@@ -442,6 +442,8 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         jLabel74 = new javax.swing.JLabel();
         jLabel161 = new javax.swing.JLabel();
         txtNam_mother = new javax.swing.JTextField();
+        CLabImg = new ViewMyPrj.CLabel();
+        jButton28 = new javax.swing.JButton();
         PanSaisiProf_Emp = new javax.swing.JPanel();
         panSaisiStd4 = new javax.swing.JPanel();
         jLabel85 = new javax.swing.JLabel();
@@ -1890,7 +1892,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                             .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(jLabel73, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(txtPlcBirth_std, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(txtNam_mother, javax.swing.GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE)
                                 .addComponent(jLabel72, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1958,7 +1960,19 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                     .addContainerGap())
             );
 
-            panSaisiStd.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 0, 800, 160));
+            panSaisiStd.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 0, 700, 160));
+
+            CLabImg.setBackground(new java.awt.Color(255, 255, 255));
+            CLabImg.setText("");
+            panSaisiStd.add(CLabImg, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 120, 120));
+
+            jButton28.setText("setIconImg");
+            jButton28.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton28ActionPerformed(evt);
+                }
+            });
+            panSaisiStd.add(jButton28, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 150, -1, -1));
 
             Pan_All_PansSais.add(panSaisiStd, "card2");
 
@@ -2806,7 +2820,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                         .addComponent(PanPrfAfterSaisStd, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addContainerGap())
                 .addGroup(jPanel4Layout.createSequentialGroup()
-                    .addGap(32, 32, 32)
+                    .addGap(30, 30, 30)
                     .addComponent(BtnNext, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             );
@@ -2818,7 +2832,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                         .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(NumOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGap(17, 17, 17)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(jPanel4Layout.createSequentialGroup()
                             .addComponent(jLabel98, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(10, 10, 10)
@@ -2828,11 +2842,11 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                         .addGroup(jPanel4Layout.createSequentialGroup()
                             .addGap(10, 10, 10)
                             .addComponent(Img_Std, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(PanPrfAfterSaisStd, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(PanPrfAfterSaisStd, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(18, 18, 18)
                     .addComponent(BtnNext, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap())
+                    .addContainerGap(206, Short.MAX_VALUE))
             );
 
             PanInfoCard.add(jPanel4, java.awt.BorderLayout.WEST);
@@ -10733,6 +10747,16 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         }
     }//GEN-LAST:event_jButton26ActionPerformed
 
+    private void jButton28ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton28ActionPerformed
+            try {
+            // InsertPictResident
+
+            ImageResidentToSv = UploadPictResident(CLabImg);
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(PanCntMenu, messagerror);
+        }
+    }//GEN-LAST:event_jButton28ActionPerformed
+
     /**
      * ************************ Initialisation Student_Resident
      * **************************
@@ -11328,6 +11352,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     private javax.swing.JButton BtnSaveStd;
     private javax.swing.JButton BtnSaveStd2;
     private javax.swing.JButton Btn_Annul_UserToUPDATE21;
+    private ViewMyPrj.CLabel CLabImg;
     private javax.swing.JLabel CaseA;
     private javax.swing.JComboBox<String> CaseN;
     private javax.swing.JComboBox<String> CaseN1;
@@ -11556,6 +11581,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     private javax.swing.JButton jButton25;
     private javax.swing.JButton jButton26;
     private javax.swing.JButton jButton27;
+    private javax.swing.JButton jButton28;
     private javax.swing.JButton jButton29;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton32;
