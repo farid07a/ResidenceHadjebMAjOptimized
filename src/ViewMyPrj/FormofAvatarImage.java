@@ -44,7 +44,7 @@ public class FormofAvatarImage extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        labalPh = new ViewMyPrj.CLabel();
+        labalPh = new org.netbeans.modules.form.InvalidComponent();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -63,9 +63,6 @@ public class FormofAvatarImage extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-
-        labalPh.setBackground(new java.awt.Color(255, 255, 255));
-        labalPh.setText("");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -219,6 +216,6 @@ public class FormofAvatarImage extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private ViewMyPrj.CLabel labalPh;
+    private org.netbeans.modules.form.InvalidComponent labalPh;
     // End of variables declaration//GEN-END:variables
 }

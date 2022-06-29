@@ -3052,7 +3052,6 @@ cnx.Connecting();
             String Type[]={"TABLE"};
             resTab =dmd.getTables(null, null, null, Type);
             int i=1;
-           
             while(resTab.next()){
                 
              /*   if (resTab.getString("TABLE_NAME").equals("Student_Res")) {
