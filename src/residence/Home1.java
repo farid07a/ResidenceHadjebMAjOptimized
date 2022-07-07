@@ -30,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -1773,7 +1774,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                     .addComponent(BtnAnnuleSaveStd, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(136, 136, 136)
                     .addComponent(BtnSaveStd, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(211, Short.MAX_VALUE))
+                    .addContainerGap(345, Short.MAX_VALUE))
             );
             jPanel5_Layout.setVerticalGroup(
                 jPanel5_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1897,7 +1898,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             jPanel2_Layout.setHorizontalGroup(
                 jPanel2_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2_Layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addContainerGap(215, Short.MAX_VALUE)
                     .addComponent(check_Emp, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(60, 60, 60)
                     .addComponent(check_StdExt, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2094,7 +2095,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             PanSaisiProf_Emp_Layout.setHorizontalGroup(
                 PanSaisiProf_Emp_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(PanSaisiProf_Emp_Layout.createSequentialGroup()
-                    .addContainerGap(516, Short.MAX_VALUE)
+                    .addContainerGap(650, Short.MAX_VALUE)
                     .addGroup(PanSaisiProf_Emp_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanSaisiProf_Emp_Layout.createSequentialGroup()
                             .addComponent(panSaisiStd4, javax.swing.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
@@ -2115,7 +2116,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                     .addComponent(panSaisiStd4, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                     .addComponent(MessgControl4, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(38, Short.MAX_VALUE))
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             );
 
             Pan_All_PansSais_.add(PanSaisiProf_Emp_, "card3");
@@ -2538,11 +2539,6 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             txtNam_std.setText("الاسم");
             txtNam_std.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
             txtNam_std.setPreferredSize(new java.awt.Dimension(100, 30));
-            txtNam_std.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtNam_stdFocusGained(evt);
-                }
-            });
             txtNam_std.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyPressed(java.awt.event.KeyEvent evt) {
                     txtNam_stdKeyPressed(evt);
@@ -2617,11 +2613,6 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             txtSurNam_std.setHorizontalAlignment(javax.swing.JTextField.CENTER);
             txtSurNam_std.setText("الـلـــقـــب");
             txtSurNam_std.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtSurNam_std.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtSurNam_stdFocusGained(evt);
-                }
-            });
             txtSurNam_std.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyPressed(java.awt.event.KeyEvent evt) {
                     txtSurNam_stdKeyPressed(evt);
@@ -2654,11 +2645,6 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             txtPlcBirth_std.setHorizontalAlignment(javax.swing.JTextField.CENTER);
             txtPlcBirth_std.setText("مــكـان الـميــلاد");
             txtPlcBirth_std.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtPlcBirth_std.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtPlcBirth_stdFocusGained(evt);
-                }
-            });
             txtPlcBirth_std.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyPressed(java.awt.event.KeyEvent evt) {
                     txtPlcBirth_stdKeyPressed(evt);
@@ -2680,11 +2666,6 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             txtNam_Father.setText("اسم الأب");
             txtNam_Father.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
             txtNam_Father.setPreferredSize(new java.awt.Dimension(100, 30));
-            txtNam_Father.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtNam_FatherFocusGained(evt);
-                }
-            });
             txtNam_Father.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyPressed(java.awt.event.KeyEvent evt) {
                     txtNam_FatherKeyPressed(evt);
@@ -2695,6 +2676,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             gridBagConstraints.gridy = 4;
             gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
             gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
             gridBagConstraints.weightx = 1.0;
             gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
@@ -2709,9 +2691,8 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             gridBagConstraints.gridy = 3;
             gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
             gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
             jPanel6.add(jLabel75, gridBagConstraints);
 
             txtProfission_Std.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
@@ -2719,11 +2700,6 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             txtProfission_Std.setHorizontalAlignment(javax.swing.JTextField.CENTER);
             txtProfission_Std.setText("مهنة الاب");
             txtProfission_Std.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtProfission_Std.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtProfission_StdFocusGained(evt);
-                }
-            });
             txtProfission_Std.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     txtProfission_StdActionPerformed(evt);
@@ -2738,6 +2714,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             gridBagConstraints.gridx = 9;
             gridBagConstraints.gridy = 4;
             gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
             gridBagConstraints.weightx = 1.0;
             gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
@@ -2750,7 +2727,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             gridBagConstraints.gridx = 9;
             gridBagConstraints.gridy = 3;
             gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
             gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
             jPanel6.add(jLabel74, gridBagConstraints);
 
@@ -2761,7 +2738,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             gridBagConstraints.gridx = 8;
             gridBagConstraints.gridy = 3;
             gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
             gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
             jPanel6.add(jLabel161, gridBagConstraints);
 
@@ -2770,11 +2747,6 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             txtNam_mother.setHorizontalAlignment(javax.swing.JTextField.CENTER);
             txtNam_mother.setText("اسم  الام");
             txtNam_mother.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtNam_mother.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtNam_motherFocusGained(evt);
-                }
-            });
             txtNam_mother.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyPressed(java.awt.event.KeyEvent evt) {
                     txtNam_motherKeyPressed(evt);
@@ -2797,7 +2769,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             gridBagConstraints.gridx = 7;
             gridBagConstraints.gridy = 3;
             gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
             gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
             jPanel6.add(jLabel76, gridBagConstraints);
 
@@ -2806,16 +2778,6 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             LastNamMothARTxt.setHorizontalAlignment(javax.swing.JTextField.CENTER);
             LastNamMothARTxt.setText("لقب  الام");
             LastNamMothARTxt.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            LastNamMothARTxt.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    LastNamMothARTxtFocusGained(evt);
-                }
-            });
-            LastNamMothARTxt.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    LastNamMothARTxtActionPerformed(evt);
-                }
-            });
             LastNamMothARTxt.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyPressed(java.awt.event.KeyEvent evt) {
                     LastNamMothARTxtKeyPressed(evt);
@@ -2837,11 +2799,6 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             txtProfission_Moth.setText("مهنة الام");
             txtProfission_Moth.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
             txtProfission_Moth.setPreferredSize(new java.awt.Dimension(100, 35));
-            txtProfission_Moth.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtProfission_MothFocusGained(evt);
-                }
-            });
             txtProfission_Moth.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyPressed(java.awt.event.KeyEvent evt) {
                     txtProfission_MothKeyPressed(evt);
@@ -2900,7 +2857,9 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             gridBagConstraints.gridx = 1;
             gridBagConstraints.gridy = 4;
             gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            gridBagConstraints.weightx = 1.0;
             jPanel6.add(BtnShowRooms, gridBagConstraints);
 
             WilayaList.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
@@ -2982,11 +2941,6 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             txtDairaStd.setText("الدائرة");
             txtDairaStd.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
             txtDairaStd.setPreferredSize(new java.awt.Dimension(100, 35));
-            txtDairaStd.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtDairaStdFocusGained(evt);
-                }
-            });
             txtDairaStd.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyPressed(java.awt.event.KeyEvent evt) {
                     txtDairaStdKeyPressed(evt);
@@ -3021,11 +2975,6 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             txtAddress_Std.setText("العـنوان");
             txtAddress_Std.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
             txtAddress_Std.setPreferredSize(new java.awt.Dimension(100, 32));
-            txtAddress_Std.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtAddress_StdFocusGained(evt);
-                }
-            });
             txtAddress_Std.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyPressed(java.awt.event.KeyEvent evt) {
                     txtAddress_StdKeyPressed(evt);
@@ -3202,8 +3151,8 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             gridBagConstraints.gridx = 5;
             gridBagConstraints.gridy = 3;
             gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
             jPanel6.add(jLabel67, gridBagConstraints);
 
             jLabel65.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
@@ -3212,7 +3161,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             gridBagConstraints.gridx = 3;
             gridBagConstraints.gridy = 3;
             gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
             gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
             jPanel6.add(jLabel65, gridBagConstraints);
 
@@ -3244,6 +3193,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             gridBagConstraints.gridx = 2;
             gridBagConstraints.gridy = 4;
             gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
             gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
             gridBagConstraints.weightx = 1.0;
             gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
@@ -3345,8 +3295,8 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             gridBagConstraints.insets = new java.awt.Insets(0, 0, 5, 0);
             jPanel11.add(jLabel89, gridBagConstraints);
 
-            txtPlaceGetBac.setBackground(new java.awt.Color(204, 204, 204));
             txtPlaceGetBac.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+            txtPlaceGetBac.setForeground(new java.awt.Color(153, 153, 153));
             txtPlaceGetBac.setHorizontalAlignment(javax.swing.JTextField.CENTER);
             txtPlaceGetBac.setText("مــكـان الــحــصـول عــلــي الــبــكـالـــوريـــا");
             txtPlaceGetBac.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -3543,7 +3493,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             panSaisiStd_.setLayout(panSaisiStd_Layout);
             panSaisiStd_Layout.setHorizontalGroup(
                 panSaisiStd_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, 873, Short.MAX_VALUE)
+                .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, 1007, Short.MAX_VALUE)
                 .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             );
             panSaisiStd_Layout.setVerticalGroup(
@@ -3552,7 +3502,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                     .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(113, Short.MAX_VALUE))
+                    .addContainerGap(249, Short.MAX_VALUE))
             );
 
             Pan_All_PansSais_.add(panSaisiStd_, "card2");
@@ -9979,7 +9929,9 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                                 Fill_Data.GetId_From_DB("Id_LevelStudy", "Level_Study", "DescriptionLevel", (String) LevelStd.getSelectedItem()), 30, txt_NumInsc.getText(),
                                 1,
                                 "", "", "", "", "", "", LastNamMothARTxt.getText());
+                        
                         student_Res.setImageRes(ImageResidentToSv);
+                        
                         student_Res.AddRsident();
                         if (student_Res.getValConfiramation() != 0) {
                             LabPrfNumCard_StdRes.setText("" + student_Res.getNumbre_CardRes());
@@ -10476,17 +10428,6 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         }
     }//GEN-LAST:event_LastNamMothARTxtKeyPressed
 
-    private void LastNamMothARTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LastNamMothARTxtActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_LastNamMothARTxtActionPerformed
-
-    private void LastNamMothARTxtFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_LastNamMothARTxtFocusGained
-        if (LastNamMothARTxt.getText().equals("..............................")) {
-            LastNamMothARTxt.setText("");
-        }
-        LastNamMothARTxt.setForeground(Color.blue);
-    }//GEN-LAST:event_LastNamMothARTxtFocusGained
-
     private void txtBranch_stdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBranch_stdKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             DatInscrpInUniv.requestFocus();
@@ -10639,38 +10580,17 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         }
     }//GEN-LAST:event_txtDairaStdKeyPressed
 
-    private void txtDairaStdFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDairaStdFocusGained
-        if (txtDairaStd.getText().equals("........................................")) {
-            txtDairaStd.setText("");
-        }
-        txtDairaStd.setForeground(Color.blue);
-    }//GEN-LAST:event_txtDairaStdFocusGained
-
     private void txtAddress_StdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAddress_StdKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             WilayaList.requestFocus();
         }
     }//GEN-LAST:event_txtAddress_StdKeyPressed
 
-    private void txtAddress_StdFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAddress_StdFocusGained
-        if (txtAddress_Std.getText().equals("...............................................................................................................................................................")) {
-            txtAddress_Std.setText("");
-        }
-        txtAddress_Std.setForeground(Color.blue);
-    }//GEN-LAST:event_txtAddress_StdFocusGained
-
     private void txtProfission_MothKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProfission_MothKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             txtAddress_Std.requestFocus();
         }
     }//GEN-LAST:event_txtProfission_MothKeyPressed
-
-    private void txtProfission_MothFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtProfission_MothFocusGained
-        if (txtProfission_Moth.getText().equals(".......................................................................")) {
-            txtProfission_Moth.setText("");
-        }
-        txtProfission_Moth.setForeground(Color.blue);
-    }//GEN-LAST:event_txtProfission_MothFocusGained
 
     private void txtNam_motherKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNam_motherKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -10679,25 +10599,11 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         }
     }//GEN-LAST:event_txtNam_motherKeyPressed
 
-    private void txtNam_motherFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNam_motherFocusGained
-        if (txtNam_mother.getText().equals("..................................................................")) {
-            txtNam_mother.setText("");
-        }
-        txtNam_mother.setForeground(Color.blue);
-    }//GEN-LAST:event_txtNam_motherFocusGained
-
     private void txtNam_FatherKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNam_FatherKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             txtProfission_Std.requestFocus();
         }
     }//GEN-LAST:event_txtNam_FatherKeyPressed
-
-    private void txtNam_FatherFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNam_FatherFocusGained
-        if (txtNam_Father.getText().equals(".......................................................................")) {
-            txtNam_Father.setText("");
-        }
-        txtNam_Father.setForeground(Color.blue);
-    }//GEN-LAST:event_txtNam_FatherFocusGained
 
     private void txtProfission_StdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProfission_StdKeyPressed
 
@@ -10710,25 +10616,11 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         // TODO add your handling code here:
     }//GEN-LAST:event_txtProfission_StdActionPerformed
 
-    private void txtProfission_StdFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtProfission_StdFocusGained
-        if (txtProfission_Std.getText().equals("........................................................................")) {
-            txtProfission_Std.setText("");
-        }
-        txtProfission_Std.setForeground(Color.blue);
-    }//GEN-LAST:event_txtProfission_StdFocusGained
-
     private void txtPlcBirth_stdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPlcBirth_stdKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             txtNam_Father.requestFocus();
         }
     }//GEN-LAST:event_txtPlcBirth_stdKeyPressed
-
-    private void txtPlcBirth_stdFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPlcBirth_stdFocusGained
-        if (txtPlcBirth_std.getText().equals("................................................................")) {
-            txtPlcBirth_std.setText("");
-        }
-        txtPlcBirth_std.setForeground(Color.blue);
-    }//GEN-LAST:event_txtPlcBirth_stdFocusGained
 
     private void txtSurNam_stdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSurNam_stdKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -10736,25 +10628,11 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         }
     }//GEN-LAST:event_txtSurNam_stdKeyPressed
 
-    private void txtSurNam_stdFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSurNam_stdFocusGained
-        if (txtSurNam_std.getText().equals("........................................................................")) {
-            txtSurNam_std.setText("");
-        }
-        txtSurNam_std.setForeground(Color.blue);
-    }//GEN-LAST:event_txtSurNam_stdFocusGained
-
     private void txtNam_stdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNam_stdKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             txtSurNam_std.requestFocus();
         }
     }//GEN-LAST:event_txtNam_stdKeyPressed
-
-    private void txtNam_stdFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNam_stdFocusGained
-        if (txtNam_std.getText().equals(".......................................................................")) {
-            txtNam_std.setText("");
-        }
-        txtNam_std.setForeground(Color.blue);
-    }//GEN-LAST:event_txtNam_stdFocusGained
 
     private void txt_NumInscKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_NumInscKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -11303,13 +11181,40 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     }//GEN-LAST:event_txtCommuneStd2KeyPressed
 
     private void jButton26ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton26ActionPerformed
+        Wia4j wia4j = new Wia4j();
+ File fileImage = null;
         try {
+             fileImage = new File(NumOrder.getText() +".jpg");
+              if (fileImage.exists()) {
+            JOptionPane.showMessageDialog(null, "This fil isExists ");
+            fileImage.delete();
+            JOptionPane.showMessageDialog(null, "Success deleting file:"+fileImage.getName());
+        }
+           wia4j.scan(NumOrder.getText() +".jpg");
+          
+        } catch (WiaOperationException ex) {
+            System.out.println("Error Exception ");
+        }
+            BufferedImage bufImg = null;
+        try {
+            bufImg = ImageIO.read(fileImage);
+            System.out.println("succes read file");
+        } catch (IOException ex) {
+            //Logger.getLogger(FormEmployer.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }
+        
+         CLabImg.setIcon(new ImageIcon(new ImageIcon(bufImg).getImage().getScaledInstance(CLabImg.getWidth(), CLabImg.getHeight(), Image.SCALE_SMOOTH)));
+         
+        
+        
+        /*try {
             // use scan function of Wia api and create file with order 
             ScannerTool.scan("D:\\Photo_residents\\" + NumOrder.getText() + ".jpg");
 
         } catch (WiaOperationException ex) {
             JOptionPane.showMessageDialog(null, "حدث خطأ بالماسح الضوئي\n الرجاء تحميل الصورة يدويا");
-        }
+        }*/
     }//GEN-LAST:event_jButton26ActionPerformed
 
     private void jButton28ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton28ActionPerformed
@@ -11355,28 +11260,31 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
 
         txt_NumInsc.setText("رقــم تــسجـيــل الــبـكــالــوريــا ");
         txt_NumInsc.setForeground(Color.gray);
-        txtNam_std.setText(".......................................................................");
-        txtNam_std.setForeground(Color.black);
-        txtSurNam_std.setText("........................................................................");
-        txtSurNam_std.setForeground(Color.BLACK);
+        txtNam_std.setText("الاسم");
+        txtNam_std.setForeground(Color.gray);
+        txtSurNam_std.setText("الـلـــقـــب");
+        txtSurNam_std.setForeground(Color.gray);
         DatBirth_std.setText("");
-        DatBirth_std.setForeground(Color.BLACK);
-        txtPlcBirth_std.setText("................................................................");
-        txtPlcBirth_std.setForeground(Color.BLACK);
-        txtNam_Father.setText(".......................................................................");
-        txtNam_Father.setForeground(Color.BLACK);
-        txtProfission_Std.setText("........................................................................");
-        txtProfission_Std.setForeground(Color.BLACK);
-        txtNam_mother.setText("..................................................................");
-        txtNam_mother.setForeground(Color.BLACK);
-        txtProfission_Moth.setText(".......................................................................");
-        txtProfission_Moth.setForeground(Color.BLACK);
-        txtAddress_Std.setText("...............................................................................................................................................................");
-        txtAddress_Std.setForeground(Color.BLACK);
+        DatBirth_std.setForeground(Color.black);
+        txtPlcBirth_std.setText("مــكـان الـميــلاد");
+        txtPlcBirth_std.setForeground(Color.gray);
+        txtNam_Father.setText("اسم الأب");
+        txtNam_Father.setForeground(Color.gray);
+        txtProfission_Std.setText("مهنة الاب");
+        txtProfission_Std.setForeground(Color.gray);
+        txtNam_mother.setText("اسم  الام");
+        txtNam_mother.setForeground(Color.gray);
+        LastNamMothARTxt.setText("لقب  الام");
+        LastNamMothARTxt.setForeground(Color.gray);
+        
+        txtProfission_Moth.setText("مهنة الام");
+        txtProfission_Moth.setForeground(Color.gray);
+        txtAddress_Std.setText("العـنوان");
+        txtAddress_Std.setForeground(Color.gray);
         WilayaList.setSelectedIndex(0);
 
-        txtDairaStd.setText("........................................");
-        txtDairaStd.setForeground(Color.BLACK);
+        txtDairaStd.setText("الدائرة");
+        txtDairaStd.setForeground(Color.gray);
         ComboxHome.setSelectedIndex(0);
         //txtCommuneStd.setForeground(Color.BLACK);
         National_list.setSelectedIndex(0);
@@ -11392,15 +11300,15 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         TtxtBacYear.setForeground(Color.gray);
         txtBacMoy.setText("00.00");
         txtBacMoy.setForeground(Color.gray);
-        txtPlaceGetBac.setText("............................................................................................................................");
+        txtPlaceGetBac.setText("مــكـان الــحــصـول عــلــي الــبــكـالـــوريـــا");
         txtPlaceGetBac.setForeground(Color.BLACK);
         txtBranch_std.setSelectedIndex(0);
         DatInscrpInUniv.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
         LevelStd.setSelectedIndex(0);
         txtDepa_Std.setSelectedIndex(0);
 
-        LastNamMothARTxt.setText("..............................");
-        LastNamMothARTxt.setForeground(Color.black);
+//        LastNamMothARTxt.setText("..............................");
+//        LastNamMothARTxt.setForeground(Color.black);
 
     }
 
