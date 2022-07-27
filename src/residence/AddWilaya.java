@@ -5,10 +5,10 @@
  */
 package residence;
 
+import java.awt.Color;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -18,16 +18,25 @@ import javax.swing.JOptionPane;
  */
 public class AddWilaya extends javax.swing.JFrame {
 
-    ConnectionDB cnx=new ConnectionDB();
+    ConnectionDB cnx = new ConnectionDB();
     Conf cnf;
+    Get_Info_DB Fill_Data = new Get_Info_DB();
+
     public AddWilaya(Conf cnf) {
         initComponents();
-         ((JLabel) combobox1.getRenderer()).setHorizontalAlignment(JLabel.CENTER);//jCheckBoxCustom1
-          //((JLabel) jCheckBoxCustom1.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
-          
+        ((JLabel) CombWilCom.getRenderer()).setHorizontalAlignment(JLabel.CENTER);//jCheckBoxCustom1
+        ((JLabel) CombWilCom.getRenderer()).setHorizontalAlignment(JLabel.CENTER);//jCheckBoxCustom1
+        //((JLabel) jCheckBoxCustom1.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
+
         this.setLocationRelativeTo(this);
-        this.cnf=cnf;
-        
+        this.cnf = cnf;
+        ButtonGroup grp = new ButtonGroup();
+        grp.add(RdiBtnWil);
+        grp.add(RdiBtnDai);
+        grp.add(RdiBtnCom);
+
+        Fill_Data.Filling(CmbWilDaira, "Wilaya", "NameWilaya", 1);
+        Fill_Data.Filling(CombWilCom, "Wilaya", "NameWilaya", 1);
     }
 
     /**
@@ -40,45 +49,87 @@ public class AddWilaya extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        WilayAr = new javax.swing.JTextField();
+        buttonView1 = new View.ButtonView();
+        buttonView2 = new View.ButtonView();
+        jPanel2 = new javax.swing.JPanel();
         WilayFr = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
         NumWily = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        combobox1 = new View.Combobox();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        WilayAr = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        NameDaireAR = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        combobox2 = new View.Combobox();
-        jTextField2 = new javax.swing.JTextField();
+        CmbWilDaira = new View.Combobox();
         jLabel8 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
+        jLabel10 = new javax.swing.JLabel();
+        NameDaireFR = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        CombWilCom = new View.Combobox();
+        NameCommuneAR = new javax.swing.JTextField();
+        NameCommuneFR = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        RdiBtnWil = new javax.swing.JRadioButton();
+        RdiBtnDai = new javax.swing.JRadioButton();
+        RdiBtnCom = new javax.swing.JRadioButton();
+        buttonView3 = new View.ButtonView();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jButton1.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-        jButton1.setText("حفظ");
-        jButton1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jButton1.setContentAreaFilled(false);
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        buttonView1.setBackground(new java.awt.Color(0, 102, 102));
+        buttonView1.setForeground(new java.awt.Color(255, 255, 255));
+        buttonView1.setText("حفظ");
+        buttonView1.setBackgroundPainted(true);
+        buttonView1.setEntred(false);
+        buttonView1.setRounded(true);
+        buttonView1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                buttonView1ActionPerformed(evt);
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-        jButton2.setText("الغاء");
-        jButton2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jButton2.setContentAreaFilled(false);
-        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        buttonView2.setBackground(new java.awt.Color(0, 102, 102));
+        buttonView2.setForeground(new java.awt.Color(255, 255, 255));
+        buttonView2.setText("مسح");
+        buttonView2.setBackgroundPainted(true);
+        buttonView2.setEntred(false);
+        buttonView2.setRounded(true);
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        WilayFr.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        WilayFr.setForeground(new java.awt.Color(153, 153, 153));
+        WilayFr.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        WilayFr.setText("Wilaya");
+        WilayFr.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                WilayFrFocusGained(evt);
+            }
+        });
+
+        NumWily.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        NumWily.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        NumWily.setText("الرقم");
+        NumWily.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                NumWilyFocusGained(evt);
+            }
+        });
 
         WilayAr.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        WilayAr.setForeground(new java.awt.Color(153, 153, 153));
         WilayAr.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         WilayAr.setText("الولاية");
         WilayAr.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -95,194 +146,350 @@ public class AddWilaya extends javax.swing.JFrame {
             }
         });
 
-        WilayFr.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-        WilayFr.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        WilayFr.setText("Wilaya");
-        WilayFr.addFocusListener(new java.awt.event.FocusAdapter() {
+        jLabel12.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel12.setText("FR");
+
+        jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("AR");
+
+        jLabel13.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel13.setText("الولاية");
+
+        jLabel14.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel14.setText("Wilaya");
+
+        jLabel15.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel15.setText("الرقم");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel12)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(NumWily)
+                    .addComponent(WilayAr)
+                    .addComponent(WilayFr, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(46, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(WilayAr, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(WilayFr, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(NumWily, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        NameDaireAR.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        NameDaireAR.setForeground(new java.awt.Color(153, 153, 153));
+        NameDaireAR.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        NameDaireAR.setText("الدائرة");
+        NameDaireAR.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                WilayFrFocusGained(evt);
+                NameDaireARFocusGained(evt);
             }
         });
+
+        jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setText("الولاية");
+
+        CmbWilDaira.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        CmbWilDaira.setLabeText("");
+
+        jLabel8.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel8.setText("الدائرة");
+
+        jLabel10.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel10.setText("Daira");
+
+        NameDaireFR.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        NameDaireFR.setForeground(new java.awt.Color(153, 153, 153));
+        NameDaireFR.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        NameDaireFR.setText("Daira");
+        NameDaireFR.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                NameDaireFRFocusGained(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("AR");
+
+        jLabel11.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel11.setText("FR");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel11))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(NameDaireFR, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(NameDaireAR, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(CmbWilDaira, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(NameDaireAR, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(CmbWilDaira, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(12, 12, 12)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(NameDaireFR, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jLabel6.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setText("البلدية");
+
+        jLabel5.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("الولاية");
+
+        CombWilCom.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        CombWilCom.setLabeText("");
+
+        NameCommuneAR.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        NameCommuneAR.setForeground(new java.awt.Color(153, 153, 153));
+        NameCommuneAR.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        NameCommuneAR.setText("البلدية");
+        NameCommuneAR.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                NameCommuneARFocusGained(evt);
+            }
+        });
+
+        NameCommuneFR.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        NameCommuneFR.setForeground(new java.awt.Color(153, 153, 153));
+        NameCommuneFR.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        NameCommuneFR.setText("Commune");
+        NameCommuneFR.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                NameCommuneFRFocusGained(evt);
+            }
+        });
+
+        jLabel9.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel9.setText("Commune");
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("AR");
 
-        NumWily.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-        NumWily.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        NumWily.setText("الرقم");
-        NumWily.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                NumWilyFocusGained(evt);
-            }
-        });
-
         jLabel4.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("FR");
 
-        combobox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "الاسم", "اللقب", "العنوان", "المستوى" }));
-        combobox1.setSelectedIndex(-1);
-        combobox1.setLabeText("");
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(CombWilCom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(NameCommuneAR)
+                    .addComponent(NameCommuneFR, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(CombWilCom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(NameCommuneAR, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(NameCommuneFR, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(62, Short.MAX_VALUE))
+        );
 
-        jLabel5.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("الولاية");
-        jLabel5.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        RdiBtnWil.setBackground(new java.awt.Color(255, 255, 255));
+        RdiBtnWil.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        RdiBtnWil.setSelected(true);
+        RdiBtnWil.setText("اضافة الولاية");
+        RdiBtnWil.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        RdiBtnWil.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        RdiBtnWil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RdiBtnWilActionPerformed(evt);
+            }
+        });
 
-        jLabel6.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("البلدية");
-        jLabel6.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        RdiBtnDai.setBackground(new java.awt.Color(255, 255, 255));
+        RdiBtnDai.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        RdiBtnDai.setText("اضافة دائرة");
+        RdiBtnDai.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        RdiBtnDai.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        RdiBtnDai.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RdiBtnDaiActionPerformed(evt);
+            }
+        });
 
-        jTextField1.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-        jTextField1.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        jTextField1.setText("ادخل البلدية");
+        RdiBtnCom.setBackground(new java.awt.Color(255, 255, 255));
+        RdiBtnCom.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        RdiBtnCom.setText("اضافة بلدية");
+        RdiBtnCom.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        RdiBtnCom.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        RdiBtnCom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RdiBtnComActionPerformed(evt);
+            }
+        });
 
-        jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("الولاية");
-        jLabel7.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-
-        combobox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "الاسم", "اللقب", "العنوان", "المستوى" }));
-        combobox2.setSelectedIndex(-1);
-        combobox2.setLabeText("");
-
-        jTextField2.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-        jTextField2.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        jTextField2.setText("ادخل الدائرة");
-
-        jLabel8.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText("الدائرة");
-        jLabel8.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-
-        jRadioButton1.setBackground(new java.awt.Color(255, 255, 255));
-        jRadioButton1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jRadioButton1.setSelected(true);
-        jRadioButton1.setText("اضافة الولاية");
-        jRadioButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jRadioButton1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-
-        jRadioButton2.setBackground(new java.awt.Color(255, 255, 255));
-        jRadioButton2.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jRadioButton2.setText("اضافة دائرة");
-        jRadioButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jRadioButton2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-
-        jRadioButton3.setBackground(new java.awt.Color(255, 255, 255));
-        jRadioButton3.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jRadioButton3.setText("اضافة بلدية");
-        jRadioButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jRadioButton3.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        buttonView3.setBackground(new java.awt.Color(0, 102, 102));
+        buttonView3.setForeground(new java.awt.Color(255, 255, 255));
+        buttonView3.setText("خروج");
+        buttonView3.setBackgroundPainted(true);
+        buttonView3.setEntred(false);
+        buttonView3.setRounded(true);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addComponent(jLabel4))
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(WilayAr)
-                            .addComponent(WilayFr, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
-                            .addComponent(NumWily)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(combobox2, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel8))))
-                .addGap(34, 34, 34)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2))
-                .addGap(2, 2, 2))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 218, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(60, 60, 60)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(combobox1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(34, 34, 34)
-                .addComponent(jRadioButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(RdiBtnCom)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(RdiBtnDai))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(RdiBtnWil, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap(25, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(buttonView3, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41)
+                .addComponent(buttonView2, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addComponent(buttonView1, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(150, 150, 150))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(4, 4, 4)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(RdiBtnWil, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(RdiBtnDai, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(RdiBtnCom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(WilayAr, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jRadioButton1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(WilayFr, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(NumWily, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(50, 50, 50)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(jRadioButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(1, 1, 1)
-                .addComponent(combobox2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jRadioButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(combobox1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addComponent(buttonView1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonView2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonView3, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        pack();
+        setBounds(0, 0, 735, 362);
     }// </editor-fold>//GEN-END:initComponents
 
     private void WilayArFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_WilayArFocusGained
         if (WilayAr.getText().equals("الولاية")) {
             WilayAr.setText("");
-         }
+        }
     }//GEN-LAST:event_WilayArFocusGained
 
     private void WilayArActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_WilayArActionPerformed
@@ -307,48 +514,151 @@ public class AddWilaya extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_NumWilyFocusGained
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if (      WilayAr.getText().equals("الولاية")||WilayAr.getText().equals("")
-                ||WilayFr.getText().equals("Wilaya")||WilayFr.getText().equals("")
-                ||NumWily.getText().equals("الرقم")||NumWily.getText().equals("") 
-            ) {
+    private void buttonView7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonView7ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonView7ActionPerformed
+
+    private void buttonView8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonView8ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonView8ActionPerformed
+
+    private void buttonView1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonView1ActionPerformed
+        
+        if (RdiBtnWil.isSelected()) {
+            
+            if (WilayAr.getText().equals("الولاية") || WilayAr.getText().equals("")
+                    || WilayFr.getText().equals("Wilaya") || WilayFr.getText().equals("")
+                    || NumWily.getText().equals("الرقم") || NumWily.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "تأكد من تعبئة المعلومات");
+            } else {
+                InsertWilaya(WilayAr.getText(), WilayFr.getText(), Integer.parseInt(NumWily.getText()));
+                cnf.Filling_Wilay_In_Other();
+                //cnf.Filling_NameWilaya();
+                WilayAr.setText("");
+                WilayFr.setText("");
+                NumWily.setText("");
+                this.setVisible(false);
+            }
+            
+        }else if(RdiBtnDai.isSelected()){
+            
+            if (NameDaireAR.getText().equals("الدائرة") || NameDaireAR.getText().equals("")
+                || NameDaireFR.getText().equals("Daira") || NameDaireFR.getText().equals("")
+                || CmbWilDaira.getSelectedIndex()==0) {
             JOptionPane.showMessageDialog(null, "تأكد من تعبئة المعلومات");
-        }else {
+            } else {
             InsertWilaya(WilayAr.getText(), WilayFr.getText(), Integer.parseInt(NumWily.getText()));
             cnf.Filling_Wilay_In_Other();
             //cnf.Filling_NameWilaya();
-            WilayAr.setText("");
-            WilayFr.setText("");
-            NumWily.setText("");
+            NameDaireAR.setText("");
+            NameDaireFR.setText("");
+            CmbWilDaira.setSelectedIndex(0);
             this.setVisible(false);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
-    
-    public void InsertWilaya(String WilayaAR,String WilayaFR,int NumWilaya){
-     //  String replace;
-        if (WilayaFR.contains("'")) {
-             WilayaFR = WilayaFR.replace("'", "");
+        
+        }else{
+            if (NameCommuneAR.getText().equals("البلدية") || NameCommuneAR.getText().equals("")
+                || NameCommuneFR.getText().equals("Commune") || NameCommuneFR.getText().equals("")
+                || CombWilCom.getSelectedIndex()==0) {
+                
+                JOptionPane.showMessageDialog(null, "تأكد من تعبئة المعلومات");
+                
+            } else {
+                
+                InsertWilaya(WilayAr.getText(), WilayFr.getText(), Integer.parseInt(NumWily.getText()));
+                cnf.Filling_Wilay_In_Other();
+                //cnf.Filling_NameWilaya();
+                NameCommuneAR.setText("");
+                NameCommuneFR.setText("");
+                CombWilCom.setSelectedIndex(0);
+                this.setVisible(false);
         }
-    String Query="insert into Wilaya (NameWilaya,DescWilaya,NumWilaya) values (N'"+WilayaAR+"','"+WilayaFR+"',"+NumWilaya+")";
-        PreparedStatement prstm=null;
+        }
+        
+        
+        
+    }//GEN-LAST:event_buttonView1ActionPerformed
+
+    private void RdiBtnDaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RdiBtnDaiActionPerformed
+        if (RdiBtnDai.isSelected()) {
+            jPanel3.setBackground(Color.white);
+            jPanel2.setBackground(new Color(204,204,204));
+            jPanel4.setBackground(new Color(204,204,204));
+        }
+    }//GEN-LAST:event_RdiBtnDaiActionPerformed
+
+    private void NameCommuneARFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_NameCommuneARFocusGained
+        if (NameCommuneAR.getText().equals("البلدية")) {
+            NameCommuneAR.setText("");
+            NameCommuneAR.setForeground(Color.BLACK);
+        }
+    }//GEN-LAST:event_NameCommuneARFocusGained
+
+    private void NameCommuneFRFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_NameCommuneFRFocusGained
+        if (NameCommuneFR.getText().equals("Commune")) {
+            NameCommuneFR.setText("");
+            NameCommuneFR.setForeground(Color.BLACK);
+        }
+    }//GEN-LAST:event_NameCommuneFRFocusGained
+
+    private void NameDaireARFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_NameDaireARFocusGained
+        // TODO add your handling code here:
+        if (NameDaireAR.getText().equals("الدائرة")) {
+            NameDaireAR.setText("");
+            NameDaireAR.setForeground(Color.BLACK);
+        }
+    }//GEN-LAST:event_NameDaireARFocusGained
+
+    private void NameDaireFRFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_NameDaireFRFocusGained
+        if (NameDaireFR.getText().equals("Daira")) {
+            NameDaireFR.setText("");
+            NameDaireFR.setForeground(Color.BLACK);
+        }
+    }//GEN-LAST:event_NameDaireFRFocusGained
+
+    private void RdiBtnWilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RdiBtnWilActionPerformed
+        if (RdiBtnWil.isSelected()) {
+            jPanel2.setBackground(new Color(255, 255, 255));
+            jPanel3.setBackground(Color.gray);
+            jPanel4.setBackground(Color.gray);
+        }
+    }//GEN-LAST:event_RdiBtnWilActionPerformed
+
+    private void RdiBtnComActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RdiBtnComActionPerformed
+        if (RdiBtnDai.isSelected()) {
+            jPanel3.setBackground(Color.gray);
+            jPanel2.setBackground(Color.gray);
+            jPanel4.setBackground(Color.white);
+        }
+    }//GEN-LAST:event_RdiBtnComActionPerformed
+
+    public void InsertWilaya(String WilayaAR, String WilayaFR, int NumWilaya) {
+        //  String replace;
+        if (WilayaFR.contains("'")) {
+            WilayaFR = WilayaFR.replace("'", "");
+        }
+        String Query = "insert into Wilaya (NameWilaya,DescWilaya,NumWilaya) values (N'" + WilayaAR + "','" + WilayaFR + "'," + NumWilaya + ")";
+        PreparedStatement prstm = null;
         //ResultSet res=null;
         cnx.Connecting();
         try {
-            prstm=cnx.getConnect().prepareStatement(Query);
-           int x= prstm.executeUpdate();
-            if (x>0) {
+            prstm = cnx.getConnect().prepareStatement(Query);
+            int x = prstm.executeUpdate();
+            if (x > 0) {
                 System.out.println("insert Success..");
                 JOptionPane.showMessageDialog(null, "تمت الاضافة بنجاح");
-                
-            }else System.out.println("insert Failed..");
-            
-           prstm.close();
-           cnx.Deconnect();
+
+            } else {
+                System.out.println("insert Failed..");
+            }
+
+            prstm.close();
+            cnx.Deconnect();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -386,24 +696,39 @@ public class AddWilaya extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private View.Combobox CmbWilDaira;
+    private View.Combobox CombWilCom;
+    private javax.swing.JTextField NameCommuneAR;
+    private javax.swing.JTextField NameCommuneFR;
+    private javax.swing.JTextField NameDaireAR;
+    private javax.swing.JTextField NameDaireFR;
     private javax.swing.JTextField NumWily;
+    private javax.swing.JRadioButton RdiBtnCom;
+    private javax.swing.JRadioButton RdiBtnDai;
+    private javax.swing.JRadioButton RdiBtnWil;
     private javax.swing.JTextField WilayAr;
     private javax.swing.JTextField WilayFr;
-    private View.Combobox combobox1;
-    private View.Combobox combobox2;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private View.ButtonView buttonView1;
+    private View.ButtonView buttonView2;
+    private View.ButtonView buttonView3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     // End of variables declaration//GEN-END:variables
 }

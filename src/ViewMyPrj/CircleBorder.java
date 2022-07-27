@@ -28,7 +28,7 @@ public class CircleBorder extends AbstractBorder{
     private final RenderingHints hints;
     /** Constructor*/
     CircleBorder() {        
-        color = Color.BLUE;
+        color = Color.BLACK;
         stroke = new BasicStroke(1);
         hints = new RenderingHints(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
     }

@@ -13,7 +13,6 @@ import javax.swing.JOptionPane;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author formation
@@ -23,40 +22,53 @@ public class SuccessAlert1 extends javax.swing.JFrame {
     /**
      * Creates new form SuccessAlert
      */
-    
     Home1 home;
-     Timer timer = null;
+    FormExterieurResidents frmExt;
+    Timer timer = null;
     TimerTask task;
     int i = 32;
+    int choiceConstructor;
+
     public SuccessAlert1(Home1 h) {
         initComponents();
-        home=h;
+        home = h;
+        choiceConstructor = 1;
         jLabel2.setText(jLabel2.getText());
         AWTUtilities.setOpaque(this, false);
         Position(0);
     }
-    
-    public void Position(int y){
-        System.out.println("SuccessAlert.Position heigh"+ (this.getHeight()+10));
-   this.setLocation(500, y-(this.getHeight()));
-      //  this.setLocation(550, y-(this.getHeight()));
-        
-       /* Dimension tk=this.getToolkit().getScreenSize();
+
+    public SuccessAlert1(FormExterieurResidents h) {
+        initComponents();
+        choiceConstructor = 2;
+        frmExt = h;
+        jLabel2.setText(jLabel2.getText());
+        AWTUtilities.setOpaque(this, false);
+        Position(0);
+    }
+
+    public void Position(int y) {
+        System.out.println("SuccessAlert.Position heigh" + (this.getHeight() + 10));
+        this.setLocation(500, y - (this.getHeight()));
+        //  this.setLocation(550, y-(this.getHeight()));
+
+        /* Dimension tk=this.getToolkit().getScreenSize();
         
         int x=(int) (tk.getWidth()/2);
         this.setLocation(x, y-(this.getHeight()));
-        */
+         */
     }
 
-     private void Trasparent(float trasp) {
+    private void Trasparent(float trasp) {
         AWTUtilities.setOpacity(this, trasp);
     }
-     
-     public void FinishTask(){
-     this.dispose();
-     timer=null;
-     task=null;
-     }
+
+    public void FinishTask() {
+        this.dispose();
+        timer = null;
+        task = null;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -178,139 +190,102 @@ public class SuccessAlert1 extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-        
-      
-        
-        task=new TimerTask() {
+
+        task = new TimerTask() {
             @Override
             public void run() {
-                
-                if (i==512) {
+
+                if (i == 512) {
                     timer.cancel();
-                }else {
+                } else {
                     Position(i);
-                    
-                i=i+32;
-                
-                    System.out.println("i :"+i);
-                
+
+                    i = i + 32;
+
+                    System.out.println("i :" + i);
+
                     Trasparent((float) i / 512);
-                    
-                     System.out.println("(float) i / 352 :"+(float) i / 512);
+
+                    System.out.println("(float) i / 352 :" + (float) i / 512);
                 }
             }
         };
-        
-         timer = new java.util.Timer();
+
+        timer = new java.util.Timer();
         timer.schedule(task, 0, 1);
-        
-        jButton1.requestFocus();  
+
+        jButton1.requestFocus();
     }//GEN-LAST:event_formWindowOpened
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        switch(home.getChoose()){
-            case 0:
-            // JOptionPane.showMessageDialog(null, "Choose == "+home.getChoose());
 
-            home.ValidateNumber_Next();         
-                break;
-            case 1:
-               // JOptionPane.showMessageDialog(null, "Choose == "+home.getChoose());
-                
-            break;
-        case 2:
-            break;
-        case 3:
-            break;
-            
-        
-        
+        if (choiceConstructor == 1) {
+            home.ValidateNumber_Next();
+        } else {
+            frmExt.ValidateNumber_NextOfExternalStudent();
         }
-        
-       
-        
-        
-        
-        
-             task=new TimerTask() {
+
+        task = new TimerTask() {
             @Override
             public void run() {
-                
-                if (i==0) {
+
+                if (i == 0) {
                     timer.cancel();
                     FinishTask();
-                }else {
-                    
-                    
-                    
+                } else {
+
                     Position(i);
-                    
-                i=i-32;
-                
-                    System.out.println("i :==========="+i);
-                
+
+                    i = i - 32;
+
+                    System.out.println("i :===========" + i);
+
                     Trasparent((float) i / 512);
-                    
-                     System.out.println("(float) i / 352 : ========"+(float) i / 512);
+
+                    System.out.println("(float) i / 352 : ========" + (float) i / 512);
                 }
             }
         };
-          timer = new java.util.Timer();
+        timer = new java.util.Timer();
         timer.schedule(task, 0, 1);
-             
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1KeyPressed
         // TODO add your handling code here:
-        
-         switch(home.getChoose()){
-            case 0:
-             //JOptionPane.showMessageDialog(null, "Choose == "+home.getChoose());
 
-            home.ValidateNumber_Next();         
-                break;
-            case 1:
-               // JOptionPane.showMessageDialog(null, "Choose == "+home.getChoose());
-                
-            break;
-        case 2:
-            break;
-        case 3:
-            break;
-            
-        
-        
+        if (choiceConstructor == 1) {
+            home.ValidateNumber_Next();
+        } else {
+            frmExt.ValidateNumber_NextOfExternalStudent();
         }
-        
-        if ((evt.getKeyCode()==KeyEvent.VK_ENTER) &&(this.getX()==500)) {
-             task=new TimerTask() {
-            @Override
-            public void run() {
-                
-                if (i==0) {
-                    timer.cancel();
-                    FinishTask();
-                }else {
-                    
-                    
-                    
-                    Position(i);
-                    
-                i=i-32;
-                
-                    System.out.println("i :==========="+i);
-                
-                    Trasparent((float) i / 512);
-                    
-                     System.out.println("(float) i / 352 : ========"+(float) i / 512);
+
+        if ((evt.getKeyCode() == KeyEvent.VK_ENTER) && (this.getX() == 500)) {
+            task = new TimerTask() {
+                @Override
+                public void run() {
+
+                    if (i == 0) {
+                        timer.cancel();
+                        FinishTask();
+                    } else {
+
+                        Position(i);
+
+                        i = i - 32;
+
+                        System.out.println("i :===========" + i);
+
+                        Trasparent((float) i / 512);
+
+                        System.out.println("(float) i / 352 : ========" + (float) i / 512);
+                    }
                 }
-            }
-        };
-          timer = new java.util.Timer();
-        timer.schedule(task, 0, 1);
+            };
+            timer = new java.util.Timer();
+            timer.schedule(task, 0, 1);
         }
-       
+
     }//GEN-LAST:event_jButton1KeyPressed
 
     /**
@@ -344,7 +319,7 @@ public class SuccessAlert1 extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new SuccessAlert1(null).setVisible(true);
+                //new SuccessAlert1().setVisible(true);
             }
         });
     }

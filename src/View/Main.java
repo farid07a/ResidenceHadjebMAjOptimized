@@ -31,7 +31,6 @@ public class Main extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        panelBorder1.setBackground(new java.awt.Color(255, 255, 255));
         panelBorder1.setOpaque(true);
 
         javax.swing.GroupLayout panelBorder1Layout = new javax.swing.GroupLayout(panelBorder1);

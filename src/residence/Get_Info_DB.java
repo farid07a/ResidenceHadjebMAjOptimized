@@ -37,7 +37,8 @@ import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
- * @author Basma01
+ * @author Basma
+ * 
  */
 public class Get_Info_DB {
     
@@ -70,7 +71,8 @@ public class Get_Info_DB {
     }
     
     
-   /***********************FillingCombobox******************/
+   /***********************FillingCombobo******************/
+
      public void Filling(JComboBox cmb,String Tab,String Field,int i){
         String Query="SELECT * FROM  "+Tab+"" ;
         
@@ -86,10 +88,10 @@ public class Get_Info_DB {
                   Dfcmb.addElement("اخــتــر الــجــنــســيــة ....");
                  break;
              case 3:
-                  Dfcmb.addElement("الــمـسـتــوي الـدراسـي ...");
+                  Dfcmb.addElement("الــمـسـتــوي الـدراسـي ");
                  break;
              case 4:
-                  Dfcmb.addElement("اختر التخـصص الدراســـــــي ....");
+                  Dfcmb.addElement("اختر التخـصص الدراســـــــي ");
                  break;
             
              case 5:
@@ -111,7 +113,7 @@ public class Get_Info_DB {
             }
             cmb.setModel(Dfcmb);
             
-        } catch (Exception e) {
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error SQL :"+e.getMessage());
         }
         
@@ -119,7 +121,7 @@ public class Get_Info_DB {
             stm.close();
             res.close();
             cnx.Deconnect();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error Close :"+e.getMessage());
         }
         
@@ -129,7 +131,7 @@ public class Get_Info_DB {
     public int GetId_From_DB(String ID,String Table,String Field,String value){
     
         if ((value=="اخــتر الولايــة....")||(value=="اخــتــر الــجــنــســيــة ....")||
-                (value=="اختر التخـصص الدراســـــــي ....")||(value=="الــمـسـتــوي الـدراسـي ...")||(value=="اخــتــر الـــكـــلــــيــــة ....")
+                (value=="اختر التخـصص الدراســـــــي ")||(value=="الــمـسـتــوي الـدراسـي ")||(value=="اخــتــر الـــكـــلــــيــــة ....")
                 ||(value=="اخــتر المــهـــنـة....")) {
            value="/"; 
         }

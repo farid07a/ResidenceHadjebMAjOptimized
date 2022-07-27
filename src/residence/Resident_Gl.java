@@ -119,6 +119,7 @@ public class Resident_Gl {
             int x=prstm.executeUpdate();
             if (x>0) {
                 //JOptionPane.showMessageDialog(null, "The Resident is added ");
+                System.out.println("Succes Add First data of Resident");
             }else 
                 JOptionPane.showMessageDialog(null, "Error in added ");
             
@@ -935,7 +936,7 @@ public void InsertImageResident(File FileImg,int NumCard){
 
 }
 /******************EEEEEEEEEEE*************************/
-public void InsertImageResident10(File FileImg,int NumCard){
+public void InsertImageResident10(File FileImg, int NumCard){
 
     int len;
 
@@ -978,7 +979,7 @@ public int GetVarPht(){
 return this.VarPht;
 }
 /*******************************************************************************/    
-public void UpdateResident(  int ID_Resident,int NumCard){
+public void UpdateResident(  int ID_Resident, int NumCard){
     PreparedStatement prstm=null;
  Numbre_CardRes=NumCard;
     String Query="UPDATE Resident_Gl SET Name_Resident=? ,LastName_Resident=? ,"
@@ -1020,7 +1021,7 @@ public void UpdateResident(  int ID_Resident,int NumCard){
     }
     try {
         prstm.close();
-    } catch (Exception e) {
+    } catch (SQLException e) {
     }
 }
 public void ReserveRoom(int ID_Rsident,int ID_Room,String PaternResident){
@@ -1771,16 +1772,16 @@ public void UpdateAllResident(){
             if(res.next()){
                Max=res.getInt(1);
               // JOptionPane.showMessageDialog(null, "MAX_NumCards : "+res.getInt(1));
-   
+              
             }
         } catch (SQLException ex) {
-           JOptionPane.showMessageDialog(null, "Error sql :"+ex);
+           JOptionPane.showMessageDialog(null, "Error in Get_MAX_Numbre_CardRes  :"+ex);
         }
          try {
              res.close();
              stm.close();
              //getCnx().Deconnect();
-         } catch (Exception e) {
+         } catch (SQLException e) {
              JOptionPane.showMessageDialog(null, "Error in Sql :"+e.getMessage());
          }
          
