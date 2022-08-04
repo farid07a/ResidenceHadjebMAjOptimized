@@ -966,15 +966,12 @@ public class FormExterieurResidents extends javax.swing.JFrame {
                         .addGroup(PanEmployerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel69, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jCheckBox4))
-                        .addGroup(PanEmployerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(PanEmployerLayout.createSequentialGroup()
-                                .addGap(130, 130, 130)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(PanEmployerLayout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(Profession, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel174, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(18, 18, 18)
+                        .addGroup(PanEmployerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(Profession, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
+                            .addComponent(jTextField2))
+                        .addGap(42, 42, 42)
+                        .addComponent(jLabel174, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(PanEmployerLayout.createSequentialGroup()
                         .addGap(105, 105, 105)
                         .addGroup(PanEmployerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1041,7 +1038,7 @@ public class FormExterieurResidents extends javax.swing.JFrame {
                                 .addComponent(Profession, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addComponent(jLabel174, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20)
-                .addGroup(PanEmployerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(PanEmployerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel69, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -1393,6 +1390,7 @@ public class FormExterieurResidents extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNam_EmplInsrKeyPressed
 
     private void BtnRdProfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnRdProfActionPerformed
+        setPatternResident(BtnRdProf.getText());
         PanProfesseur.setVisible(true);
         PanEmployer.setVisible(false);
         PanExtrieurStd.setVisible(false);
@@ -1419,9 +1417,11 @@ public class FormExterieurResidents extends javax.swing.JFrame {
 
     private void BtnRdEmployeurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnRdEmployeurActionPerformed
 
+        setPatternResident(BtnRdEmployeur.getText());
         PanEmployer.setVisible(true);
         PanExtrieurStd.setVisible(false);
         PanProfesseur.setVisible(false);
+        
         this.initialiseFieldPanelShowingData();
         
     }//GEN-LAST:event_BtnRdEmployeurActionPerformed
@@ -1814,7 +1814,11 @@ public class FormExterieurResidents extends javax.swing.JFrame {
         LabLastNameRestToPrint.setText("اللقب");
         LabDateBirth_Plc.setText("تاريخ الميلاد");
         LabPlaceBirth_Res.setText("مكان الميلاد");
-        LabBranchStd.setText("التخصص");
+        if (getPatternResident().equals(BtnRdExterieurStd.getText())) 
+            LabBranchStd.setText("التخصص");
+        else 
+            LabBranchStd.setText("المهنة");
+        
     }
     
     public void setDataOfResidents(String NumCard,String NameStd,String LastName,String DateBirth,String PlaceBirth,String Branch_Profess){

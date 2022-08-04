@@ -66,6 +66,7 @@ public class Guest1 extends javax.swing.JFrame {
     jTextField1.requestFocus();
    // jLabel3.setText(takeRepastRemplissage.NBResident(TimeRepat)+"");
      this.getInputContext().selectInputMethod(new Locale("fr", "FR"));
+     
        Toolkit.getDefaultToolkit().setLockingKeyState(KeyEvent.VK_CAPS_LOCK, true);
    }
     /**

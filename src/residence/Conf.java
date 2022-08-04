@@ -2159,9 +2159,7 @@ settings setting=new settings();
     }//GEN-LAST:event_NameWilayaActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        int n=JOptionPane.showConfirmDialog(null,
-            "هل تريد تعديل على البلدية",
-            "عملية التعديل", JOptionPane.YES_NO_OPTION);
+        int n=JOptionPane.showConfirmDialog(null,"هل تريد تعديل على البلدية","عملية التعديل", JOptionPane.YES_NO_OPTION);
         if (n==0) {
             int idWilaya=get_Info_DB.GetId_From_DB("ID_Wilaya", "Wilaya", "NameWilaya", (String) NameWilaya.getSelectedItem());
             InsertCommune(CodeCom.getText(),CommNameAR.getText(),CommNameFr.getText(),idWilaya,1);
@@ -2671,7 +2669,8 @@ String RepatNm="";
             JOptionPane.showMessageDialog(null, "Error In Close Statement"+e.getMessage());
         }
     }
-    /*********************************************************/ 
+   
+     
      public void InsertCommune(String Code_commune,String Commune_Ar,String Commune_Fr,int ID_Wilaya,int choice)
 {   
 PreparedStatement prstm=null;
