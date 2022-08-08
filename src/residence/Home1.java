@@ -137,11 +137,20 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         F.Verify_Colums_ComWil();
         F.CreateCommuneTable();
         F.CreateDomaineTable();
-        F.FillTableCommune_Combobox((String) WilayaList.getSelectedItem(), null, ComboxHome, 1);
+        F.FillTableCommune_Combobox((String) WilayaList.getSelectedItem(), null, CombCommuneSlct, 1);
         //F.FillTableCommune_Combobox((String)WilayaList.getSelectedItem(),null,ComboxHome,1);
         AdvPrp = new Advanced_prp(F);
         ItemMenRegistrationMouseClicked(null);
     }
+    
+    public void FillDataOfWilayaAndCommuneInHome(){
+        
+        F.FillTableCommune_Combobox((String) WilayaList.getSelectedItem(), null, CombCommuneSlct, 1);
+        Fill_Data.Filling(WilayaList, "Wilaya", "NameWilaya", 1);
+        WilayaList.removeItem("/");
+    }
+    
+    
 
     public void HintTextField(JTextField[] TabTextField) {
 
@@ -641,7 +650,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         WilayaList = new javax.swing.JComboBox<>();
         jLabel80 = new javax.swing.JLabel();
         jLabel88 = new javax.swing.JLabel();
-        ComboxHome = new javax.swing.JComboBox<>();
+        CombCommuneSlct = new javax.swing.JComboBox<>();
         jLabel81 = new javax.swing.JLabel();
         txtDairaStd = new javax.swing.JTextField();
         jLabel78 = new javax.swing.JLabel();
@@ -2892,15 +2901,15 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
             jPanel6.add(jLabel88, gridBagConstraints);
 
-            ComboxHome.setPreferredSize(new java.awt.Dimension(100, 35));
-            ComboxHome.addItemListener(new java.awt.event.ItemListener() {
+            CombCommuneSlct.setPreferredSize(new java.awt.Dimension(100, 35));
+            CombCommuneSlct.addItemListener(new java.awt.event.ItemListener() {
                 public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                    ComboxHomeItemStateChanged(evt);
+                    CombCommuneSlctItemStateChanged(evt);
                 }
             });
-            ComboxHome.addActionListener(new java.awt.event.ActionListener() {
+            CombCommuneSlct.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    ComboxHomeActionPerformed(evt);
+                    CombCommuneSlctActionPerformed(evt);
                 }
             });
             gridBagConstraints = new java.awt.GridBagConstraints();
@@ -2910,7 +2919,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
             gridBagConstraints.weightx = 1.0;
             gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(ComboxHome, gridBagConstraints);
+            jPanel6.add(CombCommuneSlct, gridBagConstraints);
 
             jLabel81.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
             jLabel81.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -3211,6 +3220,9 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             jLabel13.setToolTipText("معاينة بيانات الولاية وبلدياتها");
             jLabel13.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
             jLabel13.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    jLabel13MouseClicked(evt);
+                }
                 public void mouseEntered(java.awt.event.MouseEvent evt) {
                     jLabel13MouseEntered(evt);
                 }
@@ -10008,7 +10020,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                                 txtPlcBirth_std.getText(), Gender, Fill_Data.GetId_From_DB("Id_Ptrn_Res", "Pattern_Person_Res", "Name_Patern", getPatternResident()), 7,
                                 txtNam_Father.getText(), txtNam_mother.getText(),// Here attribut of Student
                                 txtProfission_Std.getText(), txtProfission_Moth.getText(), txtAddress_Std.getText(),
-                                Fill_Data.GetId_From_DB("ID_Wilaya", "Wilaya", "NameWilaya", (String) WilayaList.getSelectedItem()), (String) ComboxHome.getSelectedItem(), txtDairaStd.getText(),
+                                Fill_Data.GetId_From_DB("ID_Wilaya", "Wilaya", "NameWilaya", (String) WilayaList.getSelectedItem()), (String) CombCommuneSlct.getSelectedItem(), txtDairaStd.getText(),
                                 Fill_Data.GetId_From_DB("Id_Nationalite", "Nationalite", "Nationalite", (String) National_list.getSelectedItem()),
                                 SituationFam, bacyear,
                                 MoyBac, txtPlaceGetBac1.getText(),
@@ -10601,7 +10613,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
 
     private void txtDairaStdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDairaStdKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            ComboxHome.requestFocus();
+            CombCommuneSlct.requestFocus();
         }
     }//GEN-LAST:event_txtDairaStdKeyPressed
 
@@ -11154,12 +11166,12 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         }
     }//GEN-LAST:event_jLabel69MouseClicked
 
-    private void ComboxHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboxHomeActionPerformed
+    private void CombCommuneSlctActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CombCommuneSlctActionPerformed
         //        String CommuneSlc=(String)ComboxHome.getSelectedItem();
         //        if (!CommuneSlc.equals("اختر البلدية")) {
         //            CommuneSlc.setText(CommuneSlc);
         //        }
-    }//GEN-LAST:event_ComboxHomeActionPerformed
+    }//GEN-LAST:event_CombCommuneSlctActionPerformed
 
     private void PavillonPanInfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PavillonPanInfActionPerformed
         RoomRemplissage.FillComboboxRooms(RomPvinPanInf, (String) PavillonPanInf.getSelectedItem());
@@ -11176,7 +11188,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void WilayaListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_WilayaListActionPerformed
-        F.FillTableCommune_Combobox((String) WilayaList.getSelectedItem(), null, ComboxHome, 1);
+        F.FillTableCommune_Combobox((String) WilayaList.getSelectedItem(), null, CombCommuneSlct, 1);
     }//GEN-LAST:event_WilayaListActionPerformed
 
     private void txtDairaStd2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDairaStd2KeyPressed
@@ -11317,9 +11329,9 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         }
     }//GEN-LAST:event_txtPlaceGetBac1KeyPressed
 
-    private void ComboxHomeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ComboxHomeItemStateChanged
+    private void CombCommuneSlctItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CombCommuneSlctItemStateChanged
         txtDairaStd.requestFocus();
-    }//GEN-LAST:event_ComboxHomeItemStateChanged
+    }//GEN-LAST:event_CombCommuneSlctItemStateChanged
 
     private void National_listItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_National_listItemStateChanged
        PavillonPanInf.requestFocus();
@@ -11332,6 +11344,11 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     private void txtBranch_stdItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_txtBranch_stdItemStateChanged
        DatInscrpInUniv.requestFocus();
     }//GEN-LAST:event_txtBranch_stdItemStateChanged
+
+    private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
+       AddWilaya FormAddWilay=new AddWilaya(this);
+       
+    }//GEN-LAST:event_jLabel13MouseClicked
 
     /**
      * ************************ Initialisation Student_Resident
@@ -11366,7 +11383,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
 
         txtDairaStd.setText("الدائرة");
         txtDairaStd.setForeground(Color.gray);
-        ComboxHome.setSelectedIndex(0);
+        CombCommuneSlct.setSelectedIndex(0);
         //txtCommuneStd.setForeground(Color.BLACK);
         National_list.setSelectedIndex(0);
         CheckMale.setSelected(true);
@@ -11952,9 +11969,9 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     private javax.swing.JCheckBox CheckRestarUsr;
     private javax.swing.JCheckBox CheckSrvRoom;
     private javax.swing.JComboBox<String> CombCommune;
+    private javax.swing.JComboBox<String> CombCommuneSlct;
     private javax.swing.JComboBox<String> CombExternNewOrNot;
     private javax.swing.JComboBox<String> CombRomInUpdt;
-    private javax.swing.JComboBox<String> ComboxHome;
     private javax.swing.JLabel CountTabStdIn;
     private javax.swing.JFormattedTextField DatBirth_Empl;
     private javax.swing.JFormattedTextField DatBirth_Pro;

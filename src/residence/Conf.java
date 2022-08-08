@@ -2702,7 +2702,7 @@ cnx.Connecting();
     }
 }   
      /*****************************************************************/
-     public void Filling_Wilay_In_Other(){
+     public void FillingWilayInFormConf(){
     Filling_NameWilaya(NameWilaya);
     }
      

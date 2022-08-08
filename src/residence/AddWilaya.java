@@ -31,25 +31,39 @@ import javax.swing.table.DefaultTableModel;
 public class AddWilaya extends javax.swing.JFrame {
 
     ConnectionDB cnx = new ConnectionDB();
-    Conf cnf;
+
     Home1 home;
+    Conf conf;
+    int chouceGui;
     Get_Info_DB Fill_Data = new Get_Info_DB();
     RoundedLineBorder roundedLineBorder = new RoundedLineBorder(Color.BLACK, 1, 10, true);
 
-    public AddWilaya() {
+    public AddWilaya(Home1 objGui) {// Constructor of Home Form
         initComponents();
-}
-
-public void setConfForm(Conf cnf){
-this.cnf=cnf;
-}
-
-public void setHomeForm(Home1 home){  // 
-this.home=home;
-}
+        this.home = objGui;
+        chouceGui=1;
+    }
+    
+    public AddWilaya(Conf objGui) { // Constructor of form Configuration
+        initComponents();
+        this.conf = objGui;
+        chouceGui=2;
+    }
 
     
     
+    public void PrepareCreateGuiForm() {
+        this.setLocationRelativeTo(this);
+        ButtonGroup grp = new ButtonGroup();
+        grp.add(RdiBtnWil);
+        grp.add(RdiBtnDai);
+        grp.add(RdiBtnCom);
+        Fill_Data.Filling(CmbWilDaira, "Wilaya", "NameWilaya", 1);
+        Fill_Data.Filling(CombWilCom, "Wilaya", "NameWilaya", 1);
+        CombWilCom.setSelectedIndex(1);
+        FillTableCommune_Combobox((String) CombWilCom.getSelectedItem(), TableCommune, null, 0);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -74,6 +88,8 @@ this.home=home;
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         InsidPanDaira = new javax.swing.JPanel();
         PanDaira = new javax.swing.JPanel();
         NameDaireAR = new javax.swing.JTextField();
@@ -107,6 +123,9 @@ this.home=home;
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
@@ -222,17 +241,36 @@ this.home=home;
         jLabel15.setText("الرقم");
         PanWilaya.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 0, 43, 40));
 
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable1);
+
         javax.swing.GroupLayout InsidPanWilayaLayout = new javax.swing.GroupLayout(InsidPanWilaya);
         InsidPanWilaya.setLayout(InsidPanWilayaLayout);
         InsidPanWilayaLayout.setHorizontalGroup(
             InsidPanWilayaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(PanWilaya, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 592, Short.MAX_VALUE)
+            .addGroup(InsidPanWilayaLayout.createSequentialGroup()
+                .addGroup(InsidPanWilayaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(PanWilaya, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 632, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         InsidPanWilayaLayout.setVerticalGroup(
             InsidPanWilayaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(InsidPanWilayaLayout.createSequentialGroup()
-                .addComponent(PanWilaya, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 389, Short.MAX_VALUE))
+                .addComponent(PanWilaya, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 103, Short.MAX_VALUE))
         );
 
         ContainairDetaills.add(InsidPanWilaya, "card2");
@@ -621,7 +659,7 @@ this.home=home;
                         .addComponent(RdiBtnWil))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(buttonView3, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 123, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(buttonView4, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(106, 106, 106)
                         .addComponent(buttonView2, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -661,8 +699,7 @@ this.home=home;
         setBounds(0, 0, 650, 589);
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    
+
     private void WilayArFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_WilayArFocusGained
         if (WilayAr.getText().equals("الولاية")) {
             WilayAr.setText("");
@@ -739,9 +776,7 @@ this.home=home;
                     if (NameCommuneAR.getText().equals("البلدية") || NameCommuneAR.getText().equals("")
                             || NameCommuneFR.getText().equals("Commune") || NameCommuneFR.getText().equals("")
                             || CombWilCom.getSelectedIndex() == 0) {
-
                         JOptionPane.showMessageDialog(null, "تأكد من تعبئة المعلومات");
-
                     } else {
                         int idWilaya = Fill_Data.GetId_From_DB("ID_Wilaya", "Wilaya", "NameWilaya", (String) CombWilCom.getSelectedItem());
                         InsertCommune(CodeCom.getText(), NameCommuneAR.getText(), NameCommuneFR.getText(), idWilaya, 0);
@@ -752,31 +787,29 @@ this.home=home;
                         //cnf.Filling_NameWilaya();
                         CombWilCom.setSelectedIndex(0);
                     }
-
                     break;
                 // save Update data of Commune
-
                 case "حفظ التعديلات":
-                    int n = JOptionPane.showConfirmDialog(null,
-                            "هل تريد تعديل على البلدية",
-                            "عملية التعديل", JOptionPane.YES_NO_OPTION);
+                    int n = JOptionPane.showConfirmDialog(null,"هل تريد تعديل على البلدية", "عملية التعديل", JOptionPane.YES_NO_OPTION);
                     if (n == 0) {
                         int idWilaya = Fill_Data.GetId_From_DB("ID_Wilaya", "Wilaya", "NameWilaya", (String) CombWilCom.getSelectedItem());
-
                         InsertCommune(CodeCom.getText(), NameCommuneAR.getText(), NameCommuneFR.getText(), idWilaya, 1);
-
                         FillTableCommune_Combobox((String) CombWilCom.getSelectedItem(), TableCommune, null, 0);
                         CodeCom.setText("Code");
                         NameCommuneAR.setText("البلدية");
                         NameCommuneFR.setText("Commune");
                         Code_ComLab.setText("");
+                        
+                       
+                            
+                        
+                        
                     } else {
                         CodeCom.setText("Code");
                         NameCommuneAR.setText("البلدية");
                         NameCommuneFR.setText("Commune");
                         Code_ComLab.setText("");
                     }
-
                     break;
             }
             EnableFieldCommune(false);
@@ -933,9 +966,9 @@ this.home=home;
             NameCommuneAR.setForeground(Color.black);
 
             CodeCom.setForeground(Color.black);
-            
+
             EnableFieldCommune(true);
-                    
+
             NewUpdateCommuneChoice = 2;//   = 2 uses for Update Commune  
             BtnSavUpdate.setText("حفظ التعديلات");
 
@@ -943,18 +976,18 @@ this.home=home;
     }//GEN-LAST:event_LabUpdtMouseClicked
     int NewUpdateCommuneChoice = 1; // This variabe use to select btn of save data of commune or update
     private void NewCommuneLabMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_NewCommuneLabMouseClicked
-            
+
         if ((NameCommuneFR.getText().equals("Commune") && NameCommuneAR.getText().equals("البلدية") && CodeCom.getText().equals("Code"))) {
             NameCommuneFR.setForeground(Color.black);
             NameCommuneAR.setForeground(Color.black);
             CodeCom.setForeground(Color.black);
             EnableFieldCommune(true);
-        }else{
+        } else {
             InitialiseFieldCommune();
         }
         NewUpdateCommuneChoice = 1;//   = 1 uses for save new Commune  
-            BtnSavUpdate.setText("اضافة البلدية الجديدة");
-        
+        BtnSavUpdate.setText("اضافة البلدية الجديدة");
+
     }//GEN-LAST:event_NewCommuneLabMouseClicked
 
     private void CombWilComItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_CombWilComItemStateChanged
@@ -965,17 +998,7 @@ this.home=home;
     }//GEN-LAST:event_CombWilComItemStateChanged
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        this.setLocationRelativeTo(this);
-        ButtonGroup grp = new ButtonGroup();
-        grp.add(RdiBtnWil);
-        grp.add(RdiBtnDai);
-        grp.add(RdiBtnCom);
 
-        Fill_Data.Filling(CmbWilDaira, "Wilaya", "NameWilaya", 1);
-        Fill_Data.Filling(CombWilCom, "Wilaya", "NameWilaya", 1);
-        
-        CombWilCom.setSelectedIndex(1);
-        FillTableCommune_Combobox((String) CombWilCom.getSelectedItem(), TableCommune, null, 0);
 
     }//GEN-LAST:event_formWindowOpened
 
@@ -995,19 +1018,26 @@ this.home=home;
         NewCommuneLab.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residence/Image/C_Add_Mini_h.png"))); // NOI18N
     }//GEN-LAST:event_NewCommuneLabMouseExited
 
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        if (this.chouceGui==1) {
+            this.home.FillDataOfWilayaAndCommuneInHome();
+        }else{
+            this.conf.FillingWilayInFormConf();
+        }
+    }//GEN-LAST:event_formWindowClosed
+
     public void InitialiseFieldCommune() {
         CodeCom.setText("Code");
         NameCommuneAR.setText("البلدية");
         NameCommuneFR.setText("Commune");
     }
-    
-    public void EnableFieldCommune(boolean CaseTxt){
+
+    public void EnableFieldCommune(boolean CaseTxt) {
         CodeCom.setEnabled(CaseTxt);
         NameCommuneAR.setEnabled(CaseTxt);
         NameCommuneFR.setEnabled(CaseTxt);
-        
+
     }
-    
 
     public void Disable_Enable_Compenents(JPanel panel, boolean tcase) {
         Component[] components = panel.getComponents();
@@ -1063,9 +1093,8 @@ this.home=home;
             int x = prstm.executeUpdate();
             System.out.println("Insert Query  Executed..");
             if (x > 0) {
-                
-                
-                System.out.println((choice==1)?"Success Update Commune" : "Success add Commune ");
+
+                System.out.println((choice == 1) ? "Success Update Commune" : "Success add Commune ");
             } else {
                 System.out.println("Failed Commune Added");
             }
@@ -1154,6 +1183,9 @@ this.home=home;
         return Id_Commune;
     }
 
+    
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -1185,7 +1217,7 @@ this.home=home;
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AddWilaya(null).setVisible(true);
+                //new AddWilaya(null).setVisible(true);
             }
         });
     }
@@ -1235,6 +1267,8 @@ this.home=home;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
