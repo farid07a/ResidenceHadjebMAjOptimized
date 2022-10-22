@@ -35,12 +35,14 @@ import java.util.Locale;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -58,6 +60,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     Student_Res student_Res;
     Student_Res student_ResRemplissage = new Student_Res();
     Account accountRemplissage = new Account();
+    AddWilaya addwilyGUI;
     boolean etat_account = false;
     Resident_Gl resident_Gl = new Resident_Gl();
     Pavilion PavilionRemplissage = new Pavilion();
@@ -76,7 +79,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     int choose;
     JLabel TableMenuItem[];
     int PanResidentChoiceToSaisi = 0;
-    int Gender;
+    int Gender ;
     String Level;
     String PatternToTakeRoom;
     String Branche;
@@ -107,22 +110,37 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
 
     RoundedLineBorder roundedLineBorder = new RoundedLineBorder(Color.BLACK, 1, 10, true);
     JTextField[] ListText;
+    ButtonGroup GrpBtnMarriedStd,GrpBtnGenderStd;
     public Home1() {
         initComponents();
-        this.ListText = new JTextField[]{txtNam_std, txtSurNam_std, txtPlcBirth_std, txtNam_Father, txtProfission_Std, txtNam_mother, LastNamMothARTxt, txtProfission_Moth, txtDairaStd, txtAddress_Std};
+        this.ListText = new JTextField[]{txtNam_std, txtSurNam_std, txtPlcBirth_std, txtNam_Father, txtProfission_Std, txtNam_mother, LastNamMothARTxt, txtProfission_Moth, txtDairaStd, txtAddress_Std, TtxtBacYear, txtPlaceGetBac1, txtBacMoy1};
         HintTextField(ListText);
         //setBorderPanSaisieStd();
         AlignRightAllCombInsetResids();
         Gender = 1;
-        SituationFam = Sti_Single1.getText();
+        SituationFam = RadBtnSingleStd.getText();
         Filling_Pavilon(panCnt);
         this.setLocationRelativeTo(null);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
         TableMenuItem = new JLabel[Pn_Menu.getComponentCount()];
+
         Remplir_TableMenu();
+
         dR1 = (DefaultTableModel) TabResidentToConsult.getModel();
         dR2 = (DefaultTableModel) TabExtStdToConsult.getModel();
         dR3 = (DefaultTableModel) TabProfToConsult.getModel();
         dR4 = (DefaultTableModel) TabEmpToConsult.getModel();
+        GrpBtnMarriedStd = new ButtonGroup();
+        
+        GrpBtnMarriedStd.add(RadBtnSingleStd);
+        GrpBtnMarriedStd.add(RadBtnMarriedStd);
+        
+        GrpBtnGenderStd=new ButtonGroup();
+        GrpBtnGenderStd.add(BtnRdMaleStd);
+        GrpBtnGenderStd.add(BtnRdFemaleStd);
+        
+        
         timeLabel.setText(sdf.format(new Date(System.currentTimeMillis())));
         timer = new Timer(500, this);
         timer.setRepeats(true);
@@ -141,148 +159,198 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         //F.FillTableCommune_Combobox((String)WilayaList.getSelectedItem(),null,ComboxHome,1);
         AdvPrp = new Advanced_prp(F);
         ItemMenRegistrationMouseClicked(null);
-    }
-    
-    public void FillDataOfWilayaAndCommuneInHome(){
         
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        int year = cal.get(Calendar.YEAR);
+        firstYrs.setValue(year);
+        
+        //setBorderPanMenu();
+        // setBorderPanSaisieStd();
+        
+        SetCountsOfStudentsISaisiPan();
+    }
+
+    public void FillDataOfWilayaAndCommuneInHome() {
+
         F.FillTableCommune_Combobox((String) WilayaList.getSelectedItem(), null, CombCommuneSlct, 1);
         Fill_Data.Filling(WilayaList, "Wilaya", "NameWilaya", 1);
         WilayaList.removeItem("/");
     }
     
+    public void SetCountsOfStudentsISaisiPan(){
+    buttonView12.setText(Fill_Data.GetCount("Resident_Gl","ID_Case_Resident" ,1)+"\n "+"الطلبة الجدد");
+    //buttonView13.setText(Fill_Data.GetCount("الطلبة المسجلين \n"+"Resident_Gl","ID_Case_Resident" ,1)+"");
+    }
     
-
     public void HintTextField(JTextField[] TabTextField) {
 
         for (JTextField TextField : TabTextField) {
             TextField.addFocusListener(new FocusListener() {
                 @Override
                 public void focusGained(FocusEvent e) {
-                  switch (TextField.getText()) {
-                  case "الاسم" :
-                    TextField.setText("");
-                    TextField.setForeground(Color.black);
-                    break;
-                  
-                    case "Prenom" :
-                    TextField.setText("");
-                    TextField.setForeground(Color.black);
-                    TextField.getInputContext().selectInputMethod(new Locale("fr", "FR"));
-                    break;
-                    
-                    
-                    
-                   case "الـلـــقـــب" :
-                    TextField.setText("");
-                    TextField.setForeground(Color.black);
-                    break;
-                    
-                    case "Nom" :
-                    TextField.setText("");
-                    TextField.setForeground(Color.black);
-                    TextField.getInputContext().selectInputMethod(new Locale("fr", "FR"));
-                    break;
-                    
-                    case "مــكـان الـميــلاد" :
-                    TextField.setText("");
-                    TextField.setForeground(Color.black);
-                    break;
-                    
-                    case "lieu de naissance" :
-                    TextField.setText("");
-                    TextField.setForeground(Color.black);
-                    TextField.getInputContext().selectInputMethod(new Locale("fr", "FR"));
-                    break;
-                    
-                   case "اسم الأب" :
-                    TextField.setText("");
-                    TextField.setForeground(Color.black);
-                    break;
-                    //Prenem de pere
-                    case "Prenem de pere" :
-                    TextField.setText("");
-                    TextField.setForeground(Color.black);
-                    TextField.getInputContext().selectInputMethod(new Locale("fr", "FR"));
-                    break;
-                    
-                     case "مهنة الاب" :
-                    TextField.setText("");
-                    TextField.setForeground(Color.black);    
-                    break;
-                    
-                    case "اسم  الام" :
-                    TextField.setText("");
-                    TextField.setForeground(Color.black);
-                    break;
-                     case "لقب  الام" :
-                    TextField.setText("");
-                    TextField.setForeground(Color.black);
-                    break;
-                     case "مهنة الام" :
-                    TextField.setText("");
-                    TextField.setForeground(Color.black);
-                    break;
-                     case "العـنوان" :
-                    TextField.setText("");
-                    TextField.setForeground(Color.black);
-                    break;
+                    switch (TextField.getText()) {
+                        case "الاسم":
+                            TextField.setText("");
+                            TextField.setForeground(Color.black);
+                            TextField.getInputContext().selectInputMethod(new Locale("ar", "DZ"));
+                            break;
+
+//                    case "Prenom" :
+//                    TextField.setText("");
+//                    TextField.setForeground(Color.black);
+//                    TextField.getInputContext().selectInputMethod(new Locale("fr", "FR"));
+//                    break;
+                        case "الـلـــقـــب":
+                            TextField.setText("");
+                            TextField.setForeground(Color.black);
+                            TextField.getInputContext().selectInputMethod(new Locale("ar", "DZ"));
+                            break;
+
+//                    case "Nom" :
+//                    TextField.setText("");
+//                    TextField.setForeground(Color.black);
+//                    TextField.getInputContext().selectInputMethod(new Locale("fr", "FR"));
+//                    break;
+                        case "مــكـان الـميــلاد":
+                            TextField.setText("");
+                            TextField.setForeground(Color.black);
+                            TextField.getInputContext().selectInputMethod(new Locale("ar", "DZ"));
+                            break;
+
+//                    case "lieu de naissance" :
+//                    TextField.setText("");
+//                    TextField.setForeground(Color.black);
+//                    TextField.getInputContext().selectInputMethod(new Locale("fr", "FR"));
+//                    break;
+                        case "اسم الأب":
+                            TextField.setText("");
+                            TextField.setForeground(Color.black);
+                            TextField.getInputContext().selectInputMethod(new Locale("ar", "DZ"));
+                            break;
+                        //Prenem de pere
+//                    case "Prenem de pere" :
+//                    TextField.setText("");
+//                    TextField.setForeground(Color.black);
+//                    TextField.getInputContext().selectInputMethod(new Locale("fr", "FR"));
+//                    break;
+
+                        case "مهنة الاب":
+                            TextField.setText("");
+                            TextField.setForeground(Color.black);
+                            TextField.getInputContext().selectInputMethod(new Locale("ar", "DZ"));
+                            break;
+
+                        case "اسم  الام":
+                            TextField.setText("");
+                            TextField.setForeground(Color.black);
+                            TextField.getInputContext().selectInputMethod(new Locale("ar", "DZ"));
+                            break;
+                        case "لقب  الام":
+                            TextField.setText("");
+                            TextField.setForeground(Color.black);
+                            TextField.getInputContext().selectInputMethod(new Locale("ar", "DZ"));
+                            break;
+                        case "مهنة الام":
+                            TextField.setText("");
+                            TextField.setForeground(Color.black);
+                            TextField.getInputContext().selectInputMethod(new Locale("ar", "DZ"));
+                            break;
+                        case "العـنوان":
+                            TextField.setText("");
+                            TextField.setForeground(Color.black);
+                            TextField.getInputContext().selectInputMethod(new Locale("ar", "DZ"));
+                            break;
+                        case "الدائرة":
+                            TextField.setText("");
+                            TextField.setForeground(Color.black);
+                            TextField.getInputContext().selectInputMethod(new Locale("ar", "DZ"));
+                            break;
+
+                        case "مــكـان الــحــصـول عــلــي الــبــكـالـــوريـــا":
+                            TextField.setText("");
+                            TextField.setForeground(Color.black);
+                            TextField.getInputContext().selectInputMethod(new Locale("ar", "DZ"));
+                            break;
+                        case "2018":
+                            TextField.setText("");
+                            TextField.setForeground(Color.black);
+                            break;
+                        case "00.00":
+                            TextField.setText("");
+                            TextField.setForeground(Color.black);
+                            break;
+
                     }
-                   }
-                
+
+                }
+
                 @Override
                 public void focusLost(FocusEvent e) {
-                   
-                    if (TextField.equals(txtNam_std)&& TextField.getText().equals("")) {
+
+                    if (TextField.equals(txtNam_std) && TextField.getText().equals("")) {
                         TextField.setText("الاسم");
                         TextField.setForeground(new Color(204, 204, 204));
-                        
-                    }else if(TextField.equals(txtSurNam_std)&& TextField.getText().equals("")) {
+
+                    } else if (TextField.equals(txtSurNam_std) && TextField.getText().equals("")) {
                         TextField.setText("الـلـــقـــب");
                         TextField.setForeground(new Color(204, 204, 204));
-                        
-                    }else if(TextField.equals(txtPlcBirth_std)&& TextField.getText().equals("")) {
+
+                    } else if (TextField.equals(txtPlcBirth_std) && TextField.getText().equals("")) {
                         TextField.setText("مــكـان الـميــلاد");
                         TextField.setForeground(new Color(204, 204, 204));
-                        
-                }else if(TextField.equals(txtNam_Father)&& TextField.getText().equals("")) {
+
+                    } else if (TextField.equals(txtNam_Father) && TextField.getText().equals("")) {
                         TextField.setText("اسم الأب");
                         TextField.setForeground(new Color(204, 204, 204));
-                        
-                }else if(TextField.equals(txtProfission_Std)&& TextField.getText().equals("")) {
+
+                    } else if (TextField.equals(txtProfission_Std) && TextField.getText().equals("")) {
                         TextField.setText("مهنة الاب");
                         TextField.setForeground(new Color(204, 204, 204));
-                        
-                }else if(TextField.equals(txtNam_mother)&& TextField.getText().equals("")) {
+
+                    } else if (TextField.equals(txtNam_mother) && TextField.getText().equals("")) {
                         TextField.setText("اسم  الام");
                         TextField.setForeground(new Color(204, 204, 204));
-                        
-                }else if(TextField.equals(LastNamMothARTxt)&& TextField.getText().equals("")) {
+
+                    } else if (TextField.equals(LastNamMothARTxt) && TextField.getText().equals("")) {
                         TextField.setText("لقب  الام");
                         TextField.setForeground(new Color(204, 204, 204));
-                        
-                }else if(TextField.equals(txtProfission_Moth)&& TextField.getText().equals("")) {
+
+                    } else if (TextField.equals(txtProfission_Moth) && TextField.getText().equals("")) {
                         TextField.setText("مهنة الام");
                         TextField.setForeground(new Color(204, 204, 204));
-                        
-                }else if(TextField.equals(txtDairaStd)&& TextField.getText().equals("")) {
+
+                    } else if (TextField.equals(txtDairaStd) && TextField.getText().equals("")) {
                         TextField.setText("الدائرة");
                         TextField.setForeground(new Color(204, 204, 204));
-                        
-                }else if(TextField.equals(txtAddress_Std)&& TextField.getText().equals("")) {
+                    } else if (TextField.equals(txtAddress_Std) && TextField.getText().equals("")) {
                         TextField.setText("العـنوان");
                         TextField.setForeground(new Color(204, 204, 204));
+                    } else if (TextField.equals(TtxtBacYear) && TextField.getText().equals("")) {
+                        TextField.setText("2018");
+                        TextField.setForeground(new Color(204, 204, 204));
+                    } else if (TextField.equals(txtBacMoy1) && TextField.getText().equals("")) {
+                        TextField.setText("00.00");
+                        TextField.setForeground(new Color(204, 204, 204));
+                    } else if (TextField.equals(txtPlaceGetBac1) && TextField.getText().equals("")) {
+                        TextField.setText("مــكـان الــحــصـول عــلــي الــبــكـالـــوريـــا");
+                        TextField.setForeground(new Color(204, 204, 204));
+                    }
+
                 }
-                 
-                    
-                
-                
-                
-                
-                }
-                    
             });
         }
 
+    }
+
+    public void setBorderPanMenu() {
+        ItemMenRegistration.setBorder(roundedLineBorder);
+        ItemMenUpdate.setBorder(roundedLineBorder);
+        ItemMenConsult.setBorder(roundedLineBorder);
+        ItemMenReserveRom.setBorder(roundedLineBorder);
+        ItemMenReport.setBorder(roundedLineBorder);
+        ItemMenSystemConf.setBorder(roundedLineBorder);
+        ItemMenLogout.setBorder(roundedLineBorder);
     }
 
     public void setBorderPanSaisieStd() {
@@ -310,24 +378,24 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         ((JLabel) WilayaList.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
         ((JLabel) National_list.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
         ((JLabel) txtBranch_std.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
-        ((JLabel) txtBranch_stdExtr.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
-        ((JLabel) LevelStd_StdExtrn.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
+//        ((JLabel) txtBranch_stdExtr.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
+//        ((JLabel) LevelStd_StdExtrn.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
         ((JLabel) LevelStd.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
         ((JLabel) txtDepa_Std.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
 
-        ((JLabel) WilayaList2.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
-        ((JLabel) National_list2.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
-        ((JLabel) txtBranch_std5.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
-        ((JLabel) LevelStd2.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
-        ((JLabel) txtDepa_Std2.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
+        ((JLabel) WilayaListUpdtForm.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
+        ((JLabel) National_listStdUpdtForm.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
+        ((JLabel) Branch_stdUpdtForm.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
+        ((JLabel) LevelStdUpdtForm.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
+        ((JLabel) Depa_StdUpdtForm.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
         ((JLabel) Profession.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
 
         ((JLabel) CaseResident.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
-        ((JLabel) CaseResident1.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
+        ((JLabel) CaseResidentProfUpdtForm.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
         ((JLabel) CaseResident2.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
         ((JLabel) CaseResident3.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
-        ((JLabel) txtBranch_stdExternStd.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
-        ((JLabel) LevelStdExtToupd.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
+        ((JLabel) Branch_stdExternStdUpdtForm.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
+        ((JLabel) LevelStdExtUpdtForm.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
         ((JLabel) ProfessionToUpdate.getRenderer()).setHorizontalAlignment(JLabel.CENTER);
 
     }
@@ -549,6 +617,12 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         ItemMenUpdate = new javax.swing.JLabel();
         ItemMenSystemConf = new javax.swing.JLabel();
         ItemMenLogout = new javax.swing.JLabel();
+        buttonView4 = new View.ButtonView();
+        buttonView5 = new View.ButtonView();
+        buttonView6 = new View.ButtonView();
+        buttonView7 = new View.ButtonView();
+        buttonView8 = new View.ButtonView();
+        buttonView9 = new View.ButtonView();
         jPanel1 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         jLabel32 = new javax.swing.JLabel();
@@ -588,43 +662,11 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         check_Emp = new javax.swing.JCheckBox();
         check_Prof = new javax.swing.JCheckBox();
         txt_NumInsc = new javax.swing.JTextField();
+        buttonView10 = new View.ButtonView();
+        buttonView11 = new View.ButtonView();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
         Pan_All_PansSais_ = new javax.swing.JPanel();
-        PanSaisiProf_Emp_ = new javax.swing.JPanel();
-        MessgControl4 = new javax.swing.JLabel();
-        jLabel85 = new javax.swing.JLabel();
-        txtSurNam_Prof = new javax.swing.JTextField();
-        txtNam_Prof = new javax.swing.JTextField();
-        txtPlcBirth_Prof = new javax.swing.JTextField();
-        DatBirth_Prof = new javax.swing.JFormattedTextField();
-        txtProfession_Prof = new javax.swing.JTextField();
-        Gdr_Prf_femal = new javax.swing.JCheckBox();
-        Gdr_Prf_Mal = new javax.swing.JCheckBox();
-        PanSaisiStdExt1_ = new javax.swing.JPanel();
-        jLabel169 = new javax.swing.JLabel();
-        txtSurNam_StdExt = new javax.swing.JTextField();
-        jLabel171 = new javax.swing.JLabel();
-        txtNam_StdExt = new javax.swing.JTextField();
-        txtPlcBirth_StdExt = new javax.swing.JTextField();
-        DatBirth_StdExt = new javax.swing.JFormattedTextField();
-        jLabel172 = new javax.swing.JLabel();
-        txtBranch_stdExtr = new javax.swing.JComboBox<>();
-        jLabel173 = new javax.swing.JLabel();
-        LevelStd_StdExtrn = new javax.swing.JComboBox<>();
-        txt_NumInscSdExt = new javax.swing.JTextField();
-        Gdr_StdExt_Mal = new javax.swing.JCheckBox();
-        Gdr_Prf_femal5 = new javax.swing.JCheckBox();
-        PanSaisiEmp_ = new javax.swing.JPanel();
-        jLabel174 = new javax.swing.JLabel();
-        txtSurNam_Empl = new javax.swing.JTextField();
-        txtNam_EmplInsr = new javax.swing.JTextField();
-        txtPlcBirth_Emply = new javax.swing.JTextField();
-        DatBirth_Empl = new javax.swing.JFormattedTextField();
-        Profession = new javax.swing.JComboBox<>();
-        Gdr_Emp_Mal1 = new javax.swing.JCheckBox();
-        Gdr_Emp_femal1 = new javax.swing.JCheckBox();
-        jCheckBox4 = new javax.swing.JCheckBox();
-        jTextField2 = new javax.swing.JTextField();
-        jLabel69 = new javax.swing.JLabel();
         panSaisiStd_ = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -657,10 +699,6 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         txtAddress_Std = new javax.swing.JTextField();
         jLabel79 = new javax.swing.JLabel();
         National_list = new javax.swing.JComboBox<>();
-        Sti_Single1 = new javax.swing.JCheckBox();
-        Std_Maried = new javax.swing.JCheckBox();
-        CheckMale = new javax.swing.JCheckBox();
-        checkFemal = new javax.swing.JCheckBox();
         PavillonPanInf = new javax.swing.JComboBox<>();
         jLabel67 = new javax.swing.JLabel();
         jLabel65 = new javax.swing.JLabel();
@@ -694,80 +732,52 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         LevelStd = new javax.swing.JComboBox<>();
         txtDepa_Std = new javax.swing.JComboBox<>();
         txtBranch_std = new javax.swing.JComboBox<>();
+        jLabel60 = new javax.swing.JLabel();
+        jLabel61 = new javax.swing.JLabel();
+        jLabel68 = new javax.swing.JLabel();
+        RadBtnMarriedStd = new javax.swing.JRadioButton();
+        RadBtnSingleStd = new javax.swing.JRadioButton();
+        BtnRdFemaleStd = new javax.swing.JRadioButton();
+        BtnRdMaleStd = new javax.swing.JRadioButton();
+        jLabel70 = new javax.swing.JLabel();
+        firstYrs = new javax.swing.JSpinner();
+        jLabel95 = new javax.swing.JLabel();
+        Annet1 = new javax.swing.JTextField();
+        buttonView12 = new View.ButtonView();
+        buttonView13 = new View.ButtonView();
+        PanSaisiEmp_ = new javax.swing.JPanel();
+        jLabel174 = new javax.swing.JLabel();
+        txtSurNam_Empl = new javax.swing.JTextField();
+        txtNam_EmplInsr = new javax.swing.JTextField();
+        txtPlcBirth_Emply = new javax.swing.JTextField();
+        DatBirth_Empl = new javax.swing.JFormattedTextField();
+        Profession = new javax.swing.JComboBox<>();
+        Gdr_Emp_Mal1 = new javax.swing.JCheckBox();
+        Gdr_Emp_femal1 = new javax.swing.JCheckBox();
+        jCheckBox4 = new javax.swing.JCheckBox();
+        jTextField2 = new javax.swing.JTextField();
+        jLabel69 = new javax.swing.JLabel();
         UpdateStd = new javax.swing.JPanel();
         jPanel26 = new javax.swing.JPanel();
         PanAllUpdateResident = new javax.swing.JPanel();
         InfoStdToUpdate = new javax.swing.JPanel();
         jLabel134 = new javax.swing.JLabel();
-        txt_NumInsc2 = new javax.swing.JTextField();
-        txtNam_std5 = new javax.swing.JTextField();
-        jLabel135 = new javax.swing.JLabel();
-        jLabel136 = new javax.swing.JLabel();
-        txtSurNam_std5 = new javax.swing.JTextField();
-        txtProfission_Moth2 = new javax.swing.JTextField();
+        LbNmStdUpdtForm = new javax.swing.JLabel();
+        LbLstStdUpdtForm = new javax.swing.JLabel();
         jLabel137 = new javax.swing.JLabel();
-        DatBirth_std3 = new javax.swing.JFormattedTextField();
         jLabel138 = new javax.swing.JLabel();
         jLabel139 = new javax.swing.JLabel();
-        txtNam_Father2 = new javax.swing.JTextField();
-        txtPlcBirth_std5 = new javax.swing.JTextField();
         jLabel140 = new javax.swing.JLabel();
         jLabel141 = new javax.swing.JLabel();
-        txtProfission_Std2 = new javax.swing.JTextField();
-        txtNam_mother2 = new javax.swing.JTextField();
         jLabel142 = new javax.swing.JLabel();
         jLabel143 = new javax.swing.JLabel();
-        txtAddress_Std2 = new javax.swing.JTextField();
-        txtCommuneStd2 = new javax.swing.JTextField();
-        checkFemal2 = new javax.swing.JCheckBox();
-        CheckMale2 = new javax.swing.JCheckBox();
         jLabel144 = new javax.swing.JLabel();
-        National_list2 = new javax.swing.JComboBox<>();
-        jLabel145 = new javax.swing.JLabel();
-        jLabel146 = new javax.swing.JLabel();
-        WilayaList2 = new javax.swing.JComboBox<>();
         jLabel147 = new javax.swing.JLabel();
-        Sti_Single3 = new javax.swing.JCheckBox();
-        Std_Maried2 = new javax.swing.JCheckBox();
         jLabel148 = new javax.swing.JLabel();
-        txtBacMoy2 = new javax.swing.JTextField();
-        TtxtBacYear2 = new javax.swing.JTextField();
         jLabel149 = new javax.swing.JLabel();
         jLabel150 = new javax.swing.JLabel();
-        txtPlaceGetBac2 = new javax.swing.JTextField();
-        jLabel151 = new javax.swing.JLabel();
-        txtBranch_std5 = new javax.swing.JComboBox<>();
-        jLabel152 = new javax.swing.JLabel();
-        LevelStd2 = new javax.swing.JComboBox<>();
-        txtDepa_Std2 = new javax.swing.JComboBox<>();
-        jLabel154 = new javax.swing.JLabel();
-        txtDairaStd2 = new javax.swing.JTextField();
-        jLabel155 = new javax.swing.JLabel();
         jLabel105 = new javax.swing.JLabel();
-        Img_StdUpdate = new javax.swing.JLabel();
-        jLabel113 = new javax.swing.JLabel();
-        jLabel115 = new javax.swing.JLabel();
-        CaseResident = new javax.swing.JComboBox<>();
-        jLabel122 = new javax.swing.JLabel();
-        LastName_MotheFrUp = new javax.swing.JTextField();
-        Name_FatherFrUp = new javax.swing.JTextField();
-        PlaceBirthFrUp = new javax.swing.JTextField();
-        Name_ResidentFrUp = new javax.swing.JTextField();
-        LastName_ResidentFrUp = new javax.swing.JTextField();
-        NamMrA = new javax.swing.JTextField();
-        Name_MotherFrUp = new javax.swing.JTextField();
         jLabel157 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
-        jLabel27 = new javax.swing.JLabel();
-        jLabel29 = new javax.swing.JLabel();
-        jLabel44 = new javax.swing.JLabel();
-        jLabel45 = new javax.swing.JLabel();
-        jLabel46 = new javax.swing.JLabel();
-        LstPvlinUpd = new javax.swing.JComboBox<>();
-        CombRomInUpdt = new javax.swing.JComboBox<>();
-        jButton29 = new javax.swing.JButton();
-        CombCommune = new javax.swing.JComboBox<>();
-        NumCardToUpdt = new javax.swing.JTextField();
         PanProfToUpdate = new javax.swing.JPanel();
         MessgControl5 = new javax.swing.JLabel();
         panSaisiInfoProf = new javax.swing.JPanel();
@@ -788,7 +798,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         NumCardToUpdt2 = new javax.swing.JTextField();
         jLabel116 = new javax.swing.JLabel();
         jLabel117 = new javax.swing.JLabel();
-        CaseResident1 = new javax.swing.JComboBox<>();
+        CaseResidentProfUpdtForm = new javax.swing.JComboBox<>();
         jLabel123 = new javax.swing.JLabel();
         Img_Std1 = new javax.swing.JLabel();
         Img_profupdate = new javax.swing.JLabel();
@@ -806,9 +816,9 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         txtPlcBirth_StdExt1 = new javax.swing.JTextField();
         DatBirth_StdExt1 = new javax.swing.JFormattedTextField();
         jLabel196 = new javax.swing.JLabel();
-        txtBranch_stdExternStd = new javax.swing.JComboBox<>();
+        Branch_stdExternStdUpdtForm = new javax.swing.JComboBox<>();
         jLabel197 = new javax.swing.JLabel();
-        LevelStdExtToupd = new javax.swing.JComboBox<>();
+        LevelStdExtUpdtForm = new javax.swing.JComboBox<>();
         jLabel198 = new javax.swing.JLabel();
         txt_NumInscSdExt1 = new javax.swing.JTextField();
         jLabel199 = new javax.swing.JLabel();
@@ -848,6 +858,54 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         Img_EmpUpdate = new javax.swing.JLabel();
         jLabel133 = new javax.swing.JLabel();
         jLabel153 = new javax.swing.JLabel();
+        InfoStdToUpdate_1 = new javax.swing.JPanel();
+        Name_ResidentFrUp = new javax.swing.JTextField();
+        txtNam_std5 = new javax.swing.JTextField();
+        CaseResident = new javax.swing.JComboBox<>();
+        NumCardToUpdt = new javax.swing.JTextField();
+        txt_NumInscUpdtForm = new javax.swing.JTextField();
+        txtSurNam_std5 = new javax.swing.JTextField();
+        LastName_ResidentFrUp = new javax.swing.JTextField();
+        txtProfission_MothStdUpdtForm = new javax.swing.JTextField();
+        DatBirth_stdUpdtForm = new javax.swing.JFormattedTextField();
+        txtNam_FatherStdUpdtForm = new javax.swing.JTextField();
+        txtPlcBirth_stdUpdtForm = new javax.swing.JTextField();
+        txtProfissionfath_StdUpdtForm = new javax.swing.JTextField();
+        txtNam_MotherStdUpdtForm = new javax.swing.JTextField();
+        Name_FatherFrUp = new javax.swing.JTextField();
+        PlaceBirthFrStdUpdForm = new javax.swing.JTextField();
+        Name_MotherFrUp = new javax.swing.JTextField();
+        LastName_MotheFrUp = new javax.swing.JTextField();
+        NamMrArStdUpdtForm = new javax.swing.JTextField();
+        txtAddress_StdUpdtForm = new javax.swing.JTextField();
+        txtDairaStdUpdtForm = new javax.swing.JTextField();
+        txtCommuneStdUpdtForm = new javax.swing.JTextField();
+        txtBacMoy2 = new javax.swing.JTextField();
+        WilayaListUpdtForm = new javax.swing.JComboBox<>();
+        National_listStdUpdtForm = new javax.swing.JComboBox<>();
+        checkFemalStdUpdtForm = new javax.swing.JCheckBox();
+        CheckMaleStdUpdtForm = new javax.swing.JCheckBox();
+        Sti_SingleStdUpdtForm = new javax.swing.JCheckBox();
+        Std_MariedStdUpdtForm = new javax.swing.JCheckBox();
+        LstPvlinUpdtForm = new javax.swing.JComboBox<>();
+        CombRomInUpdtForm = new javax.swing.JComboBox<>();
+        CombCommuneUpdtForm = new javax.swing.JComboBox<>();
+        TtxtBacYearStdUpdtForm = new javax.swing.JTextField();
+        txtPlaceGetBacStdUpdtForm = new javax.swing.JTextField();
+        Branch_stdUpdtForm = new javax.swing.JComboBox<>();
+        LevelStdUpdtForm = new javax.swing.JComboBox<>();
+        Depa_StdUpdtForm = new javax.swing.JComboBox<>();
+        jButton29 = new javax.swing.JButton();
+        jLabel151 = new javax.swing.JLabel();
+        jLabel154 = new javax.swing.JLabel();
+        jLabel152 = new javax.swing.JLabel();
+        jLabel155 = new javax.swing.JLabel();
+        jLabel146 = new javax.swing.JLabel();
+        jLabel122 = new javax.swing.JLabel();
+        jLabel145 = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
+        jLabel44 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
         jPanel25 = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         TabResident = new javax.swing.JTable(){
@@ -880,6 +938,9 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         jLabel40 = new javax.swing.JLabel();
         jLabel41 = new javax.swing.JLabel();
         jLabel42 = new javax.swing.JLabel();
+        Img_StdUpdate = new javax.swing.JLabel();
+        jLabel115 = new javax.swing.JLabel();
+        jLabel113 = new javax.swing.JLabel();
         PanTakeRoom = new javax.swing.JPanel();
         jButton13 = new javax.swing.JButton();
         jPanel22 = new javax.swing.JPanel();
@@ -1229,7 +1290,8 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             PanCntMenu.setPreferredSize(new java.awt.Dimension(150, 700));
             PanCntMenu.setLayout(new java.awt.CardLayout());
 
-            Pn_Menu.setBackground(new java.awt.Color(0, 153, 153));
+            Pn_Menu.setBackground(new java.awt.Color(255, 255, 255));
+            Pn_Menu.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
             Pn_Menu.setPreferredSize(new java.awt.Dimension(150, 370));
 
             ItemMenRegistration.setBackground(new java.awt.Color(255, 255, 255));
@@ -1386,40 +1448,151 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                 }
             });
 
+            buttonView4.setBackground(new java.awt.Color(0, 102, 102));
+            buttonView4.setForeground(new java.awt.Color(255, 255, 255));
+            buttonView4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residence/Image/StUpd.png"))); // NOI18N
+            buttonView4.setText("تعديل البيانات");
+            buttonView4.setBackgroundPainted(true);
+            buttonView4.setBorderPainted(false);
+            buttonView4.setEntred(false);
+            buttonView4.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            buttonView4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+            buttonView4.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+            buttonView4.setRounded(true);
+            buttonView4.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    buttonView4ActionPerformed(evt);
+                }
+            });
+
+            buttonView5.setBackground(new java.awt.Color(0, 102, 102));
+            buttonView5.setForeground(new java.awt.Color(255, 255, 255));
+            buttonView5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residence/Image/AddUsr.png"))); // NOI18N
+            buttonView5.setText("ملــف الايـواء");
+            buttonView5.setBackgroundPainted(true);
+            buttonView5.setBorderPainted(false);
+            buttonView5.setEntred(false);
+            buttonView5.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            buttonView5.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+            buttonView5.setRounded(true);
+            buttonView5.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    buttonView5ActionPerformed(evt);
+                }
+            });
+
+            buttonView6.setBackground(new java.awt.Color(0, 102, 102));
+            buttonView6.setForeground(new java.awt.Color(255, 255, 255));
+            buttonView6.setText("معاينة البيانات");
+            buttonView6.setBackgroundPainted(true);
+            buttonView6.setBorderPainted(false);
+            buttonView6.setEntred(false);
+            buttonView6.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            buttonView6.setRounded(true);
+            buttonView6.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    buttonView6ActionPerformed(evt);
+                }
+            });
+
+            buttonView7.setBackground(new java.awt.Color(0, 102, 102));
+            buttonView7.setForeground(new java.awt.Color(255, 255, 255));
+            buttonView7.setText("التقارير");
+            buttonView7.setBackgroundPainted(true);
+            buttonView7.setBorderPainted(false);
+            buttonView7.setEntred(false);
+            buttonView7.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            buttonView7.setRounded(true);
+            buttonView7.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    buttonView7ActionPerformed(evt);
+                }
+            });
+
+            buttonView8.setBackground(new java.awt.Color(0, 102, 102));
+            buttonView8.setForeground(new java.awt.Color(255, 255, 255));
+            buttonView8.setText("خدمة الغرف");
+            buttonView8.setBackgroundPainted(true);
+            buttonView8.setBorderPainted(false);
+            buttonView8.setEntred(false);
+            buttonView8.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            buttonView8.setRounded(true);
+            buttonView8.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    buttonView8ActionPerformed(evt);
+                }
+            });
+
+            buttonView9.setBackground(new java.awt.Color(0, 102, 102));
+            buttonView9.setForeground(new java.awt.Color(255, 255, 255));
+            buttonView9.setText("الاعدادات");
+            buttonView9.setBackgroundPainted(true);
+            buttonView9.setBorderPainted(false);
+            buttonView9.setEntred(false);
+            buttonView9.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            buttonView9.setRounded(true);
+            buttonView9.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    buttonView9ActionPerformed(evt);
+                }
+            });
+
             javax.swing.GroupLayout Pn_MenuLayout = new javax.swing.GroupLayout(Pn_Menu);
             Pn_Menu.setLayout(Pn_MenuLayout);
             Pn_MenuLayout.setHorizontalGroup(
                 Pn_MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(Pn_MenuLayout.createSequentialGroup()
                     .addContainerGap()
-                    .addGroup(Pn_MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(ItemMenLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ItemMenSystemConf, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ItemMenReport, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addComponent(ItemMenRegistration, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ItemMenUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ItemMenConsult, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ItemMenReserveRom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(Pn_MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(buttonView5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(buttonView4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(buttonView6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(buttonView8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(buttonView7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(buttonView9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(Pn_MenuLayout.createSequentialGroup()
+                            .addGroup(Pn_MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(ItemMenLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(Pn_MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(ItemMenReport, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                    .addComponent(ItemMenRegistration, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(ItemMenUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(ItemMenConsult, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(ItemMenReserveRom))
+                                .addComponent(ItemMenSystemConf))
+                            .addGap(0, 0, Short.MAX_VALUE)))
+                    .addContainerGap())
             );
             Pn_MenuLayout.setVerticalGroup(
                 Pn_MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(Pn_MenuLayout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(ItemMenRegistration, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buttonView5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(ItemMenUpdate)
+                    .addComponent(buttonView4, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(buttonView6, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(buttonView8, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(buttonView7, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(buttonView9, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(42, 42, 42)
+                    .addComponent(ItemMenRegistration, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(ItemMenUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(ItemMenConsult, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(ItemMenReserveRom, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                     .addComponent(ItemMenReport, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(ItemMenSystemConf, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addComponent(ItemMenLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(301, Short.MAX_VALUE))
+                    .addGap(55, 55, 55)
+                    .addComponent(ItemMenLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             );
 
             PanCntMenu.add(Pn_Menu, "card2");
@@ -1521,17 +1694,17 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             LabNameRestToPrint.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
             LabNameRestToPrint.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
             LabNameRestToPrint.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-            PanPrfAfterSaisStd.add(LabNameRestToPrint, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 60, 25));
+            PanPrfAfterSaisStd.add(LabNameRestToPrint, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 50, 25));
 
             LabBranchStd.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
             LabBranchStd.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
             LabBranchStd.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-            PanPrfAfterSaisStd.add(LabBranchStd, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 160, 25));
+            PanPrfAfterSaisStd.add(LabBranchStd, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 140, 25));
 
             LabDateBirth_Plc.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
             LabDateBirth_Plc.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
             LabDateBirth_Plc.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-            PanPrfAfterSaisStd.add(LabDateBirth_Plc, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 100, 70, 25));
+            PanPrfAfterSaisStd.add(LabDateBirth_Plc, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 100, 50, 25));
 
             LabPrfBranch_Std2.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
             LabPrfBranch_Std2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1552,7 +1725,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             LabPrfNumCard_StdRes.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
             LabPrfNumCard_StdRes.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
             LabPrfNumCard_StdRes.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(153, 153, 153)));
-            jPanel19.add(LabPrfNumCard_StdRes, new org.netbeans.lib.awtextra.AbsoluteConstraints(74, 0, 110, 33));
+            jPanel19.add(LabPrfNumCard_StdRes, new org.netbeans.lib.awtextra.AbsoluteConstraints(74, 0, 80, 33));
 
             PanPrfAfterSaisStd.add(jPanel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 200, -1));
 
@@ -1571,7 +1744,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                     LabPrfResd_Std3MouseEntered(evt);
                 }
             });
-            PanPrfAfterSaisStd.add(LabPrfResd_Std3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 140, 30));
+            PanPrfAfterSaisStd.add(LabPrfResd_Std3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 140, 30));
 
             PrinRecWtoutSh.setBackground(new java.awt.Color(0, 204, 204));
             PrinRecWtoutSh.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
@@ -1587,7 +1760,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                     PrinRecWtoutShActionPerformed(evt);
                 }
             });
-            PanPrfAfterSaisStd.add(PrinRecWtoutSh, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 140, 40));
+            PanPrfAfterSaisStd.add(PrinRecWtoutSh, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 140, 40));
 
             LabLastNameRestToPrint.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
             LabLastNameRestToPrint.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1662,31 +1835,29 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             jPanel4_.setLayout(jPanel4_Layout);
             jPanel4_Layout.setHorizontalGroup(
                 jPanel4_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4_Layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel4_Layout.createSequentialGroup()
                     .addGroup(jPanel4_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel4_Layout.createSequentialGroup()
-                            .addComponent(PanPrfAfterSaisStd, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4_Layout.createSequentialGroup()
-                            .addGap(3, 3, 3)
-                            .addComponent(CLabImg, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addGroup(jPanel4_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel4_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel98, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addComponent(jButton26, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(47, 47, 47))))
-                .addGroup(jPanel4_Layout.createSequentialGroup()
-                    .addGap(25, 25, 25)
-                    .addGroup(jPanel4_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(BtnNext, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addContainerGap()
+                            .addComponent(BtnNext, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel4_Layout.createSequentialGroup()
-                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(NumOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(19, 19, 19)))
+                            .addGap(25, 25, 25)
+                            .addGroup(jPanel4_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel4_Layout.createSequentialGroup()
+                                    .addGap(10, 10, 10)
+                                    .addComponent(CLabImg, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanel4_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel98, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jButton26, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(jPanel4_Layout.createSequentialGroup()
+                                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(NumOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(jPanel4_Layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(PanPrfAfterSaisStd, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             );
             jPanel4_Layout.setVerticalGroup(
@@ -1698,18 +1869,16 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                         .addComponent(NumOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                     .addGroup(jPanel4_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4_Layout.createSequentialGroup()
-                            .addComponent(CLabImg, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(46, 46, 46))
                         .addGroup(jPanel4_Layout.createSequentialGroup()
                             .addComponent(jLabel98, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jButton26, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                            .addComponent(jButton26, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(CLabImg, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGap(18, 18, 18)
                     .addComponent(PanPrfAfterSaisStd, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(BtnNext, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(32, 32, 32))
             );
@@ -1779,7 +1948,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                     .addComponent(BtnAnnuleSaveStd, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(136, 136, 136)
                     .addComponent(BtnSaveStd, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(211, Short.MAX_VALUE))
+                    .addContainerGap(316, Short.MAX_VALUE))
             );
             jPanel5_Layout.setVerticalGroup(
                 jPanel5_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1898,35 +2067,86 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                 }
             });
 
+            buttonView10.setBackground(new java.awt.Color(0, 102, 102));
+            buttonView10.setForeground(new java.awt.Color(255, 255, 255));
+            buttonView10.setText("طالب خارجي");
+            buttonView10.setBackgroundPainted(true);
+            buttonView10.setBorderPainted(false);
+            buttonView10.setEntred(false);
+            buttonView10.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            buttonView10.setRounded(true);
+            buttonView10.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    buttonView10ActionPerformed(evt);
+                }
+            });
+
+            buttonView11.setBackground(new java.awt.Color(0, 102, 102));
+            buttonView11.setForeground(new java.awt.Color(255, 255, 255));
+            buttonView11.setText("عامل");
+            buttonView11.setBackgroundPainted(true);
+            buttonView11.setBorderPainted(false);
+            buttonView11.setEntred(false);
+            buttonView11.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            buttonView11.setRounded(true);
+            buttonView11.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    buttonView11ActionPerformed(evt);
+                }
+            });
+
+            jLabel18.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            jLabel18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residence/Image/ExternPop.png"))); // NOI18N
+            jLabel18.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    jLabel18MouseClicked(evt);
+                }
+            });
+
+            jLabel27.setText("اضافة طالب خارجي-عامل-استاذ");
+
             javax.swing.GroupLayout jPanel2_Layout = new javax.swing.GroupLayout(jPanel2_);
             jPanel2_.setLayout(jPanel2_Layout);
             jPanel2_Layout.setHorizontalGroup(
                 jPanel2_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2_Layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(check_Emp, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(60, 60, 60)
-                    .addComponent(check_StdExt, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(45, 45, 45)
-                    .addComponent(check_Prof, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(36, 36, 36)
-                    .addComponent(check_Std, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(158, 158, 158)
-                    .addComponent(txt_NumInsc, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(23, 23, 23))
+                    .addComponent(jLabel18)
+                    .addGap(39, 39, 39)
+                    .addComponent(jLabel27)
+                    .addGap(69, 69, 69)
+                    .addComponent(buttonView11, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buttonView10, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(85, 85, 85)
+                    .addComponent(check_Emp, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(90, 90, 90)
+                    .addComponent(check_StdExt, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(106, 106, 106)
+                    .addComponent(check_Prof, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(84, 84, 84)
+                    .addComponent(check_Std, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(115, 115, 115)
+                    .addComponent(txt_NumInsc, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
             );
             jPanel2_Layout.setVerticalGroup(
                 jPanel2_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2_Layout.createSequentialGroup()
                     .addGroup(jPanel2_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel2_Layout.createSequentialGroup()
-                            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel2_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(check_Std, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(check_StdExt, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(check_Emp, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(check_Prof, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addComponent(txt_NumInsc, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addContainerGap()
+                            .addGroup(jPanel2_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2_Layout.createSequentialGroup()
+                                    .addGap(0, 0, Short.MAX_VALUE)
+                                    .addGroup(jPanel2_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(check_Std, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(check_StdExt, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(check_Emp, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(check_Prof, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(buttonView10, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(buttonView11, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(txt_NumInsc, javax.swing.GroupLayout.Alignment.TRAILING)))
+                        .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel27, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addContainerGap())
             );
 
@@ -1937,383 +2157,1292 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             Pan_All_PansSais_.setPreferredSize(new java.awt.Dimension(1000, 500));
             Pan_All_PansSais_.setLayout(new java.awt.CardLayout());
 
-            PanSaisiProf_Emp_.setBackground(new java.awt.Color(255, 255, 255));
+            panSaisiStd_.setBackground(new java.awt.Color(255, 255, 255));
+            panSaisiStd_.setPreferredSize(new java.awt.Dimension(1000, 804));
 
-            MessgControl4.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            MessgControl4.setForeground(new java.awt.Color(255, 0, 0));
-            MessgControl4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            MessgControl4.setText("\n");
+            jPanel6.setBackground(new java.awt.Color(255, 255, 255));
+            jPanel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            jPanel6.setPreferredSize(new java.awt.Dimension(100, 30));
+            jPanel6.setLayout(new java.awt.GridBagLayout());
 
-            jLabel85.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel85.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel85.setText("المهنـــــــــــــة      : ");
-            jLabel85.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+            jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel2.setText("الاســــــم");
+            jLabel2.setPreferredSize(new java.awt.Dimension(100, 30));
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 7;
+            gridBagConstraints.gridy = 0;
+            gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
+            jPanel6.add(jLabel2, gridBagConstraints);
 
-            txtSurNam_Prof.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            txtSurNam_Prof.setForeground(new java.awt.Color(153, 153, 153));
-            txtSurNam_Prof.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtSurNam_Prof.setText("ادخل اللقب");
-            txtSurNam_Prof.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtSurNam_Prof.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtSurNam_ProfFocusGained(evt);
-                }
-            });
-            txtSurNam_Prof.addKeyListener(new java.awt.event.KeyAdapter() {
+            txtNam_std.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            txtNam_std.setForeground(new java.awt.Color(204, 204, 204));
+            txtNam_std.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtNam_std.setText("الاسم");
+            txtNam_std.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtNam_std.setPreferredSize(new java.awt.Dimension(100, 30));
+            txtNam_std.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtSurNam_ProfKeyPressed(evt);
+                    txtNam_stdKeyPressed(evt);
                 }
             });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 7;
+            gridBagConstraints.gridy = 1;
+            gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
+            jPanel6.add(txtNam_std, gridBagConstraints);
 
-            txtNam_Prof.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            txtNam_Prof.setForeground(new java.awt.Color(153, 153, 153));
-            txtNam_Prof.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtNam_Prof.setText("ادخل الاسم");
-            txtNam_Prof.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtNam_Prof.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtNam_ProfFocusGained(evt);
-                }
-            });
-            txtNam_Prof.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtNam_ProfKeyPressed(evt);
-                }
-            });
+            jLabel72.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel72.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel72.setText("تـاريـخ الـميـلاد");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 2;
+            gridBagConstraints.gridy = 0;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+            jPanel6.add(jLabel72, gridBagConstraints);
 
-            txtPlcBirth_Prof.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            txtPlcBirth_Prof.setForeground(new java.awt.Color(153, 153, 153));
-            txtPlcBirth_Prof.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtPlcBirth_Prof.setText("ادخل مكان الميلاد");
-            txtPlcBirth_Prof.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtPlcBirth_Prof.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtPlcBirth_ProfFocusGained(evt);
-                }
-            });
-            txtPlcBirth_Prof.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtPlcBirth_ProfKeyPressed(evt);
-                }
-            });
-
-            DatBirth_Prof.setForeground(java.awt.Color.blue);
+            DatBirth_std.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            DatBirth_std.setForeground(new java.awt.Color(153, 153, 153));
             try {
-                DatBirth_Prof.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+                DatBirth_std.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
             } catch (java.text.ParseException ex) {
                 ex.printStackTrace();
             }
-            DatBirth_Prof.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            DatBirth_Prof.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-            DatBirth_Prof.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            DatBirth_Prof.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    DatBirth_ProfKeyPressed(evt);
-                }
-            });
-
-            txtProfession_Prof.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            txtProfession_Prof.setForeground(new java.awt.Color(0, 102, 204));
-            txtProfession_Prof.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtProfession_Prof.setText("اســـتـاذ");
-            txtProfession_Prof.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtProfession_Prof.setEnabled(false);
-            txtProfession_Prof.addFocusListener(new java.awt.event.FocusAdapter() {
+            DatBirth_std.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            DatBirth_std.setFont(new java.awt.Font("Times New Roman", 1,16));
+            DatBirth_std.addFocusListener(new java.awt.event.FocusAdapter() {
                 public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtProfession_ProfFocusGained(evt);
+                    DatBirth_stdFocusGained(evt);
                 }
             });
+            DatBirth_std.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    DatBirth_stdKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 2;
+            gridBagConstraints.gridy = 1;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+            jPanel6.add(DatBirth_std, gridBagConstraints);
 
-            Gdr_Prf_femal.setBackground(new java.awt.Color(255, 255, 255));
-            Gdr_Prf_femal.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            Gdr_Prf_femal.setText("مؤنث");
-            Gdr_Prf_femal.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-            Gdr_Prf_femal.setBorderPainted(true);
-            Gdr_Prf_femal.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-            Gdr_Prf_femal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            Gdr_Prf_femal.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-            Gdr_Prf_femal.addActionListener(new java.awt.event.ActionListener() {
+            jLabel71.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel71.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel71.setText("الـلـــقـــب");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 4;
+            gridBagConstraints.gridy = 0;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+            jPanel6.add(jLabel71, gridBagConstraints);
+
+            txtSurNam_std.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            txtSurNam_std.setForeground(new java.awt.Color(204, 204, 204));
+            txtSurNam_std.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtSurNam_std.setText("الـلـــقـــب");
+            txtSurNam_std.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtSurNam_std.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtSurNam_stdKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 4;
+            gridBagConstraints.gridy = 1;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+            jPanel6.add(txtSurNam_std, gridBagConstraints);
+
+            jLabel73.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel73.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel73.setText("مــكـان الـميــلاد");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 0;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+            jPanel6.add(jLabel73, gridBagConstraints);
+
+            txtPlcBirth_std.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            txtPlcBirth_std.setForeground(new java.awt.Color(204, 204, 204));
+            txtPlcBirth_std.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtPlcBirth_std.setText("مــكـان الـميــلاد");
+            txtPlcBirth_std.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtPlcBirth_std.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtPlcBirth_stdKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 1;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+            jPanel6.add(txtPlcBirth_std, gridBagConstraints);
+
+            txtNam_Father.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            txtNam_Father.setForeground(new java.awt.Color(204, 204, 204));
+            txtNam_Father.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtNam_Father.setText("اسم الأب");
+            txtNam_Father.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtNam_Father.setPreferredSize(new java.awt.Dimension(100, 30));
+            txtNam_Father.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtNam_FatherKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 7;
+            gridBagConstraints.gridy = 4;
+            gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
+            jPanel6.add(txtNam_Father, gridBagConstraints);
+
+            jLabel75.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel75.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel75.setText("التخـصص الدراسي ");
+            jLabel75.setPreferredSize(new java.awt.Dimension(100, 30));
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 7;
+            gridBagConstraints.gridy = 16;
+            gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
+            jPanel6.add(jLabel75, gridBagConstraints);
+
+            txtProfission_Std.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            txtProfission_Std.setForeground(new java.awt.Color(204, 204, 204));
+            txtProfission_Std.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtProfission_Std.setText("مهنة الاب");
+            txtProfission_Std.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtProfission_Std.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtProfission_StdKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 4;
+            gridBagConstraints.gridy = 4;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+            jPanel6.add(txtProfission_Std, gridBagConstraints);
+
+            jLabel74.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel74.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel74.setText("مهنــة الاب ");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 4;
+            gridBagConstraints.gridy = 3;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+            jPanel6.add(jLabel74, gridBagConstraints);
+
+            jLabel161.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel161.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel161.setText(" اســم  الام");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 3;
+            gridBagConstraints.gridy = 3;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+            jPanel6.add(jLabel161, gridBagConstraints);
+
+            txtNam_mother.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            txtNam_mother.setForeground(new java.awt.Color(204, 204, 204));
+            txtNam_mother.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtNam_mother.setText("اسم  الام");
+            txtNam_mother.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtNam_mother.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtNam_motherKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 3;
+            gridBagConstraints.gridy = 4;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+            jPanel6.add(txtNam_mother, gridBagConstraints);
+
+            jLabel76.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel76.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel76.setText("لقب  الام");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 3;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+            jPanel6.add(jLabel76, gridBagConstraints);
+
+            LastNamMothARTxt.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            LastNamMothARTxt.setForeground(new java.awt.Color(204, 204, 204));
+            LastNamMothARTxt.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            LastNamMothARTxt.setText("لقب  الام");
+            LastNamMothARTxt.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            LastNamMothARTxt.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    LastNamMothARTxtKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 4;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+            jPanel6.add(LastNamMothARTxt, gridBagConstraints);
+
+            txtProfission_Moth.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            txtProfission_Moth.setForeground(new java.awt.Color(204, 204, 204));
+            txtProfission_Moth.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtProfission_Moth.setText("مهنة الام");
+            txtProfission_Moth.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtProfission_Moth.setPreferredSize(new java.awt.Dimension(100, 35));
+            txtProfission_Moth.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtProfission_MothKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 7;
+            gridBagConstraints.gridy = 8;
+            gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
+            jPanel6.add(txtProfission_Moth, gridBagConstraints);
+
+            jLabel77.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel77.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel77.setText("مهنـة الام");
+            jLabel77.setPreferredSize(new java.awt.Dimension(100, 30));
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 7;
+            gridBagConstraints.gridy = 7;
+            gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
+            jPanel6.add(jLabel77, gridBagConstraints);
+
+            BtnShowRooms.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            BtnShowRooms.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+            BtnShowRooms.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residence/Image/ViewSmal.jpg"))); // NOI18N
+            BtnShowRooms.setToolTipText("معاينة الغرف المحجوزة");
+            BtnShowRooms.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            BtnShowRooms.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseEntered(java.awt.event.MouseEvent evt) {
+                    BtnShowRoomsMouseEntered(evt);
+                }
+                public void mouseExited(java.awt.event.MouseEvent evt) {
+                    BtnShowRoomsMouseExited(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 12;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(10, 20, 10, 20);
+            jPanel6.add(BtnShowRooms, gridBagConstraints);
+
+            WilayaList.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            WilayaList.setAutoscrolls(true);
+            WilayaList.setPreferredSize(new java.awt.Dimension(100, 35));
+            WilayaList.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    Gdr_Prf_femalActionPerformed(evt);
+                    WilayaListActionPerformed(evt);
                 }
             });
+            WilayaList.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    WilayaListKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 6;
+            gridBagConstraints.gridy = 8;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            jPanel6.add(WilayaList, gridBagConstraints);
 
-            Gdr_Prf_Mal.setBackground(new java.awt.Color(255, 255, 255));
-            Gdr_Prf_Mal.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            Gdr_Prf_Mal.setText("مذكر");
-            Gdr_Prf_Mal.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-            Gdr_Prf_Mal.setBorderPainted(true);
-            Gdr_Prf_Mal.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-            Gdr_Prf_Mal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            Gdr_Prf_Mal.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-            Gdr_Prf_Mal.addActionListener(new java.awt.event.ActionListener() {
+            jLabel80.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel80.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel80.setText("الــولايـــة");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 6;
+            gridBagConstraints.gridy = 7;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            jPanel6.add(jLabel80, gridBagConstraints);
+
+            jLabel88.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel88.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel88.setText("الــبلــديــة");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 4;
+            gridBagConstraints.gridy = 7;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+            jPanel6.add(jLabel88, gridBagConstraints);
+
+            CombCommuneSlct.setPreferredSize(new java.awt.Dimension(100, 35));
+            CombCommuneSlct.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                    CombCommuneSlctItemStateChanged(evt);
+                }
+            });
+            CombCommuneSlct.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    Gdr_Prf_MalActionPerformed(evt);
+                    CombCommuneSlctActionPerformed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 4;
+            gridBagConstraints.gridy = 8;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+            jPanel6.add(CombCommuneSlct, gridBagConstraints);
+
+            jLabel81.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel81.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel81.setText("الــدائـــرة");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 3;
+            gridBagConstraints.gridy = 7;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+            jPanel6.add(jLabel81, gridBagConstraints);
+
+            txtDairaStd.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            txtDairaStd.setForeground(new java.awt.Color(204, 204, 204));
+            txtDairaStd.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtDairaStd.setText("الدائرة");
+            txtDairaStd.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtDairaStd.setPreferredSize(new java.awt.Dimension(100, 35));
+            txtDairaStd.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtDairaStdKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 3;
+            gridBagConstraints.gridy = 8;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+            jPanel6.add(txtDairaStd, gridBagConstraints);
+
+            jLabel78.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel78.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel78.setText(" الــعـنــوان ");
+            jLabel78.setPreferredSize(new java.awt.Dimension(100, 30));
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 7;
+            gridBagConstraints.gridy = 10;
+            gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+            jPanel6.add(jLabel78, gridBagConstraints);
+
+            txtAddress_Std.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            txtAddress_Std.setForeground(new java.awt.Color(204, 204, 204));
+            txtAddress_Std.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtAddress_Std.setText("العـنوان");
+            txtAddress_Std.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtAddress_Std.setPreferredSize(new java.awt.Dimension(100, 32));
+            txtAddress_Std.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtAddress_StdKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 4;
+            gridBagConstraints.gridy = 11;
+            gridBagConstraints.gridwidth = 4;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
+            jPanel6.add(txtAddress_Std, gridBagConstraints);
+
+            jLabel79.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel79.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel79.setText("الجنـسـية");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 3;
+            gridBagConstraints.gridy = 10;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+            jPanel6.add(jLabel79, gridBagConstraints);
+
+            National_list.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            National_list.setAutoscrolls(true);
+            National_list.setPreferredSize(new java.awt.Dimension(100, 35));
+            National_list.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                    National_listItemStateChanged(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 3;
+            gridBagConstraints.gridy = 11;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+            jPanel6.add(National_list, gridBagConstraints);
+
+            PavillonPanInf.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+            PavillonPanInf.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    PavillonPanInfActionPerformed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 11;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+            jPanel6.add(PavillonPanInf, gridBagConstraints);
+
+            jLabel67.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            jLabel67.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel67.setText("الجناح");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 10;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
+            jPanel6.add(jLabel67, gridBagConstraints);
+
+            jLabel65.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            jLabel65.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel65.setText("الغرفة");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 10;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
+            jPanel6.add(jLabel65, gridBagConstraints);
+
+            RomPvinPanInf.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+            RomPvinPanInf.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                    RomPvinPanInfItemStateChanged(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 11;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+            jPanel6.add(RomPvinPanInf, gridBagConstraints);
+
+            jCheckBox1.setBackground(new java.awt.Color(255, 255, 255));
+            jCheckBox1.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            jCheckBox1.setText("الغاء حجز الغرفة");
+            jCheckBox1.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+            jCheckBox1.setBorderPainted(true);
+            jCheckBox1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            jCheckBox1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+            jCheckBox1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+            jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jCheckBox1ActionPerformed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 12;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+            jPanel6.add(jCheckBox1, gridBagConstraints);
+
+            jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+            jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residence/Image/C_Add_Mini_h.png"))); // NOI18N
+            jLabel11.setToolTipText("اضافة جنسية جديدة");
+            jLabel11.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseEntered(java.awt.event.MouseEvent evt) {
+                    jLabel11MouseEntered(evt);
+                }
+                public void mouseExited(java.awt.event.MouseEvent evt) {
+                    jLabel11MouseExited(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 17;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+            jPanel6.add(jLabel11, gridBagConstraints);
+
+            jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+            jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residence/Image/C_Add_Mini_h.png"))); // NOI18N
+            jLabel13.setToolTipText("معاينة بيانات الولاية وبلدياتها");
+            jLabel13.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            jLabel13.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    jLabel13MouseClicked(evt);
+                }
+                public void mouseEntered(java.awt.event.MouseEvent evt) {
+                    jLabel13MouseEntered(evt);
+                }
+                public void mouseExited(java.awt.event.MouseEvent evt) {
+                    jLabel13MouseExited(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 2;
+            gridBagConstraints.gridy = 8;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            jPanel6.add(jLabel13, gridBagConstraints);
+
+            txtNam_std_FR.setBackground(new java.awt.Color(204, 204, 204));
+            txtNam_std_FR.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            txtNam_std_FR.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtNam_std_FR.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtNam_std_FR.setPreferredSize(new java.awt.Dimension(100, 30));
+            txtNam_std_FR.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    txtNam_std_FRFocusGained(evt);
+                }
+            });
+            txtNam_std_FR.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtNam_std_FRKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 6;
+            gridBagConstraints.gridy = 1;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            jPanel6.add(txtNam_std_FR, gridBagConstraints);
+
+            txtSurNam_std_FR.setBackground(new java.awt.Color(204, 204, 204));
+            txtSurNam_std_FR.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            txtSurNam_std_FR.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtSurNam_std_FR.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtSurNam_std_FR.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    txtSurNam_std_FRFocusGained(evt);
+                }
+            });
+            txtSurNam_std_FR.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtSurNam_std_FRKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 3;
+            gridBagConstraints.gridy = 1;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+            jPanel6.add(txtSurNam_std_FR, gridBagConstraints);
+
+            jLabel82.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel82.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel82.setText("Nom");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 3;
+            gridBagConstraints.gridy = 0;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+            jPanel6.add(jLabel82, gridBagConstraints);
+
+            jLabel94.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel94.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel94.setText("Nom de mere");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 3;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+            jPanel6.add(jLabel94, gridBagConstraints);
+
+            LastNamMothARTxt_FR.setBackground(new java.awt.Color(204, 204, 204));
+            LastNamMothARTxt_FR.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            LastNamMothARTxt_FR.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            LastNamMothARTxt_FR.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            LastNamMothARTxt_FR.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    LastNamMothARTxt_FRFocusGained(evt);
+                }
+            });
+            LastNamMothARTxt_FR.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    LastNamMothARTxt_FRKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 4;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+            jPanel6.add(LastNamMothARTxt_FR, gridBagConstraints);
+
+            txtNam_Father_FR.setBackground(new java.awt.Color(204, 204, 204));
+            txtNam_Father_FR.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            txtNam_Father_FR.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtNam_Father_FR.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtNam_Father_FR.setPreferredSize(new java.awt.Dimension(100, 30));
+            txtNam_Father_FR.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    txtNam_Father_FRFocusGained(evt);
+                }
+            });
+            txtNam_Father_FR.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtNam_Father_FRKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 6;
+            gridBagConstraints.gridy = 4;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            jPanel6.add(txtNam_Father_FR, gridBagConstraints);
+
+            jLabel99.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel99.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel99.setText("Prenem de pere");
+            jLabel99.setPreferredSize(new java.awt.Dimension(100, 30));
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 6;
+            gridBagConstraints.gridy = 3;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            jPanel6.add(jLabel99, gridBagConstraints);
+
+            jLabel64.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel64.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel64.setText("Prenom");
+            jLabel64.setPreferredSize(new java.awt.Dimension(100, 30));
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 6;
+            gridBagConstraints.gridy = 0;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            gridBagConstraints.weightx = 1.0;
+            jPanel6.add(jLabel64, gridBagConstraints);
+
+            txtPlcBirth_std_FR.setBackground(new java.awt.Color(204, 204, 204));
+            txtPlcBirth_std_FR.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            txtPlcBirth_std_FR.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtPlcBirth_std_FR.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtPlcBirth_std_FR.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    txtPlcBirth_std_FRFocusGained(evt);
+                }
+            });
+            txtPlcBirth_std_FR.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtPlcBirth_std_FRKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 1;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+            jPanel6.add(txtPlcBirth_std_FR, gridBagConstraints);
+
+            jLabel100.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel100.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel100.setText("lieu de naissance");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 0;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            gridBagConstraints.weightx = 1.0;
+            jPanel6.add(jLabel100, gridBagConstraints);
+
+            txtNam_mother_FR.setBackground(new java.awt.Color(204, 204, 204));
+            txtNam_mother_FR.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            txtNam_mother_FR.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtNam_mother_FR.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtNam_mother_FR.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    txtNam_mother_FRFocusGained(evt);
+                }
+            });
+            txtNam_mother_FR.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtNam_mother_FRKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 2;
+            gridBagConstraints.gridy = 4;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+            jPanel6.add(txtNam_mother_FR, gridBagConstraints);
+
+            jLabel182.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel182.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel182.setText("Prenom Mere");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 2;
+            gridBagConstraints.gridy = 3;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+            jPanel6.add(jLabel182, gridBagConstraints);
+
+            TtxtBacYear.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            TtxtBacYear.setForeground(new java.awt.Color(204, 204, 204));
+            TtxtBacYear.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            TtxtBacYear.setText("2018");
+            TtxtBacYear.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            TtxtBacYear.setPreferredSize(new java.awt.Dimension(100, 30));
+            TtxtBacYear.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    TtxtBacYearKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 7;
+            gridBagConstraints.gridy = 14;
+            gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
+            jPanel6.add(TtxtBacYear, gridBagConstraints);
+
+            jLabel101.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel101.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel101.setText("اســــم الأب");
+            jLabel101.setPreferredSize(new java.awt.Dimension(100, 30));
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 7;
+            gridBagConstraints.gridy = 3;
+            gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
+            jPanel6.add(jLabel101, gridBagConstraints);
+
+            txtBacMoy1.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            txtBacMoy1.setForeground(new java.awt.Color(204, 204, 204));
+            txtBacMoy1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtBacMoy1.setText("00.00");
+            txtBacMoy1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtBacMoy1.setPreferredSize(new java.awt.Dimension(100, 30));
+            txtBacMoy1.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtBacMoy1KeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 6;
+            gridBagConstraints.gridy = 14;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            jPanel6.add(txtBacMoy1, gridBagConstraints);
+
+            jLabel102.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel102.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel102.setText("تاريخ الـتسجيل بالجامعة");
+            jLabel102.setPreferredSize(new java.awt.Dimension(100, 30));
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 4;
+            gridBagConstraints.gridy = 13;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            jPanel6.add(jLabel102, gridBagConstraints);
+
+            jLabel103.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel103.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel103.setText("المـسـتوي الـدراسـي");
+            jLabel103.setPreferredSize(new java.awt.Dimension(100, 30));
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 4;
+            gridBagConstraints.gridy = 16;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+            jPanel6.add(jLabel103, gridBagConstraints);
+
+            txtPlaceGetBac1.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            txtPlaceGetBac1.setForeground(new java.awt.Color(204, 204, 204));
+            txtPlaceGetBac1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtPlaceGetBac1.setText("مــكـان الــحــصـول عــلــي الــبــكـالـــوريـــا");
+            txtPlaceGetBac1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtPlaceGetBac1.setPreferredSize(new java.awt.Dimension(100, 30));
+            txtPlaceGetBac1.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtPlaceGetBac1KeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 14;
+            gridBagConstraints.gridwidth = 3;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.ipady = 5;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+            jPanel6.add(txtPlaceGetBac1, gridBagConstraints);
+
+            jLabel84.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel84.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel84.setText("الــبـكـالــوريـا  دورة");
+            jLabel84.setPreferredSize(new java.awt.Dimension(100, 30));
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 7;
+            gridBagConstraints.gridy = 13;
+            gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
+            jPanel6.add(jLabel84, gridBagConstraints);
+
+            jLabel104.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel104.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel104.setText("الــمــعــدل");
+            jLabel104.setPreferredSize(new java.awt.Dimension(100, 30));
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 6;
+            gridBagConstraints.gridy = 13;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            jPanel6.add(jLabel104, gridBagConstraints);
+
+            jLabel109.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel109.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+            jLabel109.setText("مــكـان الــحــصـول عــلــي الــبــكـالـــوريـــا");
+            jLabel109.setPreferredSize(new java.awt.Dimension(100, 30));
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 13;
+            gridBagConstraints.gridwidth = 3;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+            jPanel6.add(jLabel109, gridBagConstraints);
+
+            jLabel110.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel110.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+            jLabel110.setText("الـــكلـيـة");
+            jLabel110.setPreferredSize(new java.awt.Dimension(100, 30));
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 16;
+            gridBagConstraints.gridwidth = 3;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+            jPanel6.add(jLabel110, gridBagConstraints);
+
+            DatInscrpInUniv.setForeground(java.awt.Color.blue);
+            try {
+                DatInscrpInUniv.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+            } catch (java.text.ParseException ex) {
+                ex.printStackTrace();
+            }
+            DatInscrpInUniv.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            DatInscrpInUniv.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            DatInscrpInUniv.setPreferredSize(new java.awt.Dimension(0, 35));
+            SimpleDateFormat formatDat=new SimpleDateFormat("dd/MM/YYYY");
+            String DatInscrpStr=formatDat.format(new Date());
+
+            DatInscrpInUniv.setText(DatInscrpStr);
+            DatInscrpInUniv.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    DatInscrpInUnivKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 4;
+            gridBagConstraints.gridy = 14;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
+            gridBagConstraints.weightx = 1.0;
+            jPanel6.add(DatInscrpInUniv, gridBagConstraints);
+
+            LevelStd.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            LevelStd.setAutoscrolls(true);
+            LevelStd.setPreferredSize(new java.awt.Dimension(0, 35));
+            LevelStd.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    LevelStdActionPerformed(evt);
+                }
+            });
+            LevelStd.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    LevelStdKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 4;
+            gridBagConstraints.gridy = 17;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
+            gridBagConstraints.weightx = 1.0;
+            jPanel6.add(LevelStd, gridBagConstraints);
+
+            txtDepa_Std.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            txtDepa_Std.setAutoscrolls(true);
+            txtDepa_Std.setPreferredSize(new java.awt.Dimension(0, 35));
+            txtDepa_Std.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtDepa_StdKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 17;
+            gridBagConstraints.gridwidth = 2;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
+            gridBagConstraints.weightx = 1.0;
+            jPanel6.add(txtDepa_Std, gridBagConstraints);
+
+            txtBranch_std.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            txtBranch_std.setAutoscrolls(true);
+            txtBranch_std.setPreferredSize(new java.awt.Dimension(0, 35));
+            txtBranch_std.addItemListener(new java.awt.event.ItemListener() {
+                public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                    txtBranch_stdItemStateChanged(evt);
+                }
+            });
+            txtBranch_std.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtBranch_stdKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 6;
+            gridBagConstraints.gridy = 17;
+            gridBagConstraints.gridwidth = 2;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+            jPanel6.add(txtBranch_std, gridBagConstraints);
+
+            jLabel60.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+            jLabel60.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residence/Image/C_Add_Mini_h.png"))); // NOI18N
+            jLabel60.setToolTipText("اضافة جنسية جديدة");
+            jLabel60.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            jLabel60.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseEntered(java.awt.event.MouseEvent evt) {
+                    jLabel60MouseEntered(evt);
+                }
+                public void mouseExited(java.awt.event.MouseEvent evt) {
+                    jLabel60MouseExited(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 3;
+            gridBagConstraints.gridy = 17;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
+            jPanel6.add(jLabel60, gridBagConstraints);
+
+            jLabel61.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+            jLabel61.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residence/Image/C_Add_Mini_h.png"))); // NOI18N
+            jLabel61.setToolTipText("اضافة جنسية جديدة");
+            jLabel61.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            jLabel61.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseEntered(java.awt.event.MouseEvent evt) {
+                    jLabel61MouseEntered(evt);
+                }
+                public void mouseExited(java.awt.event.MouseEvent evt) {
+                    jLabel61MouseExited(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 5;
+            gridBagConstraints.gridy = 17;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.insets = new java.awt.Insets(0, 8, 0, 3);
+            jPanel6.add(jLabel61, gridBagConstraints);
+
+            jLabel68.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+            jLabel68.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residence/Image/C_Add_Mini_h.png"))); // NOI18N
+            jLabel68.setToolTipText("اضافة جنسية جديدة");
+            jLabel68.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            jLabel68.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseEntered(java.awt.event.MouseEvent evt) {
+                    jLabel68MouseEntered(evt);
+                }
+                public void mouseExited(java.awt.event.MouseEvent evt) {
+                    jLabel68MouseExited(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 2;
+            gridBagConstraints.gridy = 11;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+            jPanel6.add(jLabel68, gridBagConstraints);
+
+            RadBtnMarriedStd.setBackground(new java.awt.Color(255, 255, 255));
+            RadBtnMarriedStd.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            RadBtnMarriedStd.setText("مــتــزوج");
+            RadBtnMarriedStd.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+            RadBtnMarriedStd.setBorderPainted(true);
+            RadBtnMarriedStd.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            RadBtnMarriedStd.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+            RadBtnMarriedStd.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+            RadBtnMarriedStd.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    RadBtnMarriedStdActionPerformed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 8;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+            jPanel6.add(RadBtnMarriedStd, gridBagConstraints);
+
+            RadBtnSingleStd.setBackground(new java.awt.Color(255, 255, 255));
+            RadBtnSingleStd.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            RadBtnSingleStd.setSelected(true);
+            RadBtnSingleStd.setText("اعـــزب");
+            RadBtnSingleStd.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+            RadBtnSingleStd.setBorderPainted(true);
+            RadBtnSingleStd.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            RadBtnSingleStd.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+            RadBtnSingleStd.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+            RadBtnSingleStd.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    RadBtnSingleStdActionPerformed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 8;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+            jPanel6.add(RadBtnSingleStd, gridBagConstraints);
+
+            BtnRdFemaleStd.setBackground(new java.awt.Color(255, 255, 255));
+            BtnRdFemaleStd.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            BtnRdFemaleStd.setText("مؤنث");
+            BtnRdFemaleStd.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+            BtnRdFemaleStd.setBorderPainted(true);
+            BtnRdFemaleStd.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            BtnRdFemaleStd.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+            BtnRdFemaleStd.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+            BtnRdFemaleStd.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    BtnRdFemaleStdActionPerformed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = 7;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+            jPanel6.add(BtnRdFemaleStd, gridBagConstraints);
+
+            BtnRdMaleStd.setBackground(new java.awt.Color(255, 255, 255));
+            BtnRdMaleStd.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            BtnRdMaleStd.setSelected(true);
+            BtnRdMaleStd.setText("مذكر");
+            BtnRdMaleStd.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+            BtnRdMaleStd.setBorderPainted(true);
+            BtnRdMaleStd.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            BtnRdMaleStd.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+            BtnRdMaleStd.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+            BtnRdMaleStd.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    BtnRdMaleStdActionPerformed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 7;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+            jPanel6.add(BtnRdMaleStd, gridBagConstraints);
+
+            jLabel70.setBackground(new java.awt.Color(255, 255, 255));
+            jLabel70.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            jLabel70.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel70.setText("السنـة الجامعية:");
+
+            firstYrs.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            firstYrs.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            firstYrs.addChangeListener(new javax.swing.event.ChangeListener() {
+                public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                    firstYrsStateChanged(evt);
                 }
             });
 
-            javax.swing.GroupLayout PanSaisiProf_Emp_Layout = new javax.swing.GroupLayout(PanSaisiProf_Emp_);
-            PanSaisiProf_Emp_.setLayout(PanSaisiProf_Emp_Layout);
-            PanSaisiProf_Emp_Layout.setHorizontalGroup(
-                PanSaisiProf_Emp_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(PanSaisiProf_Emp_Layout.createSequentialGroup()
-                    .addContainerGap(536, Short.MAX_VALUE)
-                    .addGroup(PanSaisiProf_Emp_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(MessgControl4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanSaisiProf_Emp_Layout.createSequentialGroup()
-                            .addGroup(PanSaisiProf_Emp_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(PanSaisiProf_Emp_Layout.createSequentialGroup()
-                                    .addComponent(txtProfession_Prof, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(45, 45, 45)
-                                    .addComponent(jLabel85, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(PanSaisiProf_Emp_Layout.createSequentialGroup()
-                                    .addComponent(Gdr_Prf_femal, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(57, 57, 57)
-                                    .addComponent(Gdr_Prf_Mal, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(PanSaisiProf_Emp_Layout.createSequentialGroup()
-                                    .addGap(2, 2, 2)
-                                    .addGroup(PanSaisiProf_Emp_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(txtSurNam_Prof, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(DatBirth_Prof, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(txtPlcBirth_Prof, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(txtNam_Prof, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGap(3, 3, 3)))
+            jLabel95.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            jLabel95.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel95.setText("/");
+
+            Annet1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            Annet1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            Annet1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+            buttonView12.setBackground(new java.awt.Color(0, 102, 102));
+            buttonView12.setForeground(new java.awt.Color(255, 255, 255));
+            buttonView12.setBackgroundPainted(true);
+            buttonView12.setBorderPainted(false);
+            buttonView12.setEntred(false);
+            buttonView12.setRounded(true);
+            buttonView12.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    buttonView12ActionPerformed(evt);
+                }
+            });
+
+            buttonView13.setBackground(new java.awt.Color(0, 102, 102));
+            buttonView13.setForeground(new java.awt.Color(255, 255, 255));
+            buttonView13.setBackgroundPainted(true);
+            buttonView13.setBorderPainted(false);
+            buttonView13.setEntred(false);
+            buttonView13.setRounded(true);
+            buttonView13.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    buttonView13ActionPerformed(evt);
+                }
+            });
+
+            javax.swing.GroupLayout panSaisiStd_Layout = new javax.swing.GroupLayout(panSaisiStd_);
+            panSaisiStd_.setLayout(panSaisiStd_Layout);
+            panSaisiStd_Layout.setHorizontalGroup(
+                panSaisiStd_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 1000, Short.MAX_VALUE)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panSaisiStd_Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(buttonView12, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(buttonView13, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Annet1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jLabel95, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(firstYrs, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(10, 10, 10)
+                    .addComponent(jLabel70)
                     .addContainerGap())
             );
-            PanSaisiProf_Emp_Layout.setVerticalGroup(
-                PanSaisiProf_Emp_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(PanSaisiProf_Emp_Layout.createSequentialGroup()
-                    .addGap(64, 64, 64)
-                    .addComponent(txtNam_Prof, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(19, 19, 19)
-                    .addComponent(txtSurNam_Prof, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(15, 15, 15)
-                    .addComponent(DatBirth_Prof, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(25, 25, 25)
-                    .addComponent(txtPlcBirth_Prof, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(27, 27, 27)
-                    .addGroup(PanSaisiProf_Emp_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(txtProfession_Prof, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel85, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(44, 44, 44)
-                    .addGroup(PanSaisiProf_Emp_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(Gdr_Prf_femal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(Gdr_Prf_Mal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(81, 81, 81)
-                    .addComponent(MessgControl4, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            panSaisiStd_Layout.setVerticalGroup(
+                panSaisiStd_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panSaisiStd_Layout.createSequentialGroup()
+                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(panSaisiStd_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(buttonView12, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(panSaisiStd_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel95, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Annet1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(buttonView13, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(panSaisiStd_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel70, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(firstYrs, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)))
+                    .addGap(0, 0, Short.MAX_VALUE))
             );
 
-            Pan_All_PansSais_.add(PanSaisiProf_Emp_, "card3");
-
-            PanSaisiStdExt1_.setBackground(new java.awt.Color(255, 255, 255));
-
-            jLabel169.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel169.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel169.setText("تاريخ الميلاد           : ");
-            jLabel169.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-
-            txtSurNam_StdExt.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            txtSurNam_StdExt.setForeground(new java.awt.Color(153, 153, 153));
-            txtSurNam_StdExt.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtSurNam_StdExt.setText("ادخل اللقب");
-            txtSurNam_StdExt.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtSurNam_StdExt.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtSurNam_StdExtFocusGained(evt);
-                }
-            });
-            txtSurNam_StdExt.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtSurNam_StdExtKeyPressed(evt);
-                }
-            });
-
-            jLabel171.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel171.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel171.setText("مكان الميلاد           : ");
-            jLabel171.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-
-            txtNam_StdExt.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            txtNam_StdExt.setForeground(new java.awt.Color(153, 153, 153));
-            txtNam_StdExt.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtNam_StdExt.setText("ادخل الاسم");
-            txtNam_StdExt.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtNam_StdExt.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtNam_StdExtFocusGained(evt);
-                }
-            });
-            txtNam_StdExt.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtNam_StdExtKeyPressed(evt);
-                }
-            });
-
-            txtPlcBirth_StdExt.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            txtPlcBirth_StdExt.setForeground(new java.awt.Color(153, 153, 153));
-            txtPlcBirth_StdExt.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtPlcBirth_StdExt.setText("ادخل مكان الميلاد");
-            txtPlcBirth_StdExt.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtPlcBirth_StdExt.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtPlcBirth_StdExtFocusGained(evt);
-                }
-            });
-            txtPlcBirth_StdExt.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtPlcBirth_StdExtKeyPressed(evt);
-                }
-            });
-
-            DatBirth_StdExt.setForeground(java.awt.Color.blue);
-            try {
-                DatBirth_StdExt.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
-            } catch (java.text.ParseException ex) {
-                ex.printStackTrace();
-            }
-            DatBirth_StdExt.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            DatBirth_StdExt.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-            DatBirth_StdExt.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            DatBirth_StdExt.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    DatBirth_StdExtKeyPressed(evt);
-                }
-            });
-
-            jLabel172.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel172.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            jLabel172.setText("التخـصص الدراســـــــي       :");
-
-            txtBranch_stdExtr.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-            txtBranch_stdExtr.setAutoscrolls(true);
-
-            jLabel173.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel173.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            jLabel173.setText("الــمـسـتــوي الـدراسـي        :");
-
-            LevelStd_StdExtrn.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-
-            txt_NumInscSdExt.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-            txt_NumInscSdExt.setForeground(new java.awt.Color(153, 153, 153));
-            txt_NumInscSdExt.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txt_NumInscSdExt.setText("رقــم التــسجـيــل  ");
-            txt_NumInscSdExt.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txt_NumInscSdExt.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txt_NumInscSdExtFocusGained(evt);
-                }
-            });
-            txt_NumInscSdExt.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txt_NumInscSdExtKeyPressed(evt);
-                }
-            });
-
-            Gdr_StdExt_Mal.setBackground(new java.awt.Color(255, 255, 255));
-            Gdr_StdExt_Mal.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            Gdr_StdExt_Mal.setSelected(true);
-            Gdr_StdExt_Mal.setText("مذكر");
-            Gdr_StdExt_Mal.setToolTipText("");
-            Gdr_StdExt_Mal.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-            Gdr_StdExt_Mal.setBorderPainted(true);
-            Gdr_StdExt_Mal.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-            Gdr_StdExt_Mal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            Gdr_StdExt_Mal.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-            Gdr_StdExt_Mal.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    Gdr_StdExt_MalActionPerformed(evt);
-                }
-            });
-
-            Gdr_Prf_femal5.setBackground(new java.awt.Color(255, 255, 255));
-            Gdr_Prf_femal5.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            Gdr_Prf_femal5.setText("مؤنث");
-            Gdr_Prf_femal5.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-            Gdr_Prf_femal5.setBorderPainted(true);
-            Gdr_Prf_femal5.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-            Gdr_Prf_femal5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            Gdr_Prf_femal5.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-            Gdr_Prf_femal5.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    Gdr_Prf_femal5ActionPerformed(evt);
-                }
-            });
-
-            javax.swing.GroupLayout PanSaisiStdExt1_Layout = new javax.swing.GroupLayout(PanSaisiStdExt1_);
-            PanSaisiStdExt1_.setLayout(PanSaisiStdExt1_Layout);
-            PanSaisiStdExt1_Layout.setHorizontalGroup(
-                PanSaisiStdExt1_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(PanSaisiStdExt1_Layout.createSequentialGroup()
-                    .addGroup(PanSaisiStdExt1_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(PanSaisiStdExt1_Layout.createSequentialGroup()
-                            .addGap(318, 318, 318)
-                            .addComponent(txtSurNam_StdExt, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(PanSaisiStdExt1_Layout.createSequentialGroup()
-                            .addGap(318, 318, 318)
-                            .addComponent(DatBirth_StdExt, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(41, 41, 41)
-                            .addComponent(jLabel169, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(PanSaisiStdExt1_Layout.createSequentialGroup()
-                            .addGap(318, 318, 318)
-                            .addComponent(txtPlcBirth_StdExt, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(41, 41, 41)
-                            .addComponent(jLabel171, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(PanSaisiStdExt1_Layout.createSequentialGroup()
-                            .addGap(318, 318, 318)
-                            .addComponent(Gdr_Prf_femal5, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(30, 30, 30)
-                            .addComponent(Gdr_StdExt_Mal, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(PanSaisiStdExt1_Layout.createSequentialGroup()
-                            .addGap(308, 308, 308)
-                            .addComponent(txtBranch_stdExtr, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(10, 10, 10)
-                            .addComponent(jLabel172, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(PanSaisiStdExt1_Layout.createSequentialGroup()
-                            .addGap(308, 308, 308)
-                            .addComponent(LevelStd_StdExtrn, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(10, 10, 10)
-                            .addComponent(jLabel173, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(PanSaisiStdExt1_Layout.createSequentialGroup()
-                            .addGap(318, 318, 318)
-                            .addGroup(PanSaisiStdExt1_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txt_NumInscSdExt, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtNam_StdExt, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addContainerGap(263, Short.MAX_VALUE))
-            );
-            PanSaisiStdExt1_Layout.setVerticalGroup(
-                PanSaisiStdExt1_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(PanSaisiStdExt1_Layout.createSequentialGroup()
-                    .addGap(71, 71, 71)
-                    .addComponent(txt_NumInscSdExt, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(14, 14, 14)
-                    .addComponent(txtNam_StdExt, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(14, 14, 14)
-                    .addComponent(txtSurNam_StdExt, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(14, 14, 14)
-                    .addGroup(PanSaisiStdExt1_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(DatBirth_StdExt, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel169, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(14, 14, 14)
-                    .addGroup(PanSaisiStdExt1_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(txtPlcBirth_StdExt, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel171, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(14, 14, 14)
-                    .addGroup(PanSaisiStdExt1_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(Gdr_Prf_femal5, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(Gdr_StdExt_Mal, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(44, 44, 44)
-                    .addGroup(PanSaisiStdExt1_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(txtBranch_stdExtr, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel172, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(14, 14, 14)
-                    .addGroup(PanSaisiStdExt1_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(LevelStd_StdExtrn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel173, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(77, 77, 77))
-            );
-
-            Pan_All_PansSais_.add(PanSaisiStdExt1_, "card4");
+            Pan_All_PansSais_.add(panSaisiStd_, "card2");
 
             PanSaisiEmp_.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -2487,7 +3616,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                             .addComponent(jLabel69, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(10, 10, 10)
                             .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addContainerGap(250, Short.MAX_VALUE))
+                    .addContainerGap(355, Short.MAX_VALUE))
             );
             PanSaisiEmp_Layout.setVerticalGroup(
                 PanSaisiEmp_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2518,1172 +3647,6 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
 
             Pan_All_PansSais_.add(PanSaisiEmp_, "card5");
 
-            panSaisiStd_.setBackground(new java.awt.Color(255, 255, 255));
-            panSaisiStd_.setPreferredSize(new java.awt.Dimension(1000, 804));
-
-            jPanel6.setBackground(new java.awt.Color(255, 255, 255));
-            jPanel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            jPanel6.setPreferredSize(new java.awt.Dimension(100, 30));
-            jPanel6.setLayout(new java.awt.GridBagLayout());
-
-            jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel2.setText("الاســــــم");
-            jLabel2.setPreferredSize(new java.awt.Dimension(100, 30));
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 6;
-            gridBagConstraints.gridy = 0;
-            gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
-            jPanel6.add(jLabel2, gridBagConstraints);
-
-            txtNam_std.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-            txtNam_std.setForeground(new java.awt.Color(204, 204, 204));
-            txtNam_std.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtNam_std.setText("الاسم");
-            txtNam_std.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtNam_std.setPreferredSize(new java.awt.Dimension(100, 30));
-            txtNam_std.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtNam_stdKeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 6;
-            gridBagConstraints.gridy = 1;
-            gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
-            jPanel6.add(txtNam_std, gridBagConstraints);
-
-            jLabel72.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel72.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel72.setText("تـاريـخ الـميـلاد");
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 2;
-            gridBagConstraints.gridy = 0;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(jLabel72, gridBagConstraints);
-
-            DatBirth_std.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            DatBirth_std.setForeground(new java.awt.Color(153, 153, 153));
-            try {
-                DatBirth_std.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
-            } catch (java.text.ParseException ex) {
-                ex.printStackTrace();
-            }
-            DatBirth_std.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            DatBirth_std.setFont(new java.awt.Font("Times New Roman", 1,16));
-            DatBirth_std.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    DatBirth_stdFocusGained(evt);
-                }
-            });
-            DatBirth_std.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    DatBirth_stdKeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 2;
-            gridBagConstraints.gridy = 1;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(DatBirth_std, gridBagConstraints);
-
-            jLabel71.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel71.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel71.setText("الـلـــقـــب");
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 4;
-            gridBagConstraints.gridy = 0;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(jLabel71, gridBagConstraints);
-
-            txtSurNam_std.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-            txtSurNam_std.setForeground(new java.awt.Color(204, 204, 204));
-            txtSurNam_std.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtSurNam_std.setText("الـلـــقـــب");
-            txtSurNam_std.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtSurNam_std.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtSurNam_stdKeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 4;
-            gridBagConstraints.gridy = 1;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(txtSurNam_std, gridBagConstraints);
-
-            jLabel73.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel73.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel73.setText("مــكـان الـميــلاد");
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 0;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(jLabel73, gridBagConstraints);
-
-            txtPlcBirth_std.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-            txtPlcBirth_std.setForeground(new java.awt.Color(204, 204, 204));
-            txtPlcBirth_std.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtPlcBirth_std.setText("مــكـان الـميــلاد");
-            txtPlcBirth_std.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtPlcBirth_std.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtPlcBirth_stdKeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 1;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
-            jPanel6.add(txtPlcBirth_std, gridBagConstraints);
-
-            txtNam_Father.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-            txtNam_Father.setForeground(new java.awt.Color(204, 204, 204));
-            txtNam_Father.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtNam_Father.setText("اسم الأب");
-            txtNam_Father.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtNam_Father.setPreferredSize(new java.awt.Dimension(100, 30));
-            txtNam_Father.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtNam_FatherKeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 6;
-            gridBagConstraints.gridy = 4;
-            gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
-            jPanel6.add(txtNam_Father, gridBagConstraints);
-
-            jLabel75.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel75.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel75.setText("التخـصص الدراسي ");
-            jLabel75.setPreferredSize(new java.awt.Dimension(100, 30));
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 6;
-            gridBagConstraints.gridy = 16;
-            gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
-            jPanel6.add(jLabel75, gridBagConstraints);
-
-            txtProfission_Std.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-            txtProfission_Std.setForeground(new java.awt.Color(204, 204, 204));
-            txtProfission_Std.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtProfission_Std.setText("مهنة الاب");
-            txtProfission_Std.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtProfission_Std.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtProfission_StdKeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 4;
-            gridBagConstraints.gridy = 4;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(txtProfission_Std, gridBagConstraints);
-
-            jLabel74.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel74.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel74.setText("مهنــة الاب ");
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 4;
-            gridBagConstraints.gridy = 3;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(jLabel74, gridBagConstraints);
-
-            jLabel161.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel161.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel161.setText(" اســم  الام");
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 3;
-            gridBagConstraints.gridy = 3;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(jLabel161, gridBagConstraints);
-
-            txtNam_mother.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-            txtNam_mother.setForeground(new java.awt.Color(204, 204, 204));
-            txtNam_mother.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtNam_mother.setText("اسم  الام");
-            txtNam_mother.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtNam_mother.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtNam_motherKeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 3;
-            gridBagConstraints.gridy = 4;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(txtNam_mother, gridBagConstraints);
-
-            jLabel76.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel76.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel76.setText("لقب  الام");
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 3;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(jLabel76, gridBagConstraints);
-
-            LastNamMothARTxt.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-            LastNamMothARTxt.setForeground(new java.awt.Color(204, 204, 204));
-            LastNamMothARTxt.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            LastNamMothARTxt.setText("لقب  الام");
-            LastNamMothARTxt.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            LastNamMothARTxt.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    LastNamMothARTxtKeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 4;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
-            jPanel6.add(LastNamMothARTxt, gridBagConstraints);
-
-            txtProfission_Moth.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-            txtProfission_Moth.setForeground(new java.awt.Color(204, 204, 204));
-            txtProfission_Moth.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtProfission_Moth.setText("مهنة الام");
-            txtProfission_Moth.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtProfission_Moth.setPreferredSize(new java.awt.Dimension(100, 35));
-            txtProfission_Moth.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtProfission_MothKeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 6;
-            gridBagConstraints.gridy = 8;
-            gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
-            jPanel6.add(txtProfission_Moth, gridBagConstraints);
-
-            jLabel77.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel77.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel77.setText("مهنـة الام");
-            jLabel77.setPreferredSize(new java.awt.Dimension(100, 30));
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 6;
-            gridBagConstraints.gridy = 7;
-            gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
-            jPanel6.add(jLabel77, gridBagConstraints);
-
-            BtnShowRooms.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            BtnShowRooms.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            BtnShowRooms.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residence/Image/ViewSmal.jpg"))); // NOI18N
-            BtnShowRooms.setToolTipText("معاينة الغرف المحجوزة");
-            BtnShowRooms.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-            BtnShowRooms.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseEntered(java.awt.event.MouseEvent evt) {
-                    BtnShowRoomsMouseEntered(evt);
-                }
-                public void mouseExited(java.awt.event.MouseEvent evt) {
-                    BtnShowRoomsMouseExited(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.gridy = 12;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(10, 20, 0, 20);
-            jPanel6.add(BtnShowRooms, gridBagConstraints);
-
-            WilayaList.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-            WilayaList.setAutoscrolls(true);
-            WilayaList.setPreferredSize(new java.awt.Dimension(100, 35));
-            WilayaList.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    WilayaListActionPerformed(evt);
-                }
-            });
-            WilayaList.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    WilayaListKeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 5;
-            gridBagConstraints.gridy = 8;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(WilayaList, gridBagConstraints);
-
-            jLabel80.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel80.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel80.setText("الــولايـــة");
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 5;
-            gridBagConstraints.gridy = 7;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(jLabel80, gridBagConstraints);
-
-            jLabel88.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel88.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel88.setText("الــبلــديــة");
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 4;
-            gridBagConstraints.gridy = 7;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(jLabel88, gridBagConstraints);
-
-            CombCommuneSlct.setPreferredSize(new java.awt.Dimension(100, 35));
-            CombCommuneSlct.addItemListener(new java.awt.event.ItemListener() {
-                public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                    CombCommuneSlctItemStateChanged(evt);
-                }
-            });
-            CombCommuneSlct.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    CombCommuneSlctActionPerformed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 4;
-            gridBagConstraints.gridy = 8;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(CombCommuneSlct, gridBagConstraints);
-
-            jLabel81.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel81.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel81.setText("الــدائـــرة");
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 3;
-            gridBagConstraints.gridy = 7;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(jLabel81, gridBagConstraints);
-
-            txtDairaStd.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-            txtDairaStd.setForeground(new java.awt.Color(204, 204, 204));
-            txtDairaStd.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtDairaStd.setText("الدائرة");
-            txtDairaStd.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtDairaStd.setPreferredSize(new java.awt.Dimension(100, 35));
-            txtDairaStd.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtDairaStdKeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 3;
-            gridBagConstraints.gridy = 8;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
-            jPanel6.add(txtDairaStd, gridBagConstraints);
-
-            jLabel78.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel78.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel78.setText(" الــعـنــوان ");
-            jLabel78.setPreferredSize(new java.awt.Dimension(100, 30));
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 6;
-            gridBagConstraints.gridy = 10;
-            gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
-            jPanel6.add(jLabel78, gridBagConstraints);
-
-            txtAddress_Std.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-            txtAddress_Std.setForeground(new java.awt.Color(204, 204, 204));
-            txtAddress_Std.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtAddress_Std.setText("العـنوان");
-            txtAddress_Std.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtAddress_Std.setPreferredSize(new java.awt.Dimension(100, 32));
-            txtAddress_Std.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtAddress_StdKeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 4;
-            gridBagConstraints.gridy = 11;
-            gridBagConstraints.gridwidth = 3;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
-            jPanel6.add(txtAddress_Std, gridBagConstraints);
-
-            jLabel79.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel79.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel79.setText("الجنـسـية");
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 3;
-            gridBagConstraints.gridy = 10;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(jLabel79, gridBagConstraints);
-
-            National_list.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-            National_list.setAutoscrolls(true);
-            National_list.setPreferredSize(new java.awt.Dimension(100, 35));
-            National_list.addItemListener(new java.awt.event.ItemListener() {
-                public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                    National_listItemStateChanged(evt);
-                }
-            });
-            National_list.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    National_listKeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 3;
-            gridBagConstraints.gridy = 11;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(National_list, gridBagConstraints);
-
-            Sti_Single1.setBackground(new java.awt.Color(255, 255, 255));
-            Sti_Single1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            Sti_Single1.setSelected(true);
-            Sti_Single1.setText("اعـــزب");
-            Sti_Single1.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-            Sti_Single1.setBorderPainted(true);
-            Sti_Single1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            Sti_Single1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-            Sti_Single1.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    Sti_Single1ActionPerformed(evt);
-                }
-            });
-            Sti_Single1.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    Sti_Single1KeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 7;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(Sti_Single1, gridBagConstraints);
-
-            Std_Maried.setBackground(new java.awt.Color(255, 255, 255));
-            Std_Maried.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            Std_Maried.setText("مــتــزوج");
-            Std_Maried.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-            Std_Maried.setBorderPainted(true);
-            Std_Maried.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            Std_Maried.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-            Std_Maried.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    Std_MariedActionPerformed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.gridy = 7;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(Std_Maried, gridBagConstraints);
-
-            CheckMale.setBackground(new java.awt.Color(255, 255, 255));
-            CheckMale.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            CheckMale.setSelected(true);
-            CheckMale.setText("مذكر");
-            CheckMale.setToolTipText("");
-            CheckMale.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-            CheckMale.setBorderPainted(true);
-            CheckMale.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-            CheckMale.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            CheckMale.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-            CheckMale.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    CheckMaleActionPerformed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 8;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(CheckMale, gridBagConstraints);
-
-            checkFemal.setBackground(new java.awt.Color(255, 255, 255));
-            checkFemal.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            checkFemal.setText("مؤنث");
-            checkFemal.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-            checkFemal.setBorderPainted(true);
-            checkFemal.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-            checkFemal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            checkFemal.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-            checkFemal.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    checkFemalActionPerformed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.gridy = 8;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(checkFemal, gridBagConstraints);
-
-            PavillonPanInf.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-            PavillonPanInf.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    PavillonPanInfActionPerformed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 11;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
-            jPanel6.add(PavillonPanInf, gridBagConstraints);
-
-            jLabel67.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-            jLabel67.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel67.setText("الجناح");
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 10;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
-            jPanel6.add(jLabel67, gridBagConstraints);
-
-            jLabel65.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-            jLabel65.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel65.setText("الغرفة");
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.gridy = 10;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
-            jPanel6.add(jLabel65, gridBagConstraints);
-
-            RomPvinPanInf.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-            RomPvinPanInf.addItemListener(new java.awt.event.ItemListener() {
-                public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                    RomPvinPanInfItemStateChanged(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.gridy = 11;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(RomPvinPanInf, gridBagConstraints);
-
-            jCheckBox1.setBackground(new java.awt.Color(255, 255, 255));
-            jCheckBox1.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-            jCheckBox1.setText("الغاء حجز الغرفة");
-            jCheckBox1.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-            jCheckBox1.setBorderPainted(true);
-            jCheckBox1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-            jCheckBox1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            jCheckBox1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-            jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jCheckBox1ActionPerformed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 1;
-            gridBagConstraints.gridy = 12;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 10);
-            jPanel6.add(jCheckBox1, gridBagConstraints);
-
-            jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residence/Image/C_Add_Mini_h.png"))); // NOI18N
-            jLabel11.setToolTipText("اضافة جنسية جديدة");
-            jLabel11.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-            jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseEntered(java.awt.event.MouseEvent evt) {
-                    jLabel11MouseEntered(evt);
-                }
-                public void mouseExited(java.awt.event.MouseEvent evt) {
-                    jLabel11MouseExited(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 2;
-            gridBagConstraints.gridy = 11;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(jLabel11, gridBagConstraints);
-
-            jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residence/Image/C_Add_Mini_h.png"))); // NOI18N
-            jLabel13.setToolTipText("معاينة بيانات الولاية وبلدياتها");
-            jLabel13.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-            jLabel13.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    jLabel13MouseClicked(evt);
-                }
-                public void mouseEntered(java.awt.event.MouseEvent evt) {
-                    jLabel13MouseEntered(evt);
-                }
-                public void mouseExited(java.awt.event.MouseEvent evt) {
-                    jLabel13MouseExited(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 2;
-            gridBagConstraints.gridy = 8;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            jPanel6.add(jLabel13, gridBagConstraints);
-
-            txtNam_std_FR.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-            txtNam_std_FR.setForeground(new java.awt.Color(204, 204, 204));
-            txtNam_std_FR.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtNam_std_FR.setText("Prenom");
-            txtNam_std_FR.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtNam_std_FR.setPreferredSize(new java.awt.Dimension(100, 30));
-            txtNam_std_FR.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtNam_std_FRKeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 5;
-            gridBagConstraints.gridy = 1;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
-            jPanel6.add(txtNam_std_FR, gridBagConstraints);
-
-            txtSurNam_std_FR.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-            txtSurNam_std_FR.setForeground(new java.awt.Color(204, 204, 204));
-            txtSurNam_std_FR.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtSurNam_std_FR.setText("Nom");
-            txtSurNam_std_FR.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtSurNam_std_FR.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtSurNam_std_FRKeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 3;
-            gridBagConstraints.gridy = 1;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(txtSurNam_std_FR, gridBagConstraints);
-
-            jLabel82.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel82.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel82.setText("Nom");
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 3;
-            gridBagConstraints.gridy = 0;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(jLabel82, gridBagConstraints);
-
-            jLabel94.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel94.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel94.setText("Nom de mere");
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.gridy = 3;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(jLabel94, gridBagConstraints);
-
-            LastNamMothARTxt_FR.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-            LastNamMothARTxt_FR.setForeground(new java.awt.Color(204, 204, 204));
-            LastNamMothARTxt_FR.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            LastNamMothARTxt_FR.setText("Nom de mere");
-            LastNamMothARTxt_FR.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            LastNamMothARTxt_FR.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    LastNamMothARTxt_FRKeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.gridy = 4;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
-            jPanel6.add(LastNamMothARTxt_FR, gridBagConstraints);
-
-            txtNam_Father_FR.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-            txtNam_Father_FR.setForeground(new java.awt.Color(204, 204, 204));
-            txtNam_Father_FR.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtNam_Father_FR.setText("Prenem de pere");
-            txtNam_Father_FR.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtNam_Father_FR.setPreferredSize(new java.awt.Dimension(100, 30));
-            txtNam_Father_FR.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtNam_Father_FRKeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 5;
-            gridBagConstraints.gridy = 4;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
-            jPanel6.add(txtNam_Father_FR, gridBagConstraints);
-
-            jLabel99.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel99.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel99.setText("Prenem de pere");
-            jLabel99.setPreferredSize(new java.awt.Dimension(100, 30));
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 5;
-            gridBagConstraints.gridy = 3;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(jLabel99, gridBagConstraints);
-
-            jLabel64.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel64.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel64.setText("Prenom");
-            jLabel64.setPreferredSize(new java.awt.Dimension(100, 30));
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 5;
-            gridBagConstraints.gridy = 0;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
-            jPanel6.add(jLabel64, gridBagConstraints);
-
-            txtPlcBirth_std_FR.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-            txtPlcBirth_std_FR.setForeground(new java.awt.Color(204, 204, 204));
-            txtPlcBirth_std_FR.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtPlcBirth_std_FR.setText("lieu de naissance");
-            txtPlcBirth_std_FR.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtPlcBirth_std_FR.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtPlcBirth_std_FRKeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.gridy = 1;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
-            jPanel6.add(txtPlcBirth_std_FR, gridBagConstraints);
-
-            jLabel100.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel100.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel100.setText("lieu de naissance");
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.gridy = 0;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-            gridBagConstraints.weightx = 1.0;
-            jPanel6.add(jLabel100, gridBagConstraints);
-
-            txtNam_mother_FR.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-            txtNam_mother_FR.setForeground(new java.awt.Color(204, 204, 204));
-            txtNam_mother_FR.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtNam_mother_FR.setText("اسم الام الفرنسية");
-            txtNam_mother_FR.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtNam_mother_FR.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtNam_mother_FRKeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 2;
-            gridBagConstraints.gridy = 4;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(txtNam_mother_FR, gridBagConstraints);
-
-            jLabel182.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel182.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel182.setText("Prenom Mere");
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 2;
-            gridBagConstraints.gridy = 3;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(jLabel182, gridBagConstraints);
-
-            TtxtBacYear.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-            TtxtBacYear.setForeground(new java.awt.Color(204, 204, 204));
-            TtxtBacYear.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            TtxtBacYear.setText("2018");
-            TtxtBacYear.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            TtxtBacYear.setPreferredSize(new java.awt.Dimension(100, 30));
-            TtxtBacYear.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    TtxtBacYearKeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 6;
-            gridBagConstraints.gridy = 14;
-            gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
-            jPanel6.add(TtxtBacYear, gridBagConstraints);
-
-            jLabel101.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel101.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel101.setText("اســــم الأب");
-            jLabel101.setPreferredSize(new java.awt.Dimension(100, 30));
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 6;
-            gridBagConstraints.gridy = 3;
-            gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
-            jPanel6.add(jLabel101, gridBagConstraints);
-
-            txtBacMoy1.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-            txtBacMoy1.setForeground(new java.awt.Color(204, 204, 204));
-            txtBacMoy1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtBacMoy1.setText("00.00");
-            txtBacMoy1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtBacMoy1.setPreferredSize(new java.awt.Dimension(100, 30));
-            txtBacMoy1.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtBacMoy1KeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 5;
-            gridBagConstraints.gridy = 14;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
-            jPanel6.add(txtBacMoy1, gridBagConstraints);
-
-            jLabel102.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel102.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel102.setText("تاريخ الـتسجيل بالجامعة");
-            jLabel102.setPreferredSize(new java.awt.Dimension(100, 30));
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 5;
-            gridBagConstraints.gridy = 16;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(jLabel102, gridBagConstraints);
-
-            jLabel103.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel103.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel103.setText("المـسـتوي الـدراسـي");
-            jLabel103.setPreferredSize(new java.awt.Dimension(100, 30));
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 3;
-            gridBagConstraints.gridy = 16;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(jLabel103, gridBagConstraints);
-
-            txtPlaceGetBac1.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-            txtPlaceGetBac1.setForeground(new java.awt.Color(204, 204, 204));
-            txtPlaceGetBac1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtPlaceGetBac1.setText("مــكـان الــحــصـول عــلــي الــبــكـالـــوريـــا");
-            txtPlaceGetBac1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtPlaceGetBac1.setPreferredSize(new java.awt.Dimension(100, 30));
-            txtPlaceGetBac1.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtPlaceGetBac1KeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.gridy = 14;
-            gridBagConstraints.gridwidth = 4;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.ipady = 5;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
-            jPanel6.add(txtPlaceGetBac1, gridBagConstraints);
-
-            jLabel84.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel84.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel84.setText("الــبـكـالــوريـا  دورة");
-            jLabel84.setPreferredSize(new java.awt.Dimension(100, 30));
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 6;
-            gridBagConstraints.gridy = 13;
-            gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
-            jPanel6.add(jLabel84, gridBagConstraints);
-
-            jLabel104.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel104.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel104.setText("الــمــعــدل");
-            jLabel104.setPreferredSize(new java.awt.Dimension(100, 30));
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 5;
-            gridBagConstraints.gridy = 13;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(jLabel104, gridBagConstraints);
-
-            jLabel109.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel109.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel109.setText("مــكـان الــحــصـول عــلــي الــبــكـالـــوريـــا");
-            jLabel109.setPreferredSize(new java.awt.Dimension(100, 30));
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 2;
-            gridBagConstraints.gridy = 13;
-            gridBagConstraints.gridwidth = 2;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(jLabel109, gridBagConstraints);
-
-            jLabel110.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel110.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            jLabel110.setText("الـــكلـيـة");
-            jLabel110.setPreferredSize(new java.awt.Dimension(100, 30));
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.gridy = 16;
-            gridBagConstraints.gridwidth = 2;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
-            jPanel6.add(jLabel110, gridBagConstraints);
-
-            DatInscrpInUniv.setForeground(java.awt.Color.blue);
-            try {
-                DatInscrpInUniv.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
-            } catch (java.text.ParseException ex) {
-                ex.printStackTrace();
-            }
-            DatInscrpInUniv.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            DatInscrpInUniv.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-            DatInscrpInUniv.setPreferredSize(new java.awt.Dimension(0, 35));
-            SimpleDateFormat formatDat=new SimpleDateFormat("dd/MM/YYYY");
-            String DatInscrpStr=formatDat.format(new Date());
-
-            DatInscrpInUniv.setText(DatInscrpStr);
-            DatInscrpInUniv.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    DatInscrpInUnivKeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 5;
-            gridBagConstraints.gridy = 17;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
-            gridBagConstraints.weightx = 1.0;
-            jPanel6.add(DatInscrpInUniv, gridBagConstraints);
-
-            LevelStd.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-            LevelStd.setAutoscrolls(true);
-            LevelStd.setPreferredSize(new java.awt.Dimension(0, 35));
-            LevelStd.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    LevelStdActionPerformed(evt);
-                }
-            });
-            LevelStd.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    LevelStdKeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 3;
-            gridBagConstraints.gridy = 17;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
-            gridBagConstraints.weightx = 1.0;
-            jPanel6.add(LevelStd, gridBagConstraints);
-
-            txtDepa_Std.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-            txtDepa_Std.setAutoscrolls(true);
-            txtDepa_Std.setPreferredSize(new java.awt.Dimension(0, 35));
-            txtDepa_Std.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtDepa_StdKeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 0;
-            gridBagConstraints.gridy = 17;
-            gridBagConstraints.gridwidth = 2;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
-            jPanel6.add(txtDepa_Std, gridBagConstraints);
-
-            txtBranch_std.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-            txtBranch_std.setAutoscrolls(true);
-            txtBranch_std.setPreferredSize(new java.awt.Dimension(0, 35));
-            txtBranch_std.addItemListener(new java.awt.event.ItemListener() {
-                public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                    txtBranch_stdItemStateChanged(evt);
-                }
-            });
-            txtBranch_std.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtBranch_stdKeyPressed(evt);
-                }
-            });
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 6;
-            gridBagConstraints.gridy = 17;
-            gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
-            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-            gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
-            gridBagConstraints.weightx = 1.0;
-            gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 5);
-            jPanel6.add(txtBranch_std, gridBagConstraints);
-
-            javax.swing.GroupLayout panSaisiStd_Layout = new javax.swing.GroupLayout(panSaisiStd_);
-            panSaisiStd_.setLayout(panSaisiStd_Layout);
-            panSaisiStd_Layout.setHorizontalGroup(
-                panSaisiStd_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 893, Short.MAX_VALUE)
-            );
-            panSaisiStd_Layout.setVerticalGroup(
-                panSaisiStd_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panSaisiStd_Layout.createSequentialGroup()
-                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 125, Short.MAX_VALUE))
-            );
-
-            Pan_All_PansSais_.add(panSaisiStd_, "card2");
-
             PanInfoCard.add(Pan_All_PansSais_, java.awt.BorderLayout.CENTER);
 
             PanAllServiceStudent.add(PanInfoCard, "card2");
@@ -3704,100 +3667,20 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             jLabel134.setText("رقم التسجيل");
             InfoStdToUpdate.add(jLabel134, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 10, 60, 20));
 
-            txt_NumInsc2.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-            txt_NumInsc2.setForeground(new java.awt.Color(153, 153, 153));
-            txt_NumInsc2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txt_NumInsc2.setText("رقــم تــسجـيــل  ");
-            txt_NumInsc2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txt_NumInsc2.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txt_NumInsc2FocusGained(evt);
-                }
-            });
-            txt_NumInsc2.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txt_NumInsc2KeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(txt_NumInsc2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 10, 120, 34));
+            LbNmStdUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            LbNmStdUpdtForm.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+            LbNmStdUpdtForm.setText("الاســــــم");
+            InfoStdToUpdate.add(LbNmStdUpdtForm, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 70, 50, -1));
 
-            txtNam_std5.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            txtNam_std5.setForeground(java.awt.Color.blue);
-            txtNam_std5.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtNam_std5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtNam_std5.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtNam_std5FocusGained(evt);
-                }
-            });
-            txtNam_std5.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtNam_std5KeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(txtNam_std5, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 100, 100, 34));
-
-            jLabel135.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel135.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            jLabel135.setText("الاســــــم");
-            InfoStdToUpdate.add(jLabel135, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 100, 50, 30));
-
-            jLabel136.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel136.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            jLabel136.setText("الـلـــقـــب  : ");
-            InfoStdToUpdate.add(jLabel136, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 140, 60, 34));
-
-            txtSurNam_std5.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            txtSurNam_std5.setForeground(java.awt.Color.blue);
-            txtSurNam_std5.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtSurNam_std5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtSurNam_std5.setMaximumSize(new java.awt.Dimension(2, 21));
-            txtSurNam_std5.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtSurNam_std5FocusGained(evt);
-                }
-            });
-            txtSurNam_std5.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtSurNam_std5KeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(txtSurNam_std5, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 140, 100, 34));
-
-            txtProfission_Moth2.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            txtProfission_Moth2.setForeground(java.awt.Color.blue);
-            txtProfission_Moth2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtProfission_Moth2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtProfission_Moth2.setMaximumSize(new java.awt.Dimension(2, 21));
-            txtProfission_Moth2.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtProfission_Moth2KeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(txtProfission_Moth2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 340, 210, 30));
+            LbLstStdUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            LbLstStdUpdtForm.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+            LbLstStdUpdtForm.setText("الـلـــقـــب  : ");
+            InfoStdToUpdate.add(LbLstStdUpdtForm, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 140, 60, 34));
 
             jLabel137.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
             jLabel137.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
             jLabel137.setText("مكان الميلاد :  ");
             InfoStdToUpdate.add(jLabel137, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 190, 60, 34));
-
-            DatBirth_std3.setForeground(java.awt.Color.blue);
-            try {
-                DatBirth_std3.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
-            } catch (java.text.ParseException ex) {
-                ex.printStackTrace();
-            }
-            DatBirth_std3.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            DatBirth_std3.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-            DatBirth_std3.setMaximumSize(new java.awt.Dimension(2, 21));
-            DatBirth_std3.setMinimumSize(new java.awt.Dimension(2, 21));
-            DatBirth_std3.setPreferredSize(new java.awt.Dimension(2, 21));
-            DatBirth_std3.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    DatBirth_std3KeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(DatBirth_std3, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 190, 210, 34));
 
             jLabel138.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
             jLabel138.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -3809,40 +3692,6 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             jLabel139.setText("اســــم الأب     : ");
             InfoStdToUpdate.add(jLabel139, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 240, 70, 34));
 
-            txtNam_Father2.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            txtNam_Father2.setForeground(java.awt.Color.blue);
-            txtNam_Father2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtNam_Father2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtNam_Father2.setMaximumSize(new java.awt.Dimension(2, 21));
-            txtNam_Father2.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtNam_Father2FocusGained(evt);
-                }
-            });
-            txtNam_Father2.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtNam_Father2KeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(txtNam_Father2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 240, 100, 34));
-
-            txtPlcBirth_std5.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            txtPlcBirth_std5.setForeground(java.awt.Color.blue);
-            txtPlcBirth_std5.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtPlcBirth_std5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtPlcBirth_std5.setMaximumSize(new java.awt.Dimension(2, 21));
-            txtPlcBirth_std5.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtPlcBirth_std5FocusGained(evt);
-                }
-            });
-            txtPlcBirth_std5.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtPlcBirth_std5KeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(txtPlcBirth_std5, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 190, 100, 34));
-
             jLabel140.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
             jLabel140.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
             jLabel140.setText("لـقـب الام    : ");
@@ -3852,39 +3701,6 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             jLabel141.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
             jLabel141.setText("الــمهـنــة الام : ");
             InfoStdToUpdate.add(jLabel141, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 340, 70, 30));
-
-            txtProfission_Std2.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-            txtProfission_Std2.setForeground(java.awt.Color.blue);
-            txtProfission_Std2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtProfission_Std2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtProfission_Std2.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtProfission_Std2FocusGained(evt);
-                }
-            });
-            txtProfission_Std2.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtProfission_Std2KeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(txtProfission_Std2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, 200, 34));
-
-            txtNam_mother2.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            txtNam_mother2.setForeground(java.awt.Color.blue);
-            txtNam_mother2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtNam_mother2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtNam_mother2.setMaximumSize(new java.awt.Dimension(2, 21));
-            txtNam_mother2.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtNam_mother2FocusGained(evt);
-                }
-            });
-            txtNam_mother2.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtNam_mother2KeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(txtNam_mother2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 290, 100, 34));
 
             jLabel142.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
             jLabel142.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -3896,176 +3712,20 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             jLabel143.setText(" الــعـنــوان       : ");
             InfoStdToUpdate.add(jLabel143, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 340, 80, 30));
 
-            txtAddress_Std2.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            txtAddress_Std2.setForeground(java.awt.Color.blue);
-            txtAddress_Std2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtAddress_Std2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtAddress_Std2.setMinimumSize(new java.awt.Dimension(4, 21));
-            txtAddress_Std2.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtAddress_Std2FocusGained(evt);
-                }
-            });
-            txtAddress_Std2.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtAddress_Std2KeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(txtAddress_Std2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, 200, 30));
-
-            txtCommuneStd2.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            txtCommuneStd2.setForeground(java.awt.Color.blue);
-            txtCommuneStd2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtCommuneStd2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtCommuneStd2.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtCommuneStd2KeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(txtCommuneStd2, new org.netbeans.lib.awtextra.AbsoluteConstraints(218, 380, -1, 30));
-
-            checkFemal2.setBackground(new java.awt.Color(255, 255, 255));
-            checkFemal2.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            checkFemal2.setText("مؤنث");
-            checkFemal2.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-            checkFemal2.setBorderPainted(true);
-            checkFemal2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-            checkFemal2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            checkFemal2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-            checkFemal2.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    checkFemal2ActionPerformed(evt);
-                }
-            });
-            InfoStdToUpdate.add(checkFemal2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 430, 70, 30));
-
-            CheckMale2.setBackground(new java.awt.Color(255, 255, 255));
-            CheckMale2.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            CheckMale2.setSelected(true);
-            CheckMale2.setText("مذكر");
-            CheckMale2.setToolTipText("");
-            CheckMale2.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-            CheckMale2.setBorderPainted(true);
-            CheckMale2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-            CheckMale2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            CheckMale2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-            CheckMale2.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    CheckMale2ActionPerformed(evt);
-                }
-            });
-            InfoStdToUpdate.add(CheckMale2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 430, 60, 30));
-
             jLabel144.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
             jLabel144.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
             jLabel144.setText("الدائرة  :");
             InfoStdToUpdate.add(jLabel144, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 380, 50, 30));
-
-            National_list2.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-            National_list2.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    National_list2KeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(National_list2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 420, 190, 30));
-
-            jLabel145.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            jLabel145.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            jLabel145.setText("الــجــنـســيـــة  :");
-            InfoStdToUpdate.add(jLabel145, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 420, 80, 30));
-
-            jLabel146.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel146.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            jLabel146.setText("الــولايـــة           :");
-            InfoStdToUpdate.add(jLabel146, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 380, 80, 30));
-
-            WilayaList2.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-            WilayaList2.setOpaque(false);
-            WilayaList2.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    WilayaList2ActionPerformed(evt);
-                }
-            });
-            WilayaList2.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    WilayaList2KeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(WilayaList2, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 380, 120, 30));
 
             jLabel147.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
             jLabel147.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
             jLabel147.setText("الحـالـــة  العــائــلـيـة  :");
             InfoStdToUpdate.add(jLabel147, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 460, -1, 25));
 
-            Sti_Single3.setBackground(new java.awt.Color(255, 255, 255));
-            Sti_Single3.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            Sti_Single3.setSelected(true);
-            Sti_Single3.setText("اعـــزب");
-            Sti_Single3.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-            Sti_Single3.setBorderPainted(true);
-            Sti_Single3.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-            Sti_Single3.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    Sti_Single3ActionPerformed(evt);
-                }
-            });
-            Sti_Single3.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    Sti_Single3KeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(Sti_Single3, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 460, 60, -1));
-
-            Std_Maried2.setBackground(new java.awt.Color(255, 255, 255));
-            Std_Maried2.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            Std_Maried2.setText("مــتــزوج");
-            Std_Maried2.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-            Std_Maried2.setBorderPainted(true);
-            Std_Maried2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-            Std_Maried2.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    Std_Maried2ActionPerformed(evt);
-                }
-            });
-            InfoStdToUpdate.add(Std_Maried2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 460, -1, -1));
-
             jLabel148.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
             jLabel148.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
             jLabel148.setText("الــمــعــدل          :");
             InfoStdToUpdate.add(jLabel148, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 490, 80, 30));
-
-            txtBacMoy2.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-            txtBacMoy2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtBacMoy2.setText("00.00");
-            txtBacMoy2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtBacMoy2.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtBacMoy2FocusGained(evt);
-                }
-            });
-            txtBacMoy2.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtBacMoy2KeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(txtBacMoy2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 490, 50, 30));
-
-            TtxtBacYear2.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-            TtxtBacYear2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            TtxtBacYear2.setText("2018");
-            TtxtBacYear2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            TtxtBacYear2.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    TtxtBacYear2FocusGained(evt);
-                }
-            });
-            TtxtBacYear2.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    TtxtBacYear2KeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(TtxtBacYear2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 490, 160, 30));
 
             jLabel149.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
             jLabel149.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -4077,319 +3737,17 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             jLabel150.setText("مـكـان الــحـصـول عـلـي الــبــكـالــوريـــا  :");
             InfoStdToUpdate.add(jLabel150, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 540, 190, 30));
 
-            txtPlaceGetBac2.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-            txtPlaceGetBac2.setForeground(java.awt.Color.blue);
-            txtPlaceGetBac2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtPlaceGetBac2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtPlaceGetBac2.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtPlaceGetBac2FocusGained(evt);
-                }
-            });
-            txtPlaceGetBac2.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    txtPlaceGetBac2ActionPerformed(evt);
-                }
-            });
-            txtPlaceGetBac2.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtPlaceGetBac2KeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(txtPlaceGetBac2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 540, 370, 30));
-
-            jLabel151.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            jLabel151.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            jLabel151.setText("التخـصص الدراســـــــي   :");
-            InfoStdToUpdate.add(jLabel151, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 580, 130, 30));
-
-            txtBranch_std5.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-            txtBranch_std5.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtBranch_std5KeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(txtBranch_std5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 580, 440, 30));
-
-            jLabel152.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel152.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            jLabel152.setText("الـمـسـتـوي الـدراسـي  :");
-            InfoStdToUpdate.add(jLabel152, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 620, 110, 30));
-
-            LevelStd2.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            LevelStd2.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    LevelStd2KeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(LevelStd2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 620, 150, 30));
-
-            txtDepa_Std2.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-            txtDepa_Std2.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtDepa_Std2KeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(txtDepa_Std2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 620, 170, 30));
-
-            jLabel154.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            jLabel154.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            jLabel154.setText(" الـــكـــلــــيــــة            :");
-            InfoStdToUpdate.add(jLabel154, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 620, 130, 30));
-
-            txtDairaStd2.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            txtDairaStd2.setForeground(java.awt.Color.blue);
-            txtDairaStd2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            txtDairaStd2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            txtDairaStd2.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    txtDairaStd2FocusGained(evt);
-                }
-            });
-            txtDairaStd2.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtDairaStd2KeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(txtDairaStd2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 380, 100, 30));
-
-            jLabel155.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            jLabel155.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            jLabel155.setText("الــبلــديــة  :");
-            InfoStdToUpdate.add(jLabel155, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 380, 60, 30));
-
             jLabel105.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
             jLabel105.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
             jLabel105.setText("رقـم االبطاقة");
             jLabel105.setToolTipText("");
             jLabel105.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-            InfoStdToUpdate.add(jLabel105, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 10, 60, 20));
-
-            Img_StdUpdate.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-            Img_StdUpdate.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            Img_StdUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residence/Image/imageRes.png"))); // NOI18N
-            Img_StdUpdate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            Img_StdUpdate.setIcon(new ImageIcon(getClass().getResource("/residence/Image/imageRes.png")));
-            InfoStdToUpdate.add(Img_StdUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 10, 100, 100));
-
-            jLabel113.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel113.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residence/Image/uploadPict1.png"))); // NOI18N
-            jLabel113.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-            jLabel113.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    jLabel113MouseClicked(evt);
-                }
-            });
-            InfoStdToUpdate.add(jLabel113, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 30, 30));
-
-            jLabel115.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-            jLabel115.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residence/Image/FileSelect.png"))); // NOI18N
-            jLabel115.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-            jLabel115.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    jLabel115MouseClicked(evt);
-                }
-            });
-            InfoStdToUpdate.add(jLabel115, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 30, 30));
-
-            CaseResident.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            InfoStdToUpdate.add(CaseResident, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 30, 120, 30));
-
-            jLabel122.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            jLabel122.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-            jLabel122.setText("الحـالة");
-            jLabel122.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-            InfoStdToUpdate.add(jLabel122, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 10, -1, 20));
-
-            LastName_MotheFrUp.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            LastName_MotheFrUp.setForeground(new java.awt.Color(153, 153, 153));
-            LastName_MotheFrUp.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            LastName_MotheFrUp.setText("Nom_Mère");
-            LastName_MotheFrUp.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            LastName_MotheFrUp.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    LastName_MotheFrUpFocusGained(evt);
-                }
-            });
-            LastName_MotheFrUp.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    LastName_MotheFrUpActionPerformed(evt);
-                }
-            });
-            LastName_MotheFrUp.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    LastName_MotheFrUpKeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(LastName_MotheFrUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, 100, 34));
-
-            Name_FatherFrUp.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            Name_FatherFrUp.setForeground(new java.awt.Color(153, 153, 153));
-            Name_FatherFrUp.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            Name_FatherFrUp.setText("Prénom Père");
-            Name_FatherFrUp.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            Name_FatherFrUp.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    Name_FatherFrUpFocusGained(evt);
-                }
-            });
-            Name_FatherFrUp.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    Name_FatherFrUpKeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(Name_FatherFrUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 240, 110, 34));
-
-            PlaceBirthFrUp.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            PlaceBirthFrUp.setForeground(new java.awt.Color(153, 153, 153));
-            PlaceBirthFrUp.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            PlaceBirthFrUp.setText("Lieu _Naissance");
-            PlaceBirthFrUp.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            PlaceBirthFrUp.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    PlaceBirthFrUpFocusGained(evt);
-                }
-            });
-            PlaceBirthFrUp.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    PlaceBirthFrUpKeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(PlaceBirthFrUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 100, 34));
-
-            Name_ResidentFrUp.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            Name_ResidentFrUp.setForeground(new java.awt.Color(153, 153, 153));
-            Name_ResidentFrUp.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            Name_ResidentFrUp.setText("Prénom");
-            Name_ResidentFrUp.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            Name_ResidentFrUp.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    Name_ResidentFrUpFocusGained(evt);
-                }
-            });
-            Name_ResidentFrUp.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    Name_ResidentFrUpKeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(Name_ResidentFrUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 100, 110, 34));
-
-            LastName_ResidentFrUp.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            LastName_ResidentFrUp.setForeground(new java.awt.Color(153, 153, 153));
-            LastName_ResidentFrUp.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            LastName_ResidentFrUp.setText("Nom");
-            LastName_ResidentFrUp.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            LastName_ResidentFrUp.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    LastName_ResidentFrUpFocusGained(evt);
-                }
-            });
-            LastName_ResidentFrUp.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    LastName_ResidentFrUpKeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(LastName_ResidentFrUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 101, 34));
-
-            NamMrA.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            NamMrA.setForeground(new java.awt.Color(153, 153, 153));
-            NamMrA.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            NamMrA.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            NamMrA.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    NamMrAActionPerformed(evt);
-                }
-            });
-            NamMrA.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    NamMrAKeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(NamMrA, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 290, 100, 34));
-
-            Name_MotherFrUp.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-            Name_MotherFrUp.setForeground(new java.awt.Color(153, 153, 153));
-            Name_MotherFrUp.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            Name_MotherFrUp.setText("Prénom_Mère");
-            Name_MotherFrUp.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            Name_MotherFrUp.addFocusListener(new java.awt.event.FocusAdapter() {
-                public void focusGained(java.awt.event.FocusEvent evt) {
-                    Name_MotherFrUpFocusGained(evt);
-                }
-            });
-            Name_MotherFrUp.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    Name_MotherFrUpActionPerformed(evt);
-                }
-            });
-            Name_MotherFrUp.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    Name_MotherFrUpKeyPressed(evt);
-                }
-            });
-            InfoStdToUpdate.add(Name_MotherFrUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 290, 110, 34));
+            InfoStdToUpdate.add(jLabel105, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 10, 60, 20));
 
             jLabel157.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
             jLabel157.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
             jLabel157.setText("الــمهــنــة: ");
             InfoStdToUpdate.add(jLabel157, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 240, 60, 34));
-
-            jLabel18.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-            jLabel18.setText("FR");
-            InfoStdToUpdate.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 290, -1, 34));
-
-            jLabel27.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-            jLabel27.setText("FR");
-            InfoStdToUpdate.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 140, -1, 34));
-
-            jLabel29.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-            jLabel29.setText("FR");
-            InfoStdToUpdate.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 290, -1, 34));
-
-            jLabel44.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-            jLabel44.setText("FR");
-            InfoStdToUpdate.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 240, -1, 34));
-
-            jLabel45.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-            jLabel45.setText("FR");
-            InfoStdToUpdate.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 140, -1, 20));
-
-            jLabel46.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-            jLabel46.setText("FR");
-            InfoStdToUpdate.add(jLabel46, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 190, -1, 34));
-
-            LstPvlinUpd.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    LstPvlinUpdActionPerformed(evt);
-                }
-            });
-            InfoStdToUpdate.add(LstPvlinUpd, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 420, 60, 30));
-
-            InfoStdToUpdate.add(CombRomInUpdt, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 460, 60, 30));
-
-            jButton29.setText("حفظ التعديل");
-            jButton29.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jButton29ActionPerformed(evt);
-                }
-            });
-            InfoStdToUpdate.add(jButton29, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 500, -1, 30));
-
-            InfoStdToUpdate.add(CombCommune, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 378, 80, 30));
-
-            NumCardToUpdt.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            NumCardToUpdt.setForeground(new java.awt.Color(255, 0, 0));
-            NumCardToUpdt.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-            NumCardToUpdt.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-            NumCardToUpdt.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyPressed(java.awt.event.KeyEvent evt) {
-                    NumCardToUpdtKeyPressed(evt);
-                }
-                public void keyTyped(java.awt.event.KeyEvent evt) {
-                    NumCardToUpdtKeyTyped(evt);
-                }
-            });
-            InfoStdToUpdate.add(NumCardToUpdt, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 30, 110, 28));
 
             PanAllUpdateResident.add(InfoStdToUpdate, "card2");
 
@@ -4597,8 +3955,8 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             jLabel117.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
             panSaisiInfoProf.add(jLabel117, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 120, 110, 25));
 
-            CaseResident1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            panSaisiInfoProf.add(CaseResident1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 120, 170, 25));
+            CaseResidentProfUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            panSaisiInfoProf.add(CaseResidentProfUpdtForm, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 120, 170, 25));
 
             jLabel123.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
             jLabel123.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -4650,14 +4008,14 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                     .addGroup(PanProfToUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel128, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel129, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 166, Short.MAX_VALUE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 116, Short.MAX_VALUE)
                     .addComponent(panSaisiInfoProf, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(26, 26, 26))
                 .addGroup(PanProfToUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanProfToUpdateLayout.createSequentialGroup()
-                        .addGap(0, 374, Short.MAX_VALUE)
+                        .addGap(0, 349, Short.MAX_VALUE)
                         .addComponent(Img_Std1)
-                        .addGap(0, 374, Short.MAX_VALUE)))
+                        .addGap(0, 349, Short.MAX_VALUE)))
             );
             PanProfToUpdateLayout.setVerticalGroup(
                 PanProfToUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4797,37 +4155,37 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             jLabel196.setText("التخـصص الدراســـــــي      :");
             PanSaisiInfoStdExt1.add(jLabel196, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 440, 130, 25));
 
-            txtBranch_stdExternStd.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-            txtBranch_stdExternStd.setAutoscrolls(true);
-            txtBranch_stdExternStd.addActionListener(new java.awt.event.ActionListener() {
+            Branch_stdExternStdUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            Branch_stdExternStdUpdtForm.setAutoscrolls(true);
+            Branch_stdExternStdUpdtForm.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    txtBranch_stdExternStdActionPerformed(evt);
+                    Branch_stdExternStdUpdtFormActionPerformed(evt);
                 }
             });
-            txtBranch_stdExternStd.addKeyListener(new java.awt.event.KeyAdapter() {
+            Branch_stdExternStdUpdtForm.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyPressed(java.awt.event.KeyEvent evt) {
-                    txtBranch_stdExternStdKeyPressed(evt);
+                    Branch_stdExternStdUpdtFormKeyPressed(evt);
                 }
             });
-            PanSaisiInfoStdExt1.add(txtBranch_stdExternStd, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 440, 250, 30));
+            PanSaisiInfoStdExt1.add(Branch_stdExternStdUpdtForm, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 440, 250, 30));
 
             jLabel197.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
             jLabel197.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
             jLabel197.setText("الــمـسـتــوي الـدراسـي        :");
             PanSaisiInfoStdExt1.add(jLabel197, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 490, 130, 30));
 
-            LevelStdExtToupd.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-            LevelStdExtToupd.addActionListener(new java.awt.event.ActionListener() {
+            LevelStdExtUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            LevelStdExtUpdtForm.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    LevelStdExtToupdActionPerformed(evt);
+                    LevelStdExtUpdtFormActionPerformed(evt);
                 }
             });
-            LevelStdExtToupd.addKeyListener(new java.awt.event.KeyAdapter() {
+            LevelStdExtUpdtForm.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyPressed(java.awt.event.KeyEvent evt) {
-                    LevelStdExtToupdKeyPressed(evt);
+                    LevelStdExtUpdtFormKeyPressed(evt);
                 }
             });
-            PanSaisiInfoStdExt1.add(LevelStdExtToupd, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 490, 250, 30));
+            PanSaisiInfoStdExt1.add(LevelStdExtUpdtForm, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 490, 250, 30));
 
             jLabel198.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
             jLabel198.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -5248,7 +4606,779 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
 
             PanAllUpdateResident.add(PanSaisiEmp1, "card6");
 
-            jPanel26.add(PanAllUpdateResident, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 40, 750, 650));
+            InfoStdToUpdate_1.setLayout(new java.awt.GridBagLayout());
+
+            Name_ResidentFrUp.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            Name_ResidentFrUp.setForeground(new java.awt.Color(153, 153, 153));
+            Name_ResidentFrUp.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            Name_ResidentFrUp.setText("Prénom");
+            Name_ResidentFrUp.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            Name_ResidentFrUp.setPreferredSize(new java.awt.Dimension(80, 35));
+            Name_ResidentFrUp.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    Name_ResidentFrUpFocusGained(evt);
+                }
+            });
+            Name_ResidentFrUp.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    Name_ResidentFrUpKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 9;
+            gridBagConstraints.gridy = 3;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(Name_ResidentFrUp, gridBagConstraints);
+
+            txtNam_std5.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            txtNam_std5.setForeground(java.awt.Color.blue);
+            txtNam_std5.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtNam_std5.setText("الاسم");
+            txtNam_std5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtNam_std5.setPreferredSize(new java.awt.Dimension(80, 35));
+            txtNam_std5.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    txtNam_std5FocusGained(evt);
+                }
+            });
+            txtNam_std5.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtNam_std5KeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 10;
+            gridBagConstraints.gridy = 3;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(txtNam_std5, gridBagConstraints);
+
+            CaseResident.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            CaseResident.setPreferredSize(new java.awt.Dimension(80, 35));
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 5;
+            gridBagConstraints.gridy = 1;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(CaseResident, gridBagConstraints);
+
+            NumCardToUpdt.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            NumCardToUpdt.setForeground(new java.awt.Color(255, 0, 0));
+            NumCardToUpdt.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            NumCardToUpdt.setText("رقم البطاقة");
+            NumCardToUpdt.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            NumCardToUpdt.setPreferredSize(new java.awt.Dimension(80, 35));
+            NumCardToUpdt.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    NumCardToUpdtKeyPressed(evt);
+                }
+                public void keyTyped(java.awt.event.KeyEvent evt) {
+                    NumCardToUpdtKeyTyped(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 8;
+            gridBagConstraints.gridy = 1;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(NumCardToUpdt, gridBagConstraints);
+
+            txt_NumInscUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+            txt_NumInscUpdtForm.setForeground(new java.awt.Color(153, 153, 153));
+            txt_NumInscUpdtForm.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txt_NumInscUpdtForm.setText("رقــم تــسجـيــل  ");
+            txt_NumInscUpdtForm.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txt_NumInscUpdtForm.setPreferredSize(new java.awt.Dimension(80, 35));
+            txt_NumInscUpdtForm.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    txt_NumInscUpdtFormFocusGained(evt);
+                }
+            });
+            txt_NumInscUpdtForm.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txt_NumInscUpdtFormKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 1;
+            InfoStdToUpdate_1.add(txt_NumInscUpdtForm, gridBagConstraints);
+
+            txtSurNam_std5.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            txtSurNam_std5.setForeground(java.awt.Color.blue);
+            txtSurNam_std5.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtSurNam_std5.setText("اللقب");
+            txtSurNam_std5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtSurNam_std5.setMaximumSize(new java.awt.Dimension(2, 21));
+            txtSurNam_std5.setPreferredSize(new java.awt.Dimension(80, 35));
+            txtSurNam_std5.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    txtSurNam_std5FocusGained(evt);
+                }
+            });
+            txtSurNam_std5.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtSurNam_std5KeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 10;
+            gridBagConstraints.gridy = 4;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(txtSurNam_std5, gridBagConstraints);
+
+            LastName_ResidentFrUp.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            LastName_ResidentFrUp.setForeground(new java.awt.Color(153, 153, 153));
+            LastName_ResidentFrUp.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            LastName_ResidentFrUp.setText("Nom");
+            LastName_ResidentFrUp.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            LastName_ResidentFrUp.setPreferredSize(new java.awt.Dimension(80, 35));
+            LastName_ResidentFrUp.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    LastName_ResidentFrUpFocusGained(evt);
+                }
+            });
+            LastName_ResidentFrUp.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    LastName_ResidentFrUpKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 3;
+            gridBagConstraints.gridy = 3;
+            InfoStdToUpdate_1.add(LastName_ResidentFrUp, gridBagConstraints);
+
+            txtProfission_MothStdUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            txtProfission_MothStdUpdtForm.setForeground(java.awt.Color.blue);
+            txtProfission_MothStdUpdtForm.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtProfission_MothStdUpdtForm.setText("وظيفة الام");
+            txtProfission_MothStdUpdtForm.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtProfission_MothStdUpdtForm.setMaximumSize(new java.awt.Dimension(2, 21));
+            txtProfission_MothStdUpdtForm.setPreferredSize(new java.awt.Dimension(80, 35));
+            txtProfission_MothStdUpdtForm.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtProfission_MothStdUpdtFormKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 7;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(txtProfission_MothStdUpdtForm, gridBagConstraints);
+
+            DatBirth_stdUpdtForm.setForeground(java.awt.Color.blue);
+            try {
+                DatBirth_stdUpdtForm.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+            } catch (java.text.ParseException ex) {
+                ex.printStackTrace();
+            }
+            DatBirth_stdUpdtForm.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            DatBirth_stdUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            DatBirth_stdUpdtForm.setMaximumSize(new java.awt.Dimension(2, 21));
+            DatBirth_stdUpdtForm.setMinimumSize(new java.awt.Dimension(2, 21));
+            DatBirth_stdUpdtForm.setPreferredSize(new java.awt.Dimension(80, 35));
+            DatBirth_stdUpdtForm.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    DatBirth_stdUpdtFormKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 3;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(DatBirth_stdUpdtForm, gridBagConstraints);
+
+            txtNam_FatherStdUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            txtNam_FatherStdUpdtForm.setForeground(java.awt.Color.blue);
+            txtNam_FatherStdUpdtForm.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtNam_FatherStdUpdtForm.setText("اسم الاب");
+            txtNam_FatherStdUpdtForm.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtNam_FatherStdUpdtForm.setMaximumSize(new java.awt.Dimension(2, 21));
+            txtNam_FatherStdUpdtForm.setPreferredSize(new java.awt.Dimension(80, 35));
+            txtNam_FatherStdUpdtForm.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    txtNam_FatherStdUpdtFormFocusGained(evt);
+                }
+            });
+            txtNam_FatherStdUpdtForm.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtNam_FatherStdUpdtFormKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 5;
+            gridBagConstraints.gridy = 5;
+            InfoStdToUpdate_1.add(txtNam_FatherStdUpdtForm, gridBagConstraints);
+
+            txtPlcBirth_stdUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            txtPlcBirth_stdUpdtForm.setForeground(java.awt.Color.blue);
+            txtPlcBirth_stdUpdtForm.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtPlcBirth_stdUpdtForm.setText("مكان الميلاد");
+            txtPlcBirth_stdUpdtForm.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtPlcBirth_stdUpdtForm.setMaximumSize(new java.awt.Dimension(2, 21));
+            txtPlcBirth_stdUpdtForm.setPreferredSize(new java.awt.Dimension(80, 35));
+            txtPlcBirth_stdUpdtForm.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    txtPlcBirth_stdUpdtFormFocusGained(evt);
+                }
+            });
+            txtPlcBirth_stdUpdtForm.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtPlcBirth_stdUpdtFormKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 8;
+            gridBagConstraints.gridy = 5;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(txtPlcBirth_stdUpdtForm, gridBagConstraints);
+
+            txtProfissionfath_StdUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+            txtProfissionfath_StdUpdtForm.setForeground(java.awt.Color.blue);
+            txtProfissionfath_StdUpdtForm.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtProfissionfath_StdUpdtForm.setText("وظيفة الاب");
+            txtProfissionfath_StdUpdtForm.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtProfissionfath_StdUpdtForm.setPreferredSize(new java.awt.Dimension(80, 35));
+            txtProfissionfath_StdUpdtForm.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    txtProfissionfath_StdUpdtFormFocusGained(evt);
+                }
+            });
+            txtProfissionfath_StdUpdtForm.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtProfissionfath_StdUpdtFormKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 5;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(txtProfissionfath_StdUpdtForm, gridBagConstraints);
+
+            txtNam_MotherStdUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            txtNam_MotherStdUpdtForm.setForeground(java.awt.Color.blue);
+            txtNam_MotherStdUpdtForm.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtNam_MotherStdUpdtForm.setText("اسم الام");
+            txtNam_MotherStdUpdtForm.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtNam_MotherStdUpdtForm.setMaximumSize(new java.awt.Dimension(2, 21));
+            txtNam_MotherStdUpdtForm.setPreferredSize(new java.awt.Dimension(80, 35));
+            txtNam_MotherStdUpdtForm.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    txtNam_MotherStdUpdtFormFocusGained(evt);
+                }
+            });
+            txtNam_MotherStdUpdtForm.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtNam_MotherStdUpdtFormKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 8;
+            gridBagConstraints.gridy = 7;
+            InfoStdToUpdate_1.add(txtNam_MotherStdUpdtForm, gridBagConstraints);
+
+            Name_FatherFrUp.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            Name_FatherFrUp.setForeground(new java.awt.Color(153, 153, 153));
+            Name_FatherFrUp.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            Name_FatherFrUp.setText("Prénom Père");
+            Name_FatherFrUp.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            Name_FatherFrUp.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    Name_FatherFrUpFocusGained(evt);
+                }
+            });
+            Name_FatherFrUp.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    Name_FatherFrUpKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 3;
+            gridBagConstraints.gridy = 5;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(Name_FatherFrUp, gridBagConstraints);
+
+            PlaceBirthFrStdUpdForm.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            PlaceBirthFrStdUpdForm.setForeground(new java.awt.Color(153, 153, 153));
+            PlaceBirthFrStdUpdForm.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            PlaceBirthFrStdUpdForm.setText("Lieu _Naissance");
+            PlaceBirthFrStdUpdForm.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            PlaceBirthFrStdUpdForm.setPreferredSize(new java.awt.Dimension(80, 35));
+            PlaceBirthFrStdUpdForm.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    PlaceBirthFrStdUpdFormFocusGained(evt);
+                }
+            });
+            PlaceBirthFrStdUpdForm.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    PlaceBirthFrStdUpdFormKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 7;
+            gridBagConstraints.gridy = 5;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(PlaceBirthFrStdUpdForm, gridBagConstraints);
+
+            Name_MotherFrUp.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            Name_MotherFrUp.setForeground(new java.awt.Color(153, 153, 153));
+            Name_MotherFrUp.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            Name_MotherFrUp.setText("Prénom_Mère");
+            Name_MotherFrUp.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            Name_MotherFrUp.setPreferredSize(new java.awt.Dimension(80, 35));
+            Name_MotherFrUp.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    Name_MotherFrUpFocusGained(evt);
+                }
+            });
+            Name_MotherFrUp.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    Name_MotherFrUpActionPerformed(evt);
+                }
+            });
+            Name_MotherFrUp.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    Name_MotherFrUpKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 7;
+            gridBagConstraints.gridy = 7;
+            InfoStdToUpdate_1.add(Name_MotherFrUp, gridBagConstraints);
+
+            LastName_MotheFrUp.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            LastName_MotheFrUp.setForeground(new java.awt.Color(153, 153, 153));
+            LastName_MotheFrUp.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            LastName_MotheFrUp.setText("Nom_Mère");
+            LastName_MotheFrUp.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            LastName_MotheFrUp.setPreferredSize(new java.awt.Dimension(80, 35));
+            LastName_MotheFrUp.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    LastName_MotheFrUpFocusGained(evt);
+                }
+            });
+            LastName_MotheFrUp.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    LastName_MotheFrUpActionPerformed(evt);
+                }
+            });
+            LastName_MotheFrUp.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    LastName_MotheFrUpKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 3;
+            gridBagConstraints.gridy = 7;
+            InfoStdToUpdate_1.add(LastName_MotheFrUp, gridBagConstraints);
+
+            NamMrArStdUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            NamMrArStdUpdtForm.setForeground(new java.awt.Color(153, 153, 153));
+            NamMrArStdUpdtForm.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            NamMrArStdUpdtForm.setText("لقب الام");
+            NamMrArStdUpdtForm.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            NamMrArStdUpdtForm.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    NamMrArStdUpdtFormActionPerformed(evt);
+                }
+            });
+            NamMrArStdUpdtForm.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    NamMrArStdUpdtFormKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 5;
+            gridBagConstraints.gridy = 7;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(NamMrArStdUpdtForm, gridBagConstraints);
+
+            txtAddress_StdUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            txtAddress_StdUpdtForm.setForeground(java.awt.Color.blue);
+            txtAddress_StdUpdtForm.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtAddress_StdUpdtForm.setText("العنوان");
+            txtAddress_StdUpdtForm.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtAddress_StdUpdtForm.setMinimumSize(new java.awt.Dimension(4, 21));
+            txtAddress_StdUpdtForm.setPreferredSize(new java.awt.Dimension(33, 35));
+            txtAddress_StdUpdtForm.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    txtAddress_StdUpdtFormFocusGained(evt);
+                }
+            });
+            txtAddress_StdUpdtForm.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtAddress_StdUpdtFormKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 11;
+            gridBagConstraints.gridy = 11;
+            gridBagConstraints.gridwidth = 2;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(txtAddress_StdUpdtForm, gridBagConstraints);
+
+            txtDairaStdUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            txtDairaStdUpdtForm.setForeground(java.awt.Color.blue);
+            txtDairaStdUpdtForm.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtDairaStdUpdtForm.setText("الدائرة");
+            txtDairaStdUpdtForm.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtDairaStdUpdtForm.setPreferredSize(new java.awt.Dimension(80, 35));
+            txtDairaStdUpdtForm.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    txtDairaStdUpdtFormFocusGained(evt);
+                }
+            });
+            txtDairaStdUpdtForm.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtDairaStdUpdtFormKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 9;
+            gridBagConstraints.gridy = 9;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(txtDairaStdUpdtForm, gridBagConstraints);
+
+            txtCommuneStdUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            txtCommuneStdUpdtForm.setForeground(java.awt.Color.blue);
+            txtCommuneStdUpdtForm.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtCommuneStdUpdtForm.setText("البلدية");
+            txtCommuneStdUpdtForm.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtCommuneStdUpdtForm.setPreferredSize(new java.awt.Dimension(80, 35));
+            txtCommuneStdUpdtForm.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtCommuneStdUpdtFormKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 10;
+            gridBagConstraints.gridy = 9;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(txtCommuneStdUpdtForm, gridBagConstraints);
+
+            txtBacMoy2.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+            txtBacMoy2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtBacMoy2.setText("00.00");
+            txtBacMoy2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtBacMoy2.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    txtBacMoy2FocusGained(evt);
+                }
+            });
+            txtBacMoy2.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtBacMoy2KeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 11;
+            gridBagConstraints.gridy = 14;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(txtBacMoy2, gridBagConstraints);
+
+            WilayaListUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            WilayaListUpdtForm.setOpaque(false);
+            WilayaListUpdtForm.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    WilayaListUpdtFormActionPerformed(evt);
+                }
+            });
+            WilayaListUpdtForm.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    WilayaListUpdtFormKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 12;
+            gridBagConstraints.gridy = 9;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(WilayaListUpdtForm, gridBagConstraints);
+
+            National_listStdUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            National_listStdUpdtForm.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    National_listStdUpdtFormKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 9;
+            gridBagConstraints.gridy = 13;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(National_listStdUpdtForm, gridBagConstraints);
+
+            checkFemalStdUpdtForm.setBackground(new java.awt.Color(255, 255, 255));
+            checkFemalStdUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            checkFemalStdUpdtForm.setText("مؤنث");
+            checkFemalStdUpdtForm.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+            checkFemalStdUpdtForm.setBorderPainted(true);
+            checkFemalStdUpdtForm.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+            checkFemalStdUpdtForm.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            checkFemalStdUpdtForm.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+            checkFemalStdUpdtForm.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    checkFemalStdUpdtFormActionPerformed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 7;
+            gridBagConstraints.gridy = 11;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(checkFemalStdUpdtForm, gridBagConstraints);
+
+            CheckMaleStdUpdtForm.setBackground(new java.awt.Color(255, 255, 255));
+            CheckMaleStdUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            CheckMaleStdUpdtForm.setSelected(true);
+            CheckMaleStdUpdtForm.setText("مذكر");
+            CheckMaleStdUpdtForm.setToolTipText("");
+            CheckMaleStdUpdtForm.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+            CheckMaleStdUpdtForm.setBorderPainted(true);
+            CheckMaleStdUpdtForm.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+            CheckMaleStdUpdtForm.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            CheckMaleStdUpdtForm.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+            CheckMaleStdUpdtForm.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    CheckMaleStdUpdtFormActionPerformed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 8;
+            gridBagConstraints.gridy = 11;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(CheckMaleStdUpdtForm, gridBagConstraints);
+
+            Sti_SingleStdUpdtForm.setBackground(new java.awt.Color(255, 255, 255));
+            Sti_SingleStdUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            Sti_SingleStdUpdtForm.setSelected(true);
+            Sti_SingleStdUpdtForm.setText("اعـــزب");
+            Sti_SingleStdUpdtForm.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+            Sti_SingleStdUpdtForm.setBorderPainted(true);
+            Sti_SingleStdUpdtForm.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+            Sti_SingleStdUpdtForm.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    Sti_SingleStdUpdtFormActionPerformed(evt);
+                }
+            });
+            Sti_SingleStdUpdtForm.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    Sti_SingleStdUpdtFormKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 8;
+            gridBagConstraints.gridy = 9;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(Sti_SingleStdUpdtForm, gridBagConstraints);
+
+            Std_MariedStdUpdtForm.setBackground(new java.awt.Color(255, 255, 255));
+            Std_MariedStdUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            Std_MariedStdUpdtForm.setText("مــتــزوج");
+            Std_MariedStdUpdtForm.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+            Std_MariedStdUpdtForm.setBorderPainted(true);
+            Std_MariedStdUpdtForm.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+            Std_MariedStdUpdtForm.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    Std_MariedStdUpdtFormActionPerformed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 7;
+            gridBagConstraints.gridy = 9;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(Std_MariedStdUpdtForm, gridBagConstraints);
+
+            LstPvlinUpdtForm.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    LstPvlinUpdtFormActionPerformed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 7;
+            gridBagConstraints.gridy = 13;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(LstPvlinUpdtForm, gridBagConstraints);
+
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 8;
+            gridBagConstraints.gridy = 13;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(CombRomInUpdtForm, gridBagConstraints);
+
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 11;
+            gridBagConstraints.gridy = 9;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(CombCommuneUpdtForm, gridBagConstraints);
+
+            TtxtBacYearStdUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+            TtxtBacYearStdUpdtForm.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            TtxtBacYearStdUpdtForm.setText("2018");
+            TtxtBacYearStdUpdtForm.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            TtxtBacYearStdUpdtForm.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    TtxtBacYearStdUpdtFormFocusGained(evt);
+                }
+            });
+            TtxtBacYearStdUpdtForm.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    TtxtBacYearStdUpdtFormKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 12;
+            gridBagConstraints.gridy = 14;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(TtxtBacYearStdUpdtForm, gridBagConstraints);
+
+            txtPlaceGetBacStdUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+            txtPlaceGetBacStdUpdtForm.setForeground(java.awt.Color.blue);
+            txtPlaceGetBacStdUpdtForm.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            txtPlaceGetBacStdUpdtForm.setText("مكان الحصول على البكالوريا");
+            txtPlaceGetBacStdUpdtForm.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            txtPlaceGetBacStdUpdtForm.addFocusListener(new java.awt.event.FocusAdapter() {
+                public void focusGained(java.awt.event.FocusEvent evt) {
+                    txtPlaceGetBacStdUpdtFormFocusGained(evt);
+                }
+            });
+            txtPlaceGetBacStdUpdtForm.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    txtPlaceGetBacStdUpdtFormActionPerformed(evt);
+                }
+            });
+            txtPlaceGetBacStdUpdtForm.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    txtPlaceGetBacStdUpdtFormKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 10;
+            gridBagConstraints.gridy = 14;
+            InfoStdToUpdate_1.add(txtPlaceGetBacStdUpdtForm, gridBagConstraints);
+
+            Branch_stdUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            Branch_stdUpdtForm.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    Branch_stdUpdtFormKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 12;
+            gridBagConstraints.gridy = 17;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(Branch_stdUpdtForm, gridBagConstraints);
+
+            LevelStdUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            LevelStdUpdtForm.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    LevelStdUpdtFormKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 10;
+            gridBagConstraints.gridy = 17;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(LevelStdUpdtForm, gridBagConstraints);
+
+            Depa_StdUpdtForm.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            Depa_StdUpdtForm.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyPressed(java.awt.event.KeyEvent evt) {
+                    Depa_StdUpdtFormKeyPressed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 11;
+            gridBagConstraints.gridy = 17;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(Depa_StdUpdtForm, gridBagConstraints);
+
+            jButton29.setText("حفظ التعديل");
+            jButton29.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton29ActionPerformed(evt);
+                }
+            });
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 7;
+            gridBagConstraints.gridy = 14;
+            InfoStdToUpdate_1.add(jButton29, gridBagConstraints);
+
+            jLabel151.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            jLabel151.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+            jLabel151.setText("التخـصص الدراســـــــي   :");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 12;
+            gridBagConstraints.gridy = 16;
+            InfoStdToUpdate_1.add(jLabel151, gridBagConstraints);
+
+            jLabel154.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            jLabel154.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+            jLabel154.setText(" الـــكـــلــــيــــة            :");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 11;
+            gridBagConstraints.gridy = 16;
+            InfoStdToUpdate_1.add(jLabel154, gridBagConstraints);
+
+            jLabel152.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel152.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+            jLabel152.setText("الـمـسـتـوي الـدراسـي  :");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 10;
+            gridBagConstraints.gridy = 16;
+            InfoStdToUpdate_1.add(jLabel152, gridBagConstraints);
+
+            jLabel155.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel155.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+            jLabel155.setText("الــبلــديــة  :");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 11;
+            gridBagConstraints.gridy = 8;
+            InfoStdToUpdate_1.add(jLabel155, gridBagConstraints);
+
+            jLabel146.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+            jLabel146.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+            jLabel146.setText("الــولايـــة           :");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 12;
+            gridBagConstraints.gridy = 8;
+            InfoStdToUpdate_1.add(jLabel146, gridBagConstraints);
+
+            jLabel122.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            jLabel122.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+            jLabel122.setText("الحـالة");
+            jLabel122.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 3;
+            gridBagConstraints.gridy = 1;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(jLabel122, gridBagConstraints);
+
+            jLabel145.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+            jLabel145.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+            jLabel145.setText("الــجــنـســيـــة  :");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 9;
+            gridBagConstraints.gridy = 12;
+            InfoStdToUpdate_1.add(jLabel145, gridBagConstraints);
+
+            jLabel29.setText("الغرفة");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 8;
+            gridBagConstraints.gridy = 12;
+            InfoStdToUpdate_1.add(jLabel29, gridBagConstraints);
+
+            jLabel44.setText("الجناح");
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 7;
+            gridBagConstraints.gridy = 12;
+            InfoStdToUpdate_1.add(jLabel44, gridBagConstraints);
+
+            jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = 1;
+            gridBagConstraints.gridy = 4;
+            gridBagConstraints.gridwidth = 12;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+            InfoStdToUpdate_1.add(jSeparator1, gridBagConstraints);
+
+            PanAllUpdateResident.add(InfoStdToUpdate_1, "card6");
+
+            jPanel26.add(PanAllUpdateResident, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 40, 700, 650));
 
             jPanel25.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -5581,11 +5711,38 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             jLabel42.setText("الـلـقـــب ");
             jPanel26.add(jLabel42, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 30, 50, 20));
 
+            Img_StdUpdate.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+            Img_StdUpdate.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            Img_StdUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residence/Image/imageRes.png"))); // NOI18N
+            Img_StdUpdate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+            Img_StdUpdate.setIcon(new ImageIcon(getClass().getResource("/residence/Image/imageRes.png")));
+            jPanel26.add(Img_StdUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 50, 100, 100));
+
+            jLabel115.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel115.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residence/Image/FileSelect.png"))); // NOI18N
+            jLabel115.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+            jLabel115.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    jLabel115MouseClicked(evt);
+                }
+            });
+            jPanel26.add(jLabel115, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 160, 30, 30));
+
+            jLabel113.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            jLabel113.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residence/Image/uploadPict1.png"))); // NOI18N
+            jLabel113.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+            jLabel113.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    jLabel113MouseClicked(evt);
+                }
+            });
+            jPanel26.add(jLabel113, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 200, 30, 30));
+
             javax.swing.GroupLayout UpdateStdLayout = new javax.swing.GroupLayout(UpdateStd);
             UpdateStd.setLayout(UpdateStdLayout);
             UpdateStdLayout.setHorizontalGroup(
                 UpdateStdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel26, javax.swing.GroupLayout.PREFERRED_SIZE, 1115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel26, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             );
             UpdateStdLayout.setVerticalGroup(
                 UpdateStdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -8782,26 +8939,26 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         switch (getPatternResident()) { //Select the Resident to insert into DataBase
 
             case "طالب داخلي":
-                jLabel55.setText(DatBirth_std3.getText());
+                jLabel55.setText(DatBirth_stdUpdtForm.getText());
                 String a[] = jLabel55.getText().split("/");
                 String NevDat = a[0] + "-" + a[1] + "-" + a[2];
                 try {
                     student_Res = new Student_Res(txtNam_std5.getText(), txtSurNam_std5.getText(), Integer.parseInt(NumCardToUpdt.getText()), NumCardToUpdt.getText(),
-                            new SimpleDateFormat("dd-MM-yyyy").parse(NevDat), txtPlcBirth_std5.getText(), Gender, 1,
+                            new SimpleDateFormat("dd-MM-yyyy").parse(NevDat), txtPlcBirth_stdUpdtForm.getText(), Gender, 1,
                             Fill_Data.GetId_From_DB("ID_Case_Resident", "Resident_Case", "Resident_Case", (String) CaseResident.getSelectedItem()),
-                            txtNam_Father2.getText(), txtNam_mother2.getText(), txtProfission_Std2.getText(), txtProfission_Moth2.getText(),
-                            txtAddress_Std2.getText(),
-                            Fill_Data.GetId_From_DB("ID_Wilaya", "Wilaya", "NameWilaya", (String) WilayaList2.getSelectedItem()),
-                            /*txtCommuneStd2.getText()*/ (String) CombCommune.getSelectedItem(), txtDairaStd2.getText(),
-                            Fill_Data.GetId_From_DB("Id_Nationalite", "Nationalite", "Nationalite", (String) National_list2.getSelectedItem()),
-                            SituationFam, Integer.parseInt(TtxtBacYear2.getText()), Double.parseDouble(txtBacMoy2.getText()), txtPlaceGetBac2.getText(),
-                            Fill_Data.GetId_From_DB("Id_BranchStd", "Branch_Study", "BranchStd_Name", (String) txtBranch_std5.getSelectedItem()), new Date(),
+                            txtNam_FatherStdUpdtForm.getText(), txtNam_MotherStdUpdtForm.getText(), txtProfissionfath_StdUpdtForm.getText(), txtProfission_MothStdUpdtForm.getText(),
+                            txtAddress_StdUpdtForm.getText(),
+                            Fill_Data.GetId_From_DB("ID_Wilaya", "Wilaya", "NameWilaya", (String) WilayaListUpdtForm.getSelectedItem()),
+                            /*txtCommuneStd2.getText()*/ (String) CombCommuneUpdtForm.getSelectedItem(), txtDairaStdUpdtForm.getText(),
+                            Fill_Data.GetId_From_DB("Id_Nationalite", "Nationalite", "Nationalite", (String) National_listStdUpdtForm.getSelectedItem()),
+                            SituationFam, Integer.parseInt(TtxtBacYearStdUpdtForm.getText()), Double.parseDouble(txtBacMoy2.getText()), txtPlaceGetBacStdUpdtForm.getText(),
+                            Fill_Data.GetId_From_DB("Id_BranchStd", "Branch_Study", "BranchStd_Name", (String) Branch_stdUpdtForm.getSelectedItem()), new Date(),
                             // HIDE_ON_CLOSE, SituationFam, Gender, ABORT, Level, FRAMEBITS, DateInscrp, WIDTH, HIDE_ON_CLOSE,
-                            Fill_Data.GetId_From_DB("Id_Faculty", "Faculty", "NameFact", (String) txtDepa_Std2.getSelectedItem()),
-                            Fill_Data.GetId_From_DB("Id_LevelStudy", "Level_Study", "DescriptionLevel", (String) LevelStd2.getSelectedItem()),
-                            881, txt_NumInsc2.getText(), 1,
-                            Name_ResidentFrUp.getText(), LastName_ResidentFrUp.getText(), PlaceBirthFrUp.getText(), Name_FatherFrUp.getText(), Name_MotherFrUp.getText(), LastName_MotheFrUp.getText(),
-                            NamMrA.getText());
+                            Fill_Data.GetId_From_DB("Id_Faculty", "Faculty", "NameFact", (String) Depa_StdUpdtForm.getSelectedItem()),
+                            Fill_Data.GetId_From_DB("Id_LevelStudy", "Level_Study", "DescriptionLevel", (String) LevelStdUpdtForm.getSelectedItem()),
+                            881, txt_NumInscUpdtForm.getText(), 1,
+                            Name_ResidentFrUp.getText(), LastName_ResidentFrUp.getText(), PlaceBirthFrStdUpdForm.getText(), Name_FatherFrUp.getText(), Name_MotherFrUp.getText(), LastName_MotheFrUp.getText(),
+                            NamMrArStdUpdtForm.getText());
                 } catch (Exception e) {
                 }
                 NumCard = Integer.parseInt(NumCardToUpdt.getText());
@@ -8830,7 +8987,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                 try {
                     professor_res = new Professor_Res(txtNam_Prof1.getText(), txtSurNam_Prof1.getText(), Integer.parseInt(NumCardToUpdt2.getText()), "251" + Integer.parseInt(NumCardToUpdt2.getText()),
                             new SimpleDateFormat("dd-MM-yyyy").parse(NevDatb),
-                            ftxtPlcBirth_Prof.getText(), Gender, 3, Fill_Data.GetId_From_DB("ID_Case_Resident", "Resident_Case", "Resident_Case", (String) CaseResident1.getSelectedItem()),
+                            ftxtPlcBirth_Prof.getText(), Gender, 3, Fill_Data.GetId_From_DB("ID_Case_Resident", "Resident_Case", "Resident_Case", (String) CaseResidentProfUpdtForm.getSelectedItem()),
                             1, 1, 1);
                 } catch (Exception e) {
                 }
@@ -8861,8 +9018,8 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                     externalstudent = new ExternalStudent(txtNam_StdExt1.getText(), txtSurNam_StdExt1.getText(), NumCard, "0251" + NumCard,
                             new SimpleDateFormat("dd-MM-yyyy").parse(NevDatc),
                             txtPlcBirth_StdExt1.getText(), Gender, 2, Fill_Data.GetId_From_DB("ID_Case_Resident", "Resident_Case", "Resident_Case", (String) CaseResident2.getSelectedItem()),
-                            txt_NumInscSdExt1.getText(), Fill_Data.GetId_From_DB("Id_BranchStd", "Branch_Study", "BranchStd_Name", (String) txtBranch_stdExternStd.getSelectedItem()),
-                            Fill_Data.GetId_From_DB("Id_LevelStudy", "Level_Study", "DescriptionLevel", (String) LevelStdExtToupd.getSelectedItem()), new Date(), 1);
+                            txt_NumInscSdExt1.getText(), Fill_Data.GetId_From_DB("Id_BranchStd", "Branch_Study", "BranchStd_Name", (String) Branch_stdExternStdUpdtForm.getSelectedItem()),
+                            Fill_Data.GetId_From_DB("Id_LevelStudy", "Level_Study", "DescriptionLevel", (String) LevelStdExtUpdtForm.getSelectedItem()), new Date(), 1);
                     NumCard = Integer.parseInt(NumCardToUpdt3.getText());
                 } catch (Exception e) {
                 }
@@ -8875,7 +9032,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                     Choice_Resident(check_StdExt1, check_Std1, check_Prof1, check_Emp1,
                             PanAllUpdateResident, PanStdExtToUpdate, TabResident, "عــدد الطلبـة الخارجيين");
                     Initialise_ExternalStudent_Resident(txt_NumInscSdExt1, txtNam_StdExt1, txtSurNam_StdExt1, DatBirth_StdExt1,
-                            txtPlcBirth_StdExt1, Gdr_Prf_Malp1, txtBranch_stdExternStd, LevelStdExtToupd, CaseResident2, 2);
+                            txtPlcBirth_StdExt1, Gdr_Prf_Malp1, Branch_stdExternStdUpdtForm, LevelStdExtUpdtForm, CaseResident2, 2);
                     InitFormUpdIntlExtStd(false);
                     messagerror = new MessageErrorControl(this, true, "لقد تم التعديل بنجاح");
                     messagerror.setVisible(true);
@@ -8950,7 +9107,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         //initialisationFormUpdate_InterStudent();
 
         Initialise_ExternalStudent_Resident(txt_NumInscSdExt1, txtNam_StdExt1, txtSurNam_StdExt1, DatBirth_StdExt1,
-                txtPlcBirth_StdExt1, Gdr_Prf_Malp1, txtBranch_stdExternStd, LevelStdExtToupd, CaseResident2, 2);
+                txtPlcBirth_StdExt1, Gdr_Prf_Malp1, Branch_stdExternStdUpdtForm, LevelStdExtUpdtForm, CaseResident2, 2);
         InitFormUpdIntlExtStd(false);
 
         Gdr_Prf_Malp1.setSelected(true);
@@ -9002,7 +9159,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                 break;
             case "طالب خـــارجــي":
                 Initialise_ExternalStudent_Resident(txt_NumInscSdExt1, txtNam_StdExt1, txtSurNam_StdExt1, DatBirth_StdExt1,
-                        txtPlcBirth_StdExt1, Gdr_Prf_Malp1, txtBranch_stdExternStd, LevelStdExtToupd, CaseResident2, 2);
+                        txtPlcBirth_StdExt1, Gdr_Prf_Malp1, Branch_stdExternStdUpdtForm, LevelStdExtUpdtForm, CaseResident2, 2);
                 this.InitFormUpdIntlExtStd(false);
                 break;
             case "عـــامـــل":
@@ -9036,11 +9193,11 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                 case "طالب داخلي": {
                     try {
                         student_ResRemplissage.GetInformationResidentN(NumCard, NumCardToUpdt, CaseResident, txtNam_std5, txtSurNam_std5,
-                                DatBirth_std3, txtPlcBirth_std5, CheckMale2, checkFemal2, txt_NumInsc2, txtNam_Father2, txtNam_mother2,
-                                txtProfission_Std2, txtProfission_Moth2, txtAddress_Std2, WilayaList2, txtDairaStd2, /*txtCommuneStd2*/ CombCommune, National_list2,
-                                Sti_Single3, Std_Maried2, TtxtBacYear2, txtBacMoy2, txtPlaceGetBac2,
-                                txtBranch_std5, txtDepa_Std2, LevelStd2, Img_StdUpdate, getPatternResident(), SituationFam,
-                                Name_ResidentFrUp, LastName_ResidentFrUp, PlaceBirthFrUp, Name_FatherFrUp, Name_MotherFrUp, LastName_MotheFrUp, NamMrA);
+                                DatBirth_stdUpdtForm, txtPlcBirth_stdUpdtForm, CheckMaleStdUpdtForm, checkFemalStdUpdtForm, txt_NumInscUpdtForm, txtNam_FatherStdUpdtForm, txtNam_MotherStdUpdtForm,
+                                txtProfissionfath_StdUpdtForm, txtProfission_MothStdUpdtForm, txtAddress_StdUpdtForm, WilayaListUpdtForm, txtDairaStdUpdtForm, /*txtCommuneStd2*/ CombCommuneUpdtForm, National_listStdUpdtForm,
+                                Sti_SingleStdUpdtForm, Std_MariedStdUpdtForm, TtxtBacYearStdUpdtForm, txtBacMoy2, txtPlaceGetBacStdUpdtForm,
+                                Branch_stdUpdtForm, Depa_StdUpdtForm, LevelStdUpdtForm, Img_StdUpdate, getPatternResident(), SituationFam,
+                                Name_ResidentFrUp, LastName_ResidentFrUp, PlaceBirthFrStdUpdForm, Name_FatherFrUp, Name_MotherFrUp, LastName_MotheFrUp, NamMrArStdUpdtForm);
                     } catch (IOException ex) {
                         // Logger.getLogger(Home1.class.getName()).log(Level.SEVERE, null, ex);
                         ex.printStackTrace();
@@ -9052,11 +9209,11 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                     try {
                         // JOptionPane.showMessageDialog(null, "Im in KeyEnter And Val is " + Integer.parseInt(NumCardToUpdt2.getText()));
                         professor_resRemplissage.setHome1(this);
-                        professor_resRemplissage.GetInformationResidentN(NumCard, NumCardToUpdt2, CaseResident1, txtNam_Prof1,
-                                txtSurNam_Prof1, DatBirth_Pro, ftxtPlcBirth_Prof, Gdr_Prf_Malp, Gdr_Prf_femalp, txt_NumInsc2, txtNam_Father2, txtNam_mother2,
-                                txtProfission_Std2, txtProfission_Moth2, txtAddress_Std2, WilayaList2, txtDairaStd2, /*txtCommuneStd2*/ CombCommune, National_list2,
-                                Sti_Single3, Std_Maried2, TtxtBacYear2, txtBacMoy2,
-                                txtPlaceGetBac2, txtBranch_std5, txtDepa_Std2, LevelStd2, Img_profupdate, getPatternResident(), SituationFam,
+                        professor_resRemplissage.GetInformationResidentN(NumCard, NumCardToUpdt2, CaseResidentProfUpdtForm, txtNam_Prof1,
+                                txtSurNam_Prof1, DatBirth_Pro, ftxtPlcBirth_Prof, Gdr_Prf_Malp, Gdr_Prf_femalp, txt_NumInscUpdtForm, txtNam_FatherStdUpdtForm, txtNam_MotherStdUpdtForm,
+                                txtProfissionfath_StdUpdtForm, txtProfission_MothStdUpdtForm, txtAddress_StdUpdtForm, WilayaListUpdtForm, txtDairaStdUpdtForm, /*txtCommuneStd2*/ CombCommuneUpdtForm, National_listStdUpdtForm,
+                                Sti_SingleStdUpdtForm, Std_MariedStdUpdtForm, TtxtBacYearStdUpdtForm, txtBacMoy2,
+                                txtPlaceGetBacStdUpdtForm, Branch_stdUpdtForm, Depa_StdUpdtForm, LevelStdUpdtForm, Img_profupdate, getPatternResident(), SituationFam,
                                 null, null, null, null, null, null, null);
                     } catch (IOException ex) {
                         ex.printStackTrace();
@@ -9070,8 +9227,8 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                             ExternalstudentRemplissage.GetInformationResidentN(NumCard, NumCardToUpdt3, CaseResident2, txtNam_StdExt1,
                                     txtSurNam_StdExt1, DatBirth_StdExt1, txtPlcBirth_StdExt1, Gdr_Prf_Malp1, Gdr_Prf_femalp1, txt_NumInscSdExt1, null, null,
                                     null, null, null, null, null, null, null,
-                                    null, null, null, null, null, txtBranch_stdExternStd, null,
-                                    LevelStdExtToupd, Img_StdUpdate1, getPatternResident(), SituationFam,
+                                    null, null, null, null, null, Branch_stdExternStdUpdtForm, null,
+                                    LevelStdExtUpdtForm, Img_StdUpdate1, getPatternResident(), SituationFam,
                                     null, null, null, null, null, null, null);
                         } catch (IOException ex) {
 
@@ -9115,13 +9272,13 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                 case "طالب داخلي":
                     try {
                         student_ResRemplissage.GetInformationResidentN(NumCard, NumCardToUpdt, CaseResident, txtNam_std5, txtSurNam_std5,
-                                DatBirth_std3, txtPlcBirth_std5, CheckMale2, checkFemal2, txt_NumInsc2, txtNam_Father2, txtNam_mother2,
-                                txtProfission_Std2, txtProfission_Moth2, txtAddress_Std2,
-                                WilayaList2, txtDairaStd2,
-                                /*txtCommuneStd2*/ CombCommune, National_list2,
-                                Sti_Single3, Std_Maried2, TtxtBacYear2, txtBacMoy2, txtPlaceGetBac2, txtBranch_std5, txtDepa_Std2, LevelStd2, Img_StdUpdate, getPatternResident(), SituationFam,
-                                Name_ResidentFrUp, LastName_ResidentFrUp, PlaceBirthFrUp, Name_FatherFrUp, Name_MotherFrUp, LastName_MotheFrUp, NamMrA);
-                        RoomRemplissage.GetRoomANDPavillionForStudent(NumCard, LstPvlinUpd, CombRomInUpdt, AncianRoom);
+                                DatBirth_stdUpdtForm, txtPlcBirth_stdUpdtForm, CheckMaleStdUpdtForm, checkFemalStdUpdtForm, txt_NumInscUpdtForm, txtNam_FatherStdUpdtForm, txtNam_MotherStdUpdtForm,
+                                txtProfissionfath_StdUpdtForm, txtProfission_MothStdUpdtForm, txtAddress_StdUpdtForm,
+                                WilayaListUpdtForm, txtDairaStdUpdtForm,
+                                /*txtCommuneStd2*/ CombCommuneUpdtForm, National_listStdUpdtForm,
+                                Sti_SingleStdUpdtForm, Std_MariedStdUpdtForm, TtxtBacYearStdUpdtForm, txtBacMoy2, txtPlaceGetBacStdUpdtForm, Branch_stdUpdtForm, Depa_StdUpdtForm, LevelStdUpdtForm, Img_StdUpdate, getPatternResident(), SituationFam,
+                                Name_ResidentFrUp, LastName_ResidentFrUp, PlaceBirthFrStdUpdForm, Name_FatherFrUp, Name_MotherFrUp, LastName_MotheFrUp, NamMrArStdUpdtForm);
+                        RoomRemplissage.GetRoomANDPavillionForStudent(NumCard, LstPvlinUpdtForm, CombRomInUpdtForm, AncianRoom);
                     } catch (IOException ex) {
 
                     }
@@ -9129,10 +9286,10 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                 case "اســـتـاذ":
                     try {
                         //  professor_resRemplissage.setHome1(this);
-                        professor_resRemplissage.GetInformationResidentN(NumCard, NumCardToUpdt2, CaseResident1, txtNam_Prof1,
-                                txtSurNam_Prof1, DatBirth_Pro, ftxtPlcBirth_Prof, Gdr_Prf_Malp, Gdr_Prf_femalp, txt_NumInsc2, txtNam_Father2, txtNam_mother2,
-                                txtProfission_Std2, txtProfission_Moth2, txtAddress_Std2, WilayaList2, txtDairaStd2, /*txtCommuneStd2*/ CombCommune, National_list2,
-                                Sti_Single3, Std_Maried2, TtxtBacYear2, txtBacMoy2, txtPlaceGetBac2, txtBranch_std5, txtDepa_Std2, LevelStd2, Img_profupdate, getPatternResident(), SituationFam,
+                        professor_resRemplissage.GetInformationResidentN(NumCard, NumCardToUpdt2, CaseResidentProfUpdtForm, txtNam_Prof1,
+                                txtSurNam_Prof1, DatBirth_Pro, ftxtPlcBirth_Prof, Gdr_Prf_Malp, Gdr_Prf_femalp, txt_NumInscUpdtForm, txtNam_FatherStdUpdtForm, txtNam_MotherStdUpdtForm,
+                                txtProfissionfath_StdUpdtForm, txtProfission_MothStdUpdtForm, txtAddress_StdUpdtForm, WilayaListUpdtForm, txtDairaStdUpdtForm, /*txtCommuneStd2*/ CombCommuneUpdtForm, National_listStdUpdtForm,
+                                Sti_SingleStdUpdtForm, Std_MariedStdUpdtForm, TtxtBacYearStdUpdtForm, txtBacMoy2, txtPlaceGetBacStdUpdtForm, Branch_stdUpdtForm, Depa_StdUpdtForm, LevelStdUpdtForm, Img_profupdate, getPatternResident(), SituationFam,
                                 null, null, null, null, null, null, null);
                     } catch (IOException ex) {
                     }
@@ -9144,7 +9301,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                         ExternalstudentRemplissage.GetInformationResidentN(NumCard, NumCardToUpdt3, CaseResident2, txtNam_StdExt1,
                                 txtSurNam_StdExt1, DatBirth_StdExt1, txtPlcBirth_StdExt1, Gdr_Prf_Malp1, Gdr_Prf_femalp1, txt_NumInscSdExt1, null, null,
                                 null, null, null, null, null, null, null,
-                                null, null, null, null, null, txtBranch_stdExternStd, null, LevelStdExtToupd, Img_StdUpdate1,
+                                null, null, null, null, null, Branch_stdExternStdUpdtForm, null, LevelStdExtUpdtForm, Img_StdUpdate1,
                                 getPatternResident(), SituationFam,
                                 null, null, null, null, null, null, null);
                     } catch (IOException ex) {
@@ -9354,8 +9511,8 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                 ExternalstudentRemplissage.GetInformationResidentN(Integer.parseInt(NumCardToUpdt3.getText()), NumCardToUpdt3, CaseResident2, txtNam_StdExt1,
                         txtSurNam_StdExt1, DatBirth_StdExt1, txtPlcBirth_StdExt1, Gdr_Prf_Malp1, Gdr_Prf_femalp1, txt_NumInscSdExt1, null, null,
                         null, null, null, null, null, null, null,
-                        null, null, null, null, null, txtBranch_stdExternStd, null,
-                        LevelStdExtToupd, Img_StdUpdate1, getPatternResident(), SituationFam,
+                        null, null, null, null, null, Branch_stdExternStdUpdtForm, null,
+                        LevelStdExtUpdtForm, Img_StdUpdate1, getPatternResident(), SituationFam,
                         null, null, null, null, null, null, null);
             } catch (IOException ex) {
                 //Logger.getLogger(Home1.class.getName()).log(Level.SEVERE, null, ex);
@@ -9402,8 +9559,8 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                     ExternalstudentRemplissage.GetInformationResidentN(Integer.parseInt(NumCardToUpdt3.getText()), NumCardToUpdt3, CaseResident2, txtNam_StdExt1,
                             txtSurNam_StdExt1, DatBirth_StdExt1, txtPlcBirth_StdExt1, Gdr_Prf_Malp1, Gdr_Prf_femalp1, txt_NumInscSdExt1, null, null,
                             null, null, null, null, null, null, null,
-                            null, null, null, null, null, txtBranch_stdExternStd, null,
-                            LevelStdExtToupd, Img_StdUpdate1, getPatternResident(), SituationFam,
+                            null, null, null, null, null, Branch_stdExternStdUpdtForm, null,
+                            LevelStdExtUpdtForm, Img_StdUpdate1, getPatternResident(), SituationFam,
                             null, null, null, null, null, null, null);
                 } catch (IOException ex) {
                     //Logger.getLogger(Home1.class.getName()).log(Level.SEVERE, null, ex);
@@ -9417,21 +9574,21 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         txt_NumInscSdExt1.setForeground(Color.black);
     }//GEN-LAST:event_txt_NumInscSdExt1FocusGained
 
-    private void LevelStdExtToupdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_LevelStdExtToupdKeyPressed
+    private void LevelStdExtUpdtFormKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_LevelStdExtUpdtFormKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_LevelStdExtToupdKeyPressed
+    }//GEN-LAST:event_LevelStdExtUpdtFormKeyPressed
 
-    private void LevelStdExtToupdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LevelStdExtToupdActionPerformed
+    private void LevelStdExtUpdtFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LevelStdExtUpdtFormActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_LevelStdExtToupdActionPerformed
+    }//GEN-LAST:event_LevelStdExtUpdtFormActionPerformed
 
-    private void txtBranch_stdExternStdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBranch_stdExternStdKeyPressed
+    private void Branch_stdExternStdUpdtFormKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Branch_stdExternStdUpdtFormKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtBranch_stdExternStdKeyPressed
+    }//GEN-LAST:event_Branch_stdExternStdUpdtFormKeyPressed
 
-    private void txtBranch_stdExternStdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBranch_stdExternStdActionPerformed
+    private void Branch_stdExternStdUpdtFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Branch_stdExternStdUpdtFormActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtBranch_stdExternStdActionPerformed
+    }//GEN-LAST:event_Branch_stdExternStdUpdtFormActionPerformed
 
     private void DatBirth_StdExt1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_DatBirth_StdExt1KeyPressed
         // TODO add your handling code here:
@@ -9493,10 +9650,10 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             try {
                 // JOptionPane.showMessageDialog(null, "Im in KeyEnter And Val is " + Integer.parseInt(NumCardToUpdt2.getText()));
                 professor_resRemplissage.setHome1(this);
-                professor_resRemplissage.GetInformationResidentN(Integer.parseInt(NumCardToUpdt2.getText()), NumCardToUpdt2, CaseResident1, txtNam_Prof1,
-                        txtSurNam_Prof1, DatBirth_Pro, ftxtPlcBirth_Prof, Gdr_Prf_Malp, Gdr_Prf_femalp, txt_NumInsc2, txtNam_Father2, txtNam_mother2,
-                        txtProfission_Std2, txtProfission_Moth2, txtAddress_Std2, WilayaList2, txtDairaStd2, /*txtCommuneStd2*/ CombCommune, National_list2,
-                        Sti_Single3, Std_Maried2, TtxtBacYear2, txtBacMoy2, txtPlaceGetBac2, txtBranch_std5, txtDepa_Std2, LevelStd2, Img_profupdate, getPatternResident(), SituationFam,
+                professor_resRemplissage.GetInformationResidentN(Integer.parseInt(NumCardToUpdt2.getText()), NumCardToUpdt2, CaseResidentProfUpdtForm, txtNam_Prof1,
+                        txtSurNam_Prof1, DatBirth_Pro, ftxtPlcBirth_Prof, Gdr_Prf_Malp, Gdr_Prf_femalp, txt_NumInscUpdtForm, txtNam_FatherStdUpdtForm, txtNam_MotherStdUpdtForm,
+                        txtProfissionfath_StdUpdtForm, txtProfission_MothStdUpdtForm, txtAddress_StdUpdtForm, WilayaListUpdtForm, txtDairaStdUpdtForm, /*txtCommuneStd2*/ CombCommuneUpdtForm, National_listStdUpdtForm,
+                        Sti_SingleStdUpdtForm, Std_MariedStdUpdtForm, TtxtBacYearStdUpdtForm, txtBacMoy2, txtPlaceGetBacStdUpdtForm, Branch_stdUpdtForm, Depa_StdUpdtForm, LevelStdUpdtForm, Img_profupdate, getPatternResident(), SituationFam,
                         null, null, null, null, null, null, null);
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -9515,10 +9672,10 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                 try {
                     // JOptionPane.showMessageDialog(null, "Im in KeyEnter And Val is " + Integer.parseInt(NumCardToUpdt2.getText()));
                     professor_resRemplissage.setHome1(this);
-                    professor_resRemplissage.GetInformationResidentN(Integer.parseInt(NumCardToUpdt2.getText()), NumCardToUpdt2, CaseResident1, txtNam_Prof1,
-                            txtSurNam_Prof1, DatBirth_Pro, ftxtPlcBirth_Prof, Gdr_Prf_Malp, Gdr_Prf_femalp, txt_NumInsc2, txtNam_Father2, txtNam_mother2,
-                            txtProfission_Std2, txtProfission_Moth2, txtAddress_Std2, WilayaList2, txtDairaStd2, /*txtCommuneStd2*/ CombCommune, National_list2,
-                            Sti_Single3, Std_Maried2, TtxtBacYear2, txtBacMoy2, txtPlaceGetBac2, txtBranch_std5, txtDepa_Std2, LevelStd2, Img_profupdate, getPatternResident(), SituationFam,
+                    professor_resRemplissage.GetInformationResidentN(Integer.parseInt(NumCardToUpdt2.getText()), NumCardToUpdt2, CaseResidentProfUpdtForm, txtNam_Prof1,
+                            txtSurNam_Prof1, DatBirth_Pro, ftxtPlcBirth_Prof, Gdr_Prf_Malp, Gdr_Prf_femalp, txt_NumInscUpdtForm, txtNam_FatherStdUpdtForm, txtNam_MotherStdUpdtForm,
+                            txtProfissionfath_StdUpdtForm, txtProfission_MothStdUpdtForm, txtAddress_StdUpdtForm, WilayaListUpdtForm, txtDairaStdUpdtForm, /*txtCommuneStd2*/ CombCommuneUpdtForm, National_listStdUpdtForm,
+                            Sti_SingleStdUpdtForm, Std_MariedStdUpdtForm, TtxtBacYearStdUpdtForm, txtBacMoy2, txtPlaceGetBacStdUpdtForm, Branch_stdUpdtForm, Depa_StdUpdtForm, LevelStdUpdtForm, Img_profupdate, getPatternResident(), SituationFam,
                             null, null, null, null, null, null, null);
                 } catch (IOException ex) {
                     ex.printStackTrace();
@@ -9597,7 +9754,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
 
     private void Name_MotherFrUpKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Name_MotherFrUpKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            NamMrA.requestFocus();
+            NamMrArStdUpdtForm.requestFocus();
         }
     }//GEN-LAST:event_Name_MotherFrUpKeyPressed
 
@@ -9612,19 +9769,19 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         Name_MotherFrUp.setForeground(Color.blue);
     }//GEN-LAST:event_Name_MotherFrUpFocusGained
 
-    private void NamMrAKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NamMrAKeyPressed
+    private void NamMrArStdUpdtFormKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NamMrArStdUpdtFormKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             LastName_MotheFrUp.requestFocus();
         }
-    }//GEN-LAST:event_NamMrAKeyPressed
+    }//GEN-LAST:event_NamMrArStdUpdtFormKeyPressed
 
-    private void NamMrAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NamMrAActionPerformed
+    private void NamMrArStdUpdtFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NamMrArStdUpdtFormActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_NamMrAActionPerformed
+    }//GEN-LAST:event_NamMrArStdUpdtFormActionPerformed
 
     private void LastName_ResidentFrUpKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_LastName_ResidentFrUpKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            DatBirth_std3.requestFocus();
+            DatBirth_stdUpdtForm.requestFocus();
         }
     }//GEN-LAST:event_LastName_ResidentFrUpKeyPressed
 
@@ -9648,22 +9805,22 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         Name_ResidentFrUp.setForeground(Color.blue);
     }//GEN-LAST:event_Name_ResidentFrUpFocusGained
 
-    private void PlaceBirthFrUpKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PlaceBirthFrUpKeyPressed
+    private void PlaceBirthFrStdUpdFormKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PlaceBirthFrStdUpdFormKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            txtNam_Father2.requestFocus();
+            txtNam_FatherStdUpdtForm.requestFocus();
         }
-    }//GEN-LAST:event_PlaceBirthFrUpKeyPressed
+    }//GEN-LAST:event_PlaceBirthFrStdUpdFormKeyPressed
 
-    private void PlaceBirthFrUpFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_PlaceBirthFrUpFocusGained
-        if (PlaceBirthFrUp.getText().equals("Lieu _Naissance")) {
-            PlaceBirthFrUp.setText("");
+    private void PlaceBirthFrStdUpdFormFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_PlaceBirthFrStdUpdFormFocusGained
+        if (PlaceBirthFrStdUpdForm.getText().equals("Lieu _Naissance")) {
+            PlaceBirthFrStdUpdForm.setText("");
         }
-        PlaceBirthFrUp.setForeground(Color.blue);
-    }//GEN-LAST:event_PlaceBirthFrUpFocusGained
+        PlaceBirthFrStdUpdForm.setForeground(Color.blue);
+    }//GEN-LAST:event_PlaceBirthFrStdUpdFormFocusGained
 
     private void Name_FatherFrUpKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Name_FatherFrUpKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            txtProfission_Std2.requestFocus();
+            txtProfissionfath_StdUpdtForm.requestFocus();
         }
     }//GEN-LAST:event_Name_FatherFrUpKeyPressed
 
@@ -9676,7 +9833,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
 
     private void LastName_MotheFrUpKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_LastName_MotheFrUpKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            txtProfission_Moth2.requestFocus();
+            txtProfission_MothStdUpdtForm.requestFocus();
         }
     }//GEN-LAST:event_LastName_MotheFrUpKeyPressed
 
@@ -9714,10 +9871,10 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         } else {
             try {
                 student_ResRemplissage.GetInformationResidentN(Integer.parseInt(NumCardToUpdt.getText()), NumCardToUpdt, CaseResident, txtNam_std5, txtSurNam_std5,
-                        DatBirth_std3, txtPlcBirth_std5, CheckMale2, checkFemal2, txt_NumInsc2, txtNam_Father2, txtNam_mother2,
-                        txtProfission_Std2, txtProfission_Moth2, txtAddress_Std2, WilayaList2, txtDairaStd2, /*txtCommuneStd2*/ CombCommune, National_list2,
-                        Sti_Single3, Std_Maried2, TtxtBacYear2, txtBacMoy2, txtPlaceGetBac2, txtBranch_std5, txtDepa_Std2, LevelStd2, Img_StdUpdate, getPatternResident(), SituationFam,
-                        Name_ResidentFrUp, LastName_ResidentFrUp, PlaceBirthFrUp, Name_FatherFrUp, Name_MotherFrUp, LastName_MotheFrUp, NamMrA);
+                        DatBirth_stdUpdtForm, txtPlcBirth_stdUpdtForm, CheckMaleStdUpdtForm, checkFemalStdUpdtForm, txt_NumInscUpdtForm, txtNam_FatherStdUpdtForm, txtNam_MotherStdUpdtForm,
+                        txtProfissionfath_StdUpdtForm, txtProfission_MothStdUpdtForm, txtAddress_StdUpdtForm, WilayaListUpdtForm, txtDairaStdUpdtForm, /*txtCommuneStd2*/ CombCommuneUpdtForm, National_listStdUpdtForm,
+                        Sti_SingleStdUpdtForm, Std_MariedStdUpdtForm, TtxtBacYearStdUpdtForm, txtBacMoy2, txtPlaceGetBacStdUpdtForm, Branch_stdUpdtForm, Depa_StdUpdtForm, LevelStdUpdtForm, Img_StdUpdate, getPatternResident(), SituationFam,
+                        Name_ResidentFrUp, LastName_ResidentFrUp, PlaceBirthFrStdUpdForm, Name_FatherFrUp, Name_MotherFrUp, LastName_MotheFrUp, NamMrArStdUpdtForm);
             } catch (IOException ex) {
             }
         }
@@ -9739,10 +9896,10 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             } else {
                 try {
                     student_ResRemplissage.GetInformationResidentN(Integer.parseInt(NumCardToUpdt.getText()), NumCardToUpdt, CaseResident, txtNam_std5, txtSurNam_std5,
-                            DatBirth_std3, txtPlcBirth_std5, CheckMale2, checkFemal2, txt_NumInsc2, txtNam_Father2, txtNam_mother2,
-                            txtProfission_Std2, txtProfission_Moth2, txtAddress_Std2, WilayaList2, txtDairaStd2, /*txtCommuneStd2*/ CombCommune, National_list2,
-                            Sti_Single3, Std_Maried2, TtxtBacYear2, txtBacMoy2, txtPlaceGetBac2, txtBranch_std5, txtDepa_Std2, LevelStd2, Img_StdUpdate, getPatternResident(), SituationFam,
-                            Name_ResidentFrUp, LastName_ResidentFrUp, PlaceBirthFrUp, Name_FatherFrUp, Name_MotherFrUp, LastName_MotheFrUp, NamMrA);
+                            DatBirth_stdUpdtForm, txtPlcBirth_stdUpdtForm, CheckMaleStdUpdtForm, checkFemalStdUpdtForm, txt_NumInscUpdtForm, txtNam_FatherStdUpdtForm, txtNam_MotherStdUpdtForm,
+                            txtProfissionfath_StdUpdtForm, txtProfission_MothStdUpdtForm, txtAddress_StdUpdtForm, WilayaListUpdtForm, txtDairaStdUpdtForm, /*txtCommuneStd2*/ CombCommuneUpdtForm, National_listStdUpdtForm,
+                            Sti_SingleStdUpdtForm, Std_MariedStdUpdtForm, TtxtBacYearStdUpdtForm, txtBacMoy2, txtPlaceGetBacStdUpdtForm, Branch_stdUpdtForm, Depa_StdUpdtForm, LevelStdUpdtForm, Img_StdUpdate, getPatternResident(), SituationFam,
+                            Name_ResidentFrUp, LastName_ResidentFrUp, PlaceBirthFrStdUpdForm, Name_FatherFrUp, Name_MotherFrUp, LastName_MotheFrUp, NamMrArStdUpdtForm);
                 } catch (IOException | NumberFormatException e) {
                     e.printStackTrace();
                 }
@@ -9750,52 +9907,52 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         }
     }//GEN-LAST:event_NumCardToUpdtKeyPressed
 
-    private void txtDepa_Std2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDepa_Std2KeyPressed
+    private void Depa_StdUpdtFormKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Depa_StdUpdtFormKeyPressed
 
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            LevelStd2.requestFocus();
+            LevelStdUpdtForm.requestFocus();
         }
-    }//GEN-LAST:event_txtDepa_Std2KeyPressed
+    }//GEN-LAST:event_Depa_StdUpdtFormKeyPressed
 
-    private void LevelStd2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_LevelStd2KeyPressed
+    private void LevelStdUpdtFormKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_LevelStdUpdtFormKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_LevelStd2KeyPressed
+    }//GEN-LAST:event_LevelStdUpdtFormKeyPressed
 
-    private void txtBranch_std5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBranch_std5KeyPressed
+    private void Branch_stdUpdtFormKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Branch_stdUpdtFormKeyPressed
 
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            txtDepa_Std2.requestFocus();
+            Depa_StdUpdtForm.requestFocus();
         }
-    }//GEN-LAST:event_txtBranch_std5KeyPressed
+    }//GEN-LAST:event_Branch_stdUpdtFormKeyPressed
 
-    private void txtPlaceGetBac2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPlaceGetBac2KeyPressed
+    private void txtPlaceGetBacStdUpdtFormKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPlaceGetBacStdUpdtFormKeyPressed
 
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            txtBranch_std5.requestFocus();
+            Branch_stdUpdtForm.requestFocus();
         }
-    }//GEN-LAST:event_txtPlaceGetBac2KeyPressed
+    }//GEN-LAST:event_txtPlaceGetBacStdUpdtFormKeyPressed
 
-    private void txtPlaceGetBac2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPlaceGetBac2ActionPerformed
+    private void txtPlaceGetBacStdUpdtFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPlaceGetBacStdUpdtFormActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtPlaceGetBac2ActionPerformed
+    }//GEN-LAST:event_txtPlaceGetBacStdUpdtFormActionPerformed
 
-    private void txtPlaceGetBac2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPlaceGetBac2FocusGained
+    private void txtPlaceGetBacStdUpdtFormFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPlaceGetBacStdUpdtFormFocusGained
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtPlaceGetBac2FocusGained
+    }//GEN-LAST:event_txtPlaceGetBacStdUpdtFormFocusGained
 
-    private void TtxtBacYear2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TtxtBacYear2KeyPressed
+    private void TtxtBacYearStdUpdtFormKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TtxtBacYearStdUpdtFormKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             txtBacMoy2.requestFocus();
         }
-    }//GEN-LAST:event_TtxtBacYear2KeyPressed
+    }//GEN-LAST:event_TtxtBacYearStdUpdtFormKeyPressed
 
-    private void TtxtBacYear2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TtxtBacYear2FocusGained
-        TtxtBacYear2.setForeground(Color.black);
-    }//GEN-LAST:event_TtxtBacYear2FocusGained
+    private void TtxtBacYearStdUpdtFormFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TtxtBacYearStdUpdtFormFocusGained
+        TtxtBacYearStdUpdtForm.setForeground(Color.black);
+    }//GEN-LAST:event_TtxtBacYearStdUpdtFormFocusGained
 
     private void txtBacMoy2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBacMoy2KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            txtPlaceGetBac2.requestFocus();
+            txtPlaceGetBacStdUpdtForm.requestFocus();
         }
     }//GEN-LAST:event_txtBacMoy2KeyPressed
 
@@ -9803,133 +9960,133 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         txtBacMoy2.setForeground(Color.black);
     }//GEN-LAST:event_txtBacMoy2FocusGained
 
-    private void Std_Maried2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Std_Maried2ActionPerformed
-        if (Std_Maried2.isSelected() == true) {
+    private void Std_MariedStdUpdtFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Std_MariedStdUpdtFormActionPerformed
+        if (Std_MariedStdUpdtForm.isSelected() == true) {
 
-            SituationFam = Std_Maried2.getText();
-            Sti_Single3.setSelected(false);
+            SituationFam = Std_MariedStdUpdtForm.getText();
+            Sti_SingleStdUpdtForm.setSelected(false);
 
         } else {
-            Sti_Single3.setSelected(true);
-            SituationFam = Sti_Single3.getText();
+            Sti_SingleStdUpdtForm.setSelected(true);
+            SituationFam = Sti_SingleStdUpdtForm.getText();
             //Std_Maried2.getText();
         }
-    }//GEN-LAST:event_Std_Maried2ActionPerformed
+    }//GEN-LAST:event_Std_MariedStdUpdtFormActionPerformed
 
-    private void Sti_Single3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Sti_Single3KeyPressed
+    private void Sti_SingleStdUpdtFormKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Sti_SingleStdUpdtFormKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_Sti_Single3KeyPressed
+    }//GEN-LAST:event_Sti_SingleStdUpdtFormKeyPressed
 
-    private void Sti_Single3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Sti_Single3ActionPerformed
+    private void Sti_SingleStdUpdtFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Sti_SingleStdUpdtFormActionPerformed
 
-        if (Sti_Single3.isSelected() == true) {
+        if (Sti_SingleStdUpdtForm.isSelected() == true) {
 
-            SituationFam = Sti_Single3.getText();
-            Std_Maried2.setSelected(false);
+            SituationFam = Sti_SingleStdUpdtForm.getText();
+            Std_MariedStdUpdtForm.setSelected(false);
 
         } else {
-            Std_Maried2.setSelected(true);
-            SituationFam = Std_Maried2.getText();
+            Std_MariedStdUpdtForm.setSelected(true);
+            SituationFam = Std_MariedStdUpdtForm.getText();
             //Std_Maried2.getText();
         }
-    }//GEN-LAST:event_Sti_Single3ActionPerformed
+    }//GEN-LAST:event_Sti_SingleStdUpdtFormActionPerformed
 
-    private void WilayaList2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_WilayaList2KeyPressed
+    private void WilayaListUpdtFormKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_WilayaListUpdtFormKeyPressed
 
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            txtDairaStd2.requestFocus();
+            txtDairaStdUpdtForm.requestFocus();
         }
-    }//GEN-LAST:event_WilayaList2KeyPressed
+    }//GEN-LAST:event_WilayaListUpdtFormKeyPressed
 
-    private void National_list2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_National_list2KeyPressed
+    private void National_listStdUpdtFormKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_National_listStdUpdtFormKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_National_list2KeyPressed
+    }//GEN-LAST:event_National_listStdUpdtFormKeyPressed
 
-    private void CheckMale2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckMale2ActionPerformed
+    private void CheckMaleStdUpdtFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckMaleStdUpdtFormActionPerformed
 
-        if (CheckMale2.isSelected() == true) {
-            checkFemal2.setSelected(false);
+        if (CheckMaleStdUpdtForm.isSelected() == true) {
+            checkFemalStdUpdtForm.setSelected(false);
             Gender = 1;
         } else {
-            checkFemal2.setSelected(true);
+            checkFemalStdUpdtForm.setSelected(true);
             Gender = 2;
         }
-    }//GEN-LAST:event_CheckMale2ActionPerformed
+    }//GEN-LAST:event_CheckMaleStdUpdtFormActionPerformed
 
-    private void checkFemal2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkFemal2ActionPerformed
-        if (checkFemal2.isSelected() == true) {
-            CheckMale2.setSelected(false);
+    private void checkFemalStdUpdtFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkFemalStdUpdtFormActionPerformed
+        if (checkFemalStdUpdtForm.isSelected() == true) {
+            CheckMaleStdUpdtForm.setSelected(false);
             Gender = 2;
 
         } else {
-            CheckMale2.setSelected(true);
+            CheckMaleStdUpdtForm.setSelected(true);
             Gender = 1;
         }
-    }//GEN-LAST:event_checkFemal2ActionPerformed
+    }//GEN-LAST:event_checkFemalStdUpdtFormActionPerformed
 
-    private void txtAddress_Std2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAddress_Std2KeyPressed
+    private void txtAddress_StdUpdtFormKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAddress_StdUpdtFormKeyPressed
         // --
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            WilayaList2.requestFocus();
+            WilayaListUpdtForm.requestFocus();
         }
-    }//GEN-LAST:event_txtAddress_Std2KeyPressed
+    }//GEN-LAST:event_txtAddress_StdUpdtFormKeyPressed
 
-    private void txtAddress_Std2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAddress_Std2FocusGained
+    private void txtAddress_StdUpdtFormFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAddress_StdUpdtFormFocusGained
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtAddress_Std2FocusGained
+    }//GEN-LAST:event_txtAddress_StdUpdtFormFocusGained
 
-    private void txtNam_mother2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNam_mother2KeyPressed
+    private void txtNam_MotherStdUpdtFormKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNam_MotherStdUpdtFormKeyPressed
 
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             Name_MotherFrUp.requestFocus();
         }
-    }//GEN-LAST:event_txtNam_mother2KeyPressed
+    }//GEN-LAST:event_txtNam_MotherStdUpdtFormKeyPressed
 
-    private void txtNam_mother2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNam_mother2FocusGained
+    private void txtNam_MotherStdUpdtFormFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNam_MotherStdUpdtFormFocusGained
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNam_mother2FocusGained
+    }//GEN-LAST:event_txtNam_MotherStdUpdtFormFocusGained
 
-    private void txtProfission_Std2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProfission_Std2KeyPressed
+    private void txtProfissionfath_StdUpdtFormKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProfissionfath_StdUpdtFormKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            txtNam_mother2.requestFocus();
+            txtNam_MotherStdUpdtForm.requestFocus();
         }
-    }//GEN-LAST:event_txtProfission_Std2KeyPressed
+    }//GEN-LAST:event_txtProfissionfath_StdUpdtFormKeyPressed
 
-    private void txtProfission_Std2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtProfission_Std2FocusGained
+    private void txtProfissionfath_StdUpdtFormFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtProfissionfath_StdUpdtFormFocusGained
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtProfission_Std2FocusGained
+    }//GEN-LAST:event_txtProfissionfath_StdUpdtFormFocusGained
 
-    private void txtPlcBirth_std5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPlcBirth_std5KeyPressed
+    private void txtPlcBirth_stdUpdtFormKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPlcBirth_stdUpdtFormKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            PlaceBirthFrUp.requestFocus();
+            PlaceBirthFrStdUpdForm.requestFocus();
         }
-    }//GEN-LAST:event_txtPlcBirth_std5KeyPressed
+    }//GEN-LAST:event_txtPlcBirth_stdUpdtFormKeyPressed
 
-    private void txtPlcBirth_std5FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPlcBirth_std5FocusGained
+    private void txtPlcBirth_stdUpdtFormFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPlcBirth_stdUpdtFormFocusGained
 
-    }//GEN-LAST:event_txtPlcBirth_std5FocusGained
+    }//GEN-LAST:event_txtPlcBirth_stdUpdtFormFocusGained
 
-    private void txtNam_Father2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNam_Father2KeyPressed
+    private void txtNam_FatherStdUpdtFormKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNam_FatherStdUpdtFormKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             Name_FatherFrUp.requestFocus();
         }
-    }//GEN-LAST:event_txtNam_Father2KeyPressed
+    }//GEN-LAST:event_txtNam_FatherStdUpdtFormKeyPressed
 
-    private void txtNam_Father2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNam_Father2FocusGained
+    private void txtNam_FatherStdUpdtFormFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNam_FatherStdUpdtFormFocusGained
 
-    }//GEN-LAST:event_txtNam_Father2FocusGained
+    }//GEN-LAST:event_txtNam_FatherStdUpdtFormFocusGained
 
-    private void DatBirth_std3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_DatBirth_std3KeyPressed
+    private void DatBirth_stdUpdtFormKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_DatBirth_stdUpdtFormKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            txtPlcBirth_std5.requestFocus();
+            txtPlcBirth_stdUpdtForm.requestFocus();
         }        // TODO add your handling code here:
-    }//GEN-LAST:event_DatBirth_std3KeyPressed
+    }//GEN-LAST:event_DatBirth_stdUpdtFormKeyPressed
 
-    private void txtProfission_Moth2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProfission_Moth2KeyPressed
+    private void txtProfission_MothStdUpdtFormKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProfission_MothStdUpdtFormKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            txtAddress_Std2.requestFocus();
+            txtAddress_StdUpdtForm.requestFocus();
         }
-    }//GEN-LAST:event_txtProfission_Moth2KeyPressed
+    }//GEN-LAST:event_txtProfission_MothStdUpdtFormKeyPressed
 
     private void txtSurNam_std5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSurNam_std5KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -9951,13 +10108,13 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         txtNam_std5.setForeground(Color.gray);
     }//GEN-LAST:event_txtNam_std5FocusGained
 
-    private void txt_NumInsc2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_NumInsc2KeyPressed
+    private void txt_NumInscUpdtFormKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_NumInscUpdtFormKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txt_NumInsc2KeyPressed
+    }//GEN-LAST:event_txt_NumInscUpdtFormKeyPressed
 
-    private void txt_NumInsc2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_NumInsc2FocusGained
-        txt_NumInsc2.setForeground(Color.black);
-    }//GEN-LAST:event_txt_NumInsc2FocusGained
+    private void txt_NumInscUpdtFormFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_NumInscUpdtFormFocusGained
+        txt_NumInscUpdtForm.setForeground(Color.black);
+    }//GEN-LAST:event_txt_NumInscUpdtFormFocusGained
 
     private void BtnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnNextActionPerformed
 
@@ -9973,9 +10130,9 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             case "عـــامـــل":
                 Initialise_Employer_Resident(txtNam_EmplInsr, txtSurNam_Empl, DatBirth_Empl, txtPlcBirth_Emply, Gdr_Emp_Mal1, Profession, null, 1);
                 break;
-            case "طالب خـــارجــي":
-                Initialise_ExternalStudent_Resident(txt_NumInscSdExt1, txtNam_StdExt, txtSurNam_StdExt, DatBirth_StdExt, txtPlcBirth_StdExt, Gdr_StdExt_Mal, txtBranch_stdExtr, LevelStd_StdExtrn, null, 1);
-                break;
+//            case "طالب خـــارجــي":
+//                Initialise_ExternalStudent_Resident(txt_NumInscSdExt1, txtNam_StdExt, txtSurNam_StdExt, DatBirth_StdExt, txtPlcBirth_StdExt, Gdr_StdExt_Mal, txtBranch_stdExtr, LevelStd_StdExtrn, null, 1);
+//                break;
             case "اســـتـاذ":
                 Initialise_Professor_Resident();
                 break;
@@ -10015,6 +10172,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
 
                         String Num = DatInscrpInUniv.getText();
                         String a2[] = Num.split("/");
+
                         String NumInsc = a2[0] + "-" + a2[1] + "-" + a2[2];
                         student_Res = new Student_Res(txtNam_std.getText(), txtSurNam_std.getText(), Num_Cardes, "0251" + Num_Cardes, new SimpleDateFormat("dd-MM-yyyy").parse(NevDat) /*new Date(DatBirth_std.getText())*/,
                                 txtPlcBirth_std.getText(), Gender, Fill_Data.GetId_From_DB("Id_Ptrn_Res", "Pattern_Person_Res", "Name_Patern", getPatternResident()), 7,
@@ -10029,9 +10187,9 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                                 Fill_Data.GetId_From_DB("Id_LevelStudy", "Level_Study", "DescriptionLevel", (String) LevelStd.getSelectedItem()), 30, txt_NumInsc.getText(),
                                 1,
                                 "", "", "", "", "", "", LastNamMothARTxt.getText());
-                        
+
                         student_Res.setImageRes(ImageResidentToSv);
-                        
+
                         student_Res.AddRsident();
                         if (student_Res.getValConfiramation() != 0) {
                             LabPrfNumCard_StdRes.setText("" + student_Res.getNumbre_CardRes());
@@ -10057,69 +10215,69 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
                 break;
             case "اســـتـاذ":
                 // JOptionPane.showMessageDialog(null, "The Resident :"+getPatternResident());
-                jLabel55.setText(DatBirth_Prof.getText());
-                String a[] = jLabel55.getText().split("/");
-                String NevDat = a[0] + "-" + a[1] + "-" + a[2];
-
-                try {
-                    professor_res = new Professor_Res(txtNam_Prof.getText(), txtSurNam_Prof.getText(), Num_Cardes, "251" + Num_Cardes, new SimpleDateFormat("dd-MM-yyyy").parse(NevDat), txtPlcBirth_Emply.getText(), Gender, Fill_Data.GetId_From_DB("Id_Ptrn_Res", "Pattern_Person_Res", "Name_Patern", getPatternResident()), 2,
-                            1, 0, 0);
-                } catch (Exception ex) {
-                    Logger.getLogger(Home1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-                }
-
-                professor_res.setImageRes(ImageResidentToSv);
-
-                professor_res.AddRsident();
-                if (professor_res.getValConfiramation() != 0) {
-                    LabPrfNumCard_StdRes.setText("" + professor_res.getNumbre_CardRes());
-                    LabNameRestToPrint.setText(professor_res.getFirst_name());
-                    LabLastNameRestToPrint.setText(professor_res.getLast_name());
-                    LabDateBirth_Plc.setText(Format.format(professor_res.getDateBirth()));
-                    LabPlaceBirth_Res.setText(professor_res.getPlaceBirth());
-                    LabBranchStd.setText("اســـتـاذ");
-                    //  JOptionPane.showMessageDialog(null, "The Value Confirmation :"+student_Res.getValConfiramation());
-                    new SuccessAlert1(this).setVisible(true);
-                    Initialise_Professor_Resident();
-                    ImageResidentToSv = InitialiseImageResident(CLabImg);
-                    System.out.println("residence.Home1.BtnSaveStdActionPerformed()" + "The Student And Resident Is Added  ");
-                } else {
-                    messagerror = new MessageErrorControl(this, true, "الرجــاء اعــادة ادخــال البيانات");
-                    messagerror.setVisible(true);
-                }
+//                jLabel55.setText(DatBirth_Prof.getText());
+//                String a[] = jLabel55.getText().split("/");
+//                String NevDat = a[0] + "-" + a[1] + "-" + a[2];
+//
+//                try {
+//                    professor_res = new Professor_Res(txtNam_Prof.getText(), txtSurNam_Prof.getText(), Num_Cardes, "251" + Num_Cardes, new SimpleDateFormat("dd-MM-yyyy").parse(NevDat), txtPlcBirth_Emply.getText(), Gender, Fill_Data.GetId_From_DB("Id_Ptrn_Res", "Pattern_Person_Res", "Name_Patern", getPatternResident()), 2,
+//                            1, 0, 0);
+//                } catch (Exception ex) {
+//                    Logger.getLogger(Home1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//                }
+//
+//                professor_res.setImageRes(ImageResidentToSv);
+//
+//                professor_res.AddRsident();
+//                if (professor_res.getValConfiramation() != 0) {
+//                    LabPrfNumCard_StdRes.setText("" + professor_res.getNumbre_CardRes());
+//                    LabNameRestToPrint.setText(professor_res.getFirst_name());
+//                    LabLastNameRestToPrint.setText(professor_res.getLast_name());
+//                    LabDateBirth_Plc.setText(Format.format(professor_res.getDateBirth()));
+//                    LabPlaceBirth_Res.setText(professor_res.getPlaceBirth());
+//                    LabBranchStd.setText("اســـتـاذ");
+//                    //  JOptionPane.showMessageDialog(null, "The Value Confirmation :"+student_Res.getValConfiramation());
+//                    new SuccessAlert1(this).setVisible(true);
+//                    Initialise_Professor_Resident();
+//                    ImageResidentToSv = InitialiseImageResident(CLabImg);
+//                    System.out.println("residence.Home1.BtnSaveStdActionPerformed()" + "The Student And Resident Is Added  ");
+//                } else {
+//                    messagerror = new MessageErrorControl(this, true, "الرجــاء اعــادة ادخــال البيانات");
+//                    messagerror.setVisible(true);
+//                }
 
                 break;
             case "طالب خـــارجــي":
-
-                jLabel55.setText(DatBirth_StdExt.getText());
-                //JOptionPane.showMessageDialog(null, "The Resident :"+getPatternResident()+"Date Birth is :"+DatBirth_StdExt.getText());
-                String b[] = jLabel55.getText().split("/");
-                String NevDatb = b[0] + "-" + b[1] + "-" + b[2];
-                // JOptionPane.showMessageDialog(null, "The Resident :"+getPatternResident());
-                try {
-                    externalstudent = new ExternalStudent(txtNam_StdExt.getText(), txtSurNam_StdExt.getText(), 1, "", new SimpleDateFormat("dd-MM-yyyy").parse(NevDatb), txtPlcBirth_StdExt.getText(),
-                            Gender, Fill_Data.GetId_From_DB("Id_Ptrn_Res", "Pattern_Person_Res", "Name_Patern", getPatternResident()),
-                            8, txt_NumInscSdExt.getText(), Fill_Data.GetId_From_DB("Id_BranchStd", "Branch_Study", "BranchStd_Name", (String) txtBranch_stdExtr.getSelectedItem()),
-                            Fill_Data.GetId_From_DB("Id_LevelStudy", "Level_Study", "DescriptionLevel", (String) LevelStd_StdExtrn.getSelectedItem()), new Date(), 0);
-                } catch (Exception e) {
-                }
-                externalstudent.setImageRes(ImageResidentToSv);
-                externalstudent.AddRsident();
-                if (externalstudent.getValConfiramation() != 0) {
-                    LabPrfNumCard_StdRes.setText("" + externalstudent.getNumbre_CardRes());
-                    LabNameRestToPrint.setText(externalstudent.getFirst_name());
-                    LabLastNameRestToPrint.setText(externalstudent.getLast_name());
-                    LabDateBirth_Plc.setText(Format.format(externalstudent.getDateBirth()));
-                    LabPlaceBirth_Res.setText(externalstudent.getPlaceBirth());
-                    LabBranchStd.setText((String) txtBranch_stdExtr.getSelectedItem());
-
-                    new SuccessAlert1(this).setVisible(true);
-                    Initialise_ExternalStudent_Resident(txt_NumInscSdExt, txtNam_StdExt, txtSurNam_StdExt, DatBirth_StdExt, txtPlcBirth_StdExt, Gdr_StdExt_Mal, txtBranch_stdExtr, LevelStd_StdExtrn, null, 1);
-                    ImageResidentToSv = InitialiseImageResident(CLabImg);
-                } else {
-                    messagerror = new MessageErrorControl(this, true, "الرجــاء اعــادة ادخــال البيانات");
-                    messagerror.setVisible(true);
-                }
+//
+//                jLabel55.setText(DatBirth_StdExt.getText());
+//                //JOptionPane.showMessageDialog(null, "The Resident :"+getPatternResident()+"Date Birth is :"+DatBirth_StdExt.getText());
+//                String b[] = jLabel55.getText().split("/");
+//                String NevDatb = b[0] + "-" + b[1] + "-" + b[2];
+//                // JOptionPane.showMessageDialog(null, "The Resident :"+getPatternResident());
+//                try {
+//                    externalstudent = new ExternalStudent(txtNam_StdExt.getText(), txtSurNam_StdExt.getText(), 1, "", new SimpleDateFormat("dd-MM-yyyy").parse(NevDatb), txtPlcBirth_StdExt.getText(),
+//                            Gender, Fill_Data.GetId_From_DB("Id_Ptrn_Res", "Pattern_Person_Res", "Name_Patern", getPatternResident()),
+//                            8, txt_NumInscSdExt.getText(), Fill_Data.GetId_From_DB("Id_BranchStd", "Branch_Study", "BranchStd_Name", (String) txtBranch_stdExtr.getSelectedItem()),
+//                            Fill_Data.GetId_From_DB("Id_LevelStudy", "Level_Study", "DescriptionLevel", (String) LevelStd_StdExtrn.getSelectedItem()), new Date(), 0);
+//                } catch (Exception e) {
+//                }
+//                externalstudent.setImageRes(ImageResidentToSv);
+//                externalstudent.AddRsident();
+//                if (externalstudent.getValConfiramation() != 0) {
+//                    LabPrfNumCard_StdRes.setText("" + externalstudent.getNumbre_CardRes());
+//                    LabNameRestToPrint.setText(externalstudent.getFirst_name());
+//                    LabLastNameRestToPrint.setText(externalstudent.getLast_name());
+//                    LabDateBirth_Plc.setText(Format.format(externalstudent.getDateBirth()));
+//                    LabPlaceBirth_Res.setText(externalstudent.getPlaceBirth());
+//                    LabBranchStd.setText((String) txtBranch_stdExtr.getSelectedItem());
+//
+//                    new SuccessAlert1(this).setVisible(true);
+//                    Initialise_ExternalStudent_Resident(txt_NumInscSdExt, txtNam_StdExt, txtSurNam_StdExt, DatBirth_StdExt, txtPlcBirth_StdExt, Gdr_StdExt_Mal, txtBranch_stdExtr, LevelStd_StdExtrn, null, 1);
+//                    ImageResidentToSv = InitialiseImageResident(CLabImg);
+//                } else {
+//                    messagerror = new MessageErrorControl(this, true, "الرجــاء اعــادة ادخــال البيانات");
+//                    messagerror.setVisible(true);
+//                }
 
                 break;
             case "عـــامـــل":
@@ -10205,16 +10363,16 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     }//GEN-LAST:event_LabPrfResd_Std3MouseClicked
 
     private void check_StdExtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_StdExtActionPerformed
-        setPatternResident(check_StdExt.getText());
-        Choice_Resident(check_StdExt, check_Prof, check_Emp, check_Std, SecondCentrePan);
-        PanPrfAfterSaisStd.setVisible(false);
-        Gdr_StdExt_Mal.setSelected(true);
-        Gender = 1;
-        //Gdr_Emp_Mal1
-        Fill_Data.Filling(txtBranch_stdExtr, "Branch_Study", "BranchStd_Name", 4);
-        txtBranch_std5.removeItem("/");
-        Fill_Data.Filling(LevelStd_StdExtrn, "Level_Study", "DescriptionLevel", 3);
-        LevelStd.removeItem("/");
+//        setPatternResident(check_StdExt.getText());
+//        Choice_Resident(check_StdExt, check_Prof, check_Emp, check_Std, SecondCentrePan);
+//        PanPrfAfterSaisStd.setVisible(false);
+//        Gdr_StdExt_Mal.setSelected(true);
+//        Gender = 1;
+//        //Gdr_Emp_Mal1
+//        Fill_Data.Filling(txtBranch_stdExtr, "Branch_Study", "BranchStd_Name", 4);
+//        txtBranch_std5.removeItem("/");
+//        Fill_Data.Filling(LevelStd_StdExtrn, "Level_Study", "DescriptionLevel", 3);
+//        LevelStd.removeItem("/");
         //LevelStd_StdExtrn
     }//GEN-LAST:event_check_StdExtActionPerformed
 
@@ -10226,18 +10384,18 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         setPatternResident(check_Std.getText());
         Choice_Resident(check_Std, check_Prof, check_StdExt, check_Emp, SecondCentrePan);
 
-        Fill_Data.Filling(WilayaList2, "Wilaya", "NameWilaya", 1);
-        WilayaList2.removeItem("/");
-        Fill_Data.Filling(National_list2, "Nationalite", "Nationalite", 2);
-        National_list2.removeItem("/");
-        Fill_Data.Filling(LevelStd2, "Level_Study", "DescriptionLevel", 3);
-        LevelStd2.removeItem("/");
-        Fill_Data.Filling(txtBranch_std5, "Branch_Study", "BranchStd_Name", 4);
-        txtBranch_std5.removeItem("/");
-        Fill_Data.Filling(txtDepa_Std2, "Faculty", "NameFact", 5);
-        txtDepa_Std2.removeItem("/");
+        Fill_Data.Filling(WilayaListUpdtForm, "Wilaya", "NameWilaya", 1);
+        WilayaListUpdtForm.removeItem("/");
+        Fill_Data.Filling(National_listStdUpdtForm, "Nationalite", "Nationalite", 2);
+        National_listStdUpdtForm.removeItem("/");
+        Fill_Data.Filling(LevelStdUpdtForm, "Level_Study", "DescriptionLevel", 3);
+        LevelStdUpdtForm.removeItem("/");
+        Fill_Data.Filling(Branch_stdUpdtForm, "Branch_Study", "BranchStd_Name", 4);
+        Branch_stdUpdtForm.removeItem("/");
+        Fill_Data.Filling(Depa_StdUpdtForm, "Faculty", "NameFact", 5);
+        Depa_StdUpdtForm.removeItem("/");
         PanPrfAfterSaisStd.setVisible(false);
-        CheckMale.setSelected(true);
+        BtnRdMaleStd.setSelected(true);
         Gender = 1;
     }//GEN-LAST:event_check_StdActionPerformed
 
@@ -10246,12 +10404,12 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     }//GEN-LAST:event_check_ProfKeyPressed
 
     private void check_ProfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_ProfActionPerformed
-        setPatternResident(check_Prof.getText());
-        Choice_Resident(check_Prof, check_Std, check_StdExt, check_Emp, SecondCentrePan);
-
-        PanPrfAfterSaisStd.setVisible(false);
-        Gdr_Prf_Mal.setSelected(true);
-        Gender = 1;
+//        setPatternResident(check_Prof.getText());
+//        Choice_Resident(check_Prof, check_Std, check_StdExt, check_Emp, SecondCentrePan);
+//
+//        PanPrfAfterSaisStd.setVisible(false);
+//        Gdr_Prf_Mal.setSelected(true);
+//        Gender = 1;
 
         //txtBranch_stdExtr
     }//GEN-LAST:event_check_ProfActionPerformed
@@ -10261,14 +10419,14 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     }//GEN-LAST:event_check_EmpKeyPressed
 
     private void check_EmpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_EmpActionPerformed
-        setPatternResident(check_Emp.getText());
-        Choice_Resident(check_Emp, check_Std, check_Prof, check_StdExt, SecondCentrePan);
-        Gdr_Emp_Mal1.setSelected(true);
-        Gender = 1;
-        //PatternResident=check_Emp.getText();
-        Fill_Data.Filling(Profession, "Profession", "Profession", 6);
-        Profession.removeItem("/");
-        PanPrfAfterSaisStd.setVisible(false);
+//        setPatternResident(check_Emp.getText());
+//        Choice_Resident(check_Emp, check_Std, check_Prof, check_StdExt, SecondCentrePan);
+//        Gdr_Emp_Mal1.setSelected(true);
+//        Gender = 1;
+//        //PatternResident=check_Emp.getText();
+//        Fill_Data.Filling(Profession, "Profession", "Profession", 6);
+//        Profession.removeItem("/");
+//        PanPrfAfterSaisStd.setVisible(false);
     }//GEN-LAST:event_check_EmpActionPerformed
 
     private void Gdr_Emp_femal1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Gdr_Emp_femal1ActionPerformed
@@ -10342,163 +10500,6 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         txtSurNam_Empl.setForeground(Color.blue);
     }//GEN-LAST:event_txtSurNam_EmplFocusGained
 
-    private void Gdr_Prf_femal5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Gdr_Prf_femal5ActionPerformed
-        if (Gdr_Prf_femal5.isSelected() == true) {
-            Gdr_StdExt_Mal.setSelected(false);
-            Gender = 2;
-        } else {
-            Gdr_StdExt_Mal.setSelected(true);
-            Gender = 1;
-        }
-    }//GEN-LAST:event_Gdr_Prf_femal5ActionPerformed
-
-    private void Gdr_StdExt_MalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Gdr_StdExt_MalActionPerformed
-        if (Gdr_StdExt_Mal.isSelected() == true) {
-            Gdr_Prf_femal5.setSelected(false);
-            Gender = 1;
-
-        } else {
-            Gdr_Prf_femal5.setSelected(true);
-            Gender = 2;
-        }
-    }//GEN-LAST:event_Gdr_StdExt_MalActionPerformed
-
-    private void txt_NumInscSdExtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_NumInscSdExtKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-
-            txtNam_StdExt.requestFocus();
-        }
-    }//GEN-LAST:event_txt_NumInscSdExtKeyPressed
-
-    private void txt_NumInscSdExtFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_NumInscSdExtFocusGained
-
-        if (txt_NumInscSdExt.getText().equals("رقــم التــسجـيــل  ")) {
-            txt_NumInscSdExt.setText("");
-        }
-        txt_NumInscSdExt.setForeground(Color.red);
-    }//GEN-LAST:event_txt_NumInscSdExtFocusGained
-
-    private void DatBirth_StdExtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_DatBirth_StdExtKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            txtPlcBirth_StdExt.requestFocus();
-        }
-    }//GEN-LAST:event_DatBirth_StdExtKeyPressed
-
-    private void txtPlcBirth_StdExtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPlcBirth_StdExtKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            Gdr_StdExt_Mal.requestFocus();
-        }
-    }//GEN-LAST:event_txtPlcBirth_StdExtKeyPressed
-
-    private void txtPlcBirth_StdExtFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPlcBirth_StdExtFocusGained
-        if (txtPlcBirth_StdExt.getText().equals("ادخل مكان الميلاد")) {
-            txtPlcBirth_StdExt.setText("");
-        }
-        txtPlcBirth_StdExt.setForeground(Color.blue);
-    }//GEN-LAST:event_txtPlcBirth_StdExtFocusGained
-
-    private void txtNam_StdExtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNam_StdExtKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            txtSurNam_StdExt.requestFocus();
-        }
-    }//GEN-LAST:event_txtNam_StdExtKeyPressed
-
-    private void txtNam_StdExtFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNam_StdExtFocusGained
-        //  ادخل الاسم
-        if (txtNam_StdExt.getText().equals("ادخل الاسم")) {
-            txtNam_StdExt.setText("");
-        }
-        txtNam_StdExt.setForeground(Color.blue);
-    }//GEN-LAST:event_txtNam_StdExtFocusGained
-
-    private void txtSurNam_StdExtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSurNam_StdExtKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            DatBirth_StdExt.requestFocus();
-        }
-    }//GEN-LAST:event_txtSurNam_StdExtKeyPressed
-
-    private void txtSurNam_StdExtFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSurNam_StdExtFocusGained
-        if (txtSurNam_StdExt.getText().equals("ادخل اللقب")) {
-            txtSurNam_StdExt.setText("");
-        }
-        txtSurNam_StdExt.setForeground(Color.blue);
-    }//GEN-LAST:event_txtSurNam_StdExtFocusGained
-
-    private void Gdr_Prf_MalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Gdr_Prf_MalActionPerformed
-        // TODO add your handling code here:
-
-        if (Gdr_Prf_Mal.isSelected()) {
-            Gdr_Prf_femal.setSelected(false);
-            Gender = 1;
-
-        } else {
-
-            Gdr_Prf_femal.setSelected(true);
-
-            Gender = 2;
-        }
-    }//GEN-LAST:event_Gdr_Prf_MalActionPerformed
-
-    private void Gdr_Prf_femalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Gdr_Prf_femalActionPerformed
-        if (Gdr_Prf_femal.isSelected()) {
-            Gdr_Prf_Mal.setSelected(false);
-            Gender = 2;
-        } else {
-            Gdr_Prf_Mal.setSelected(true);
-            Gender = 1;
-        }
-    }//GEN-LAST:event_Gdr_Prf_femalActionPerformed
-
-    private void txtProfession_ProfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtProfession_ProfFocusGained
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtProfession_ProfFocusGained
-
-    private void DatBirth_ProfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_DatBirth_ProfKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            txtPlcBirth_Prof.requestFocus();
-        }
-    }//GEN-LAST:event_DatBirth_ProfKeyPressed
-
-    private void txtPlcBirth_ProfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPlcBirth_ProfKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            Gdr_Prf_Mal.requestFocus();
-        }
-    }//GEN-LAST:event_txtPlcBirth_ProfKeyPressed
-
-    private void txtPlcBirth_ProfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPlcBirth_ProfFocusGained
-        if (txtPlcBirth_Prof.getText().equals("ادخل مكان الميلاد")) {
-            txtPlcBirth_Prof.setText("");
-        }
-        txtPlcBirth_Prof.setForeground(Color.blue);
-    }//GEN-LAST:event_txtPlcBirth_ProfFocusGained
-
-    private void txtNam_ProfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNam_ProfKeyPressed
-
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            txtSurNam_Prof.requestFocus();
-        }
-    }//GEN-LAST:event_txtNam_ProfKeyPressed
-
-    private void txtNam_ProfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNam_ProfFocusGained
-        if (txtNam_Prof.getText().equals("ادخل الاسم")) {
-            txtNam_Prof.setText("");
-        }
-        txtNam_Prof.setForeground(Color.blue);
-    }//GEN-LAST:event_txtNam_ProfFocusGained
-
-    private void txtSurNam_ProfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSurNam_ProfKeyPressed
-        if ((evt.getKeyCode() == KeyEvent.VK_ENTER) && !(txtSurNam_Prof.getText().equals(""))) {
-            DatBirth_Prof.requestFocus();
-        }
-    }//GEN-LAST:event_txtSurNam_ProfKeyPressed
-
-    private void txtSurNam_ProfFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSurNam_ProfFocusGained
-        if (txtSurNam_Prof.getText().equals("ادخل اللقب")) {
-            txtSurNam_Prof.setText("");
-        }
-        txtSurNam_Prof.setForeground(Color.blue);
-    }//GEN-LAST:event_txtSurNam_ProfFocusGained
-
     private void DatBirth_stdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_DatBirth_stdKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             txtPlcBirth_std.requestFocus();
@@ -10511,7 +10512,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
 
     private void LastNamMothARTxtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_LastNamMothARTxtKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-          LastNamMothARTxt_FR.requestFocus();
+            LastNamMothARTxt_FR.requestFocus();
         }
     }//GEN-LAST:event_LastNamMothARTxtKeyPressed
 
@@ -10520,35 +10521,6 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             DatInscrpInUniv.requestFocus();
         }
     }//GEN-LAST:event_txtBranch_stdKeyPressed
-
-    private void CheckMaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckMaleActionPerformed
-        if (CheckMale.isSelected()) {
-            checkFemal.setSelected(false);
-            Gender = 1;
-            Sti_Single1.requestFocus();
-        } else {
-            checkFemal.setSelected(true);
-            Sti_Single1.requestFocus();
-            Gender = 2;
-        }
-    }//GEN-LAST:event_CheckMaleActionPerformed
-
-    private void checkFemalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkFemalActionPerformed
-        if (checkFemal.isSelected()) {
-            CheckMale.setSelected(false);
-            Gender = 2;
-            Sti_Single1.requestFocus();
-        } else {
-            CheckMale.setSelected(true);
-            Gender = 1;
-        }
-    }//GEN-LAST:event_checkFemalActionPerformed
-
-    private void National_listKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_National_listKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            CheckMale.requestFocus();
-        }
-    }//GEN-LAST:event_National_listKeyPressed
 
     private void txtDepa_StdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDepa_StdKeyPressed
         // TODO add your handling code here:
@@ -10570,22 +10542,6 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         Level = (String) LevelStd.getSelectedItem();
     }//GEN-LAST:event_LevelStdActionPerformed
 
-    private void Sti_Single1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Sti_Single1KeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Sti_Single1KeyPressed
-
-    private void Sti_Single1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Sti_Single1ActionPerformed
-        if (Sti_Single1.isSelected()) {
-            Std_Maried.setSelected(false);
-            SituationFam = Sti_Single1.getText();
-            TtxtBacYear.requestFocus();
-        } else {
-            Std_Maried.setSelected(true);
-            SituationFam = Std_Maried.getText();
-
-        }
-    }//GEN-LAST:event_Sti_Single1ActionPerformed
-
     private void DatInscrpInUnivKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_DatInscrpInUnivKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             LevelStd.requestFocus();
@@ -10598,18 +10554,6 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             txtDairaStd.requestFocus();
         }
     }//GEN-LAST:event_WilayaListKeyPressed
-
-    private void Std_MariedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Std_MariedActionPerformed
-        if (Std_Maried.isSelected()) {
-            Sti_Single1.setSelected(false);
-            SituationFam = Std_Maried.getText();
-            TtxtBacYear.requestFocus();
-        } else {
-            Sti_Single1.setSelected(true);
-            SituationFam = Sti_Single1.getText();
-            TtxtBacYear.requestFocus();
-        }
-    }//GEN-LAST:event_Std_MariedActionPerformed
 
     private void txtDairaStdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDairaStdKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -10789,37 +10733,40 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
 //        ChoixPanSrvdetaille(PanServiceDetaill, PanRegistrationStd);
         ChoixPanSrvdetaille(PanAllServiceStudent, UpdateStd);
         ChoixPanSrvdetaille(PanAllUpdateResident, InfoStdToUpdate);
+
         Fill_Data.Filling(CaseResident, "Resident_Case", "Resident_Case", 7);
-        Fill_Data.Filling(CaseResident1, "Resident_Case", "Resident_Case", 7);
+
+        Fill_Data.Filling(CaseResidentProfUpdtForm, "Resident_Case", "Resident_Case", 7);
 
         Fill_Data.FillingCase(CaseResident2, "طالب خـــارجــي");
         Fill_Data.FillingCase(CaseResident3, "عـــامـــل");
 
         //CaseResident2 CaseResident3
-        Fill_Data.Filling(WilayaList2, "Wilaya", "NameWilaya", 1);
-        WilayaList2.removeItem("/");
+        Fill_Data.Filling(WilayaListUpdtForm, "Wilaya", "NameWilaya", 1);
+        WilayaListUpdtForm.removeItem("/");
 
-        Fill_Data.Filling(National_list2, "Nationalite", "Nationalite", 2);
-        National_list2.removeItem("/");
+        Fill_Data.Filling(National_listStdUpdtForm, "Nationalite", "Nationalite", 2);
+        National_listStdUpdtForm.removeItem("/");
 
-        Fill_Data.Filling(LevelStd2, "Level_Study", "DescriptionLevel", 3);
-        LevelStd2.removeItem("/");
-        Fill_Data.Filling(txtBranch_std5, "Branch_Study", "BranchStd_Name", 4);
-        txtBranch_std5.removeItem("/");
+        Fill_Data.Filling(LevelStdUpdtForm, "Level_Study", "DescriptionLevel", 3);
+        LevelStdUpdtForm.removeItem("/");
 
-        Fill_Data.Filling(txtDepa_Std2, "Faculty", "NameFact", 5);
-        txtDepa_Std2.removeItem("/");
+        Fill_Data.Filling(Branch_stdUpdtForm, "Branch_Study", "BranchStd_Name", 4);
+        Branch_stdUpdtForm.removeItem("/");
 
-        Fill_Data.Filling(txtBranch_stdExternStd, "Branch_Study", "BranchStd_Name", 4);
-        txtBranch_stdExternStd.removeItem("/");
+        Fill_Data.Filling(Depa_StdUpdtForm, "Faculty", "NameFact", 5);
+        Depa_StdUpdtForm.removeItem("/");
 
-        Fill_Data.Filling(LevelStdExtToupd, "Level_Study", "DescriptionLevel", 3);
-        LevelStdExtToupd.removeItem("/");
+        Fill_Data.Filling(Branch_stdExternStdUpdtForm, "Branch_Study", "BranchStd_Name", 4);
+        Branch_stdExternStdUpdtForm.removeItem("/");
+
+        Fill_Data.Filling(LevelStdExtUpdtForm, "Level_Study", "DescriptionLevel", 3);
+        LevelStdExtUpdtForm.removeItem("/");
 
         Fill_Data.Filling(ProfessionToUpdate, "Profession", "Profession", 6);
         ProfessionToUpdate.removeItem("/");
 
-        Fill_Data.Filling(LstPvlinUpd, "Pavilion", "Pavilion_Name", 8);
+        Fill_Data.Filling(LstPvlinUpdtForm, "Pavilion", "Pavilion_Name", 8);
         DefaultTableModel dfmd = (DefaultTableModel) TabResident.getModel();
 
         DeSelectedPatern(check_Std1, check_Prof1, check_StdExt1, check_Emp1);
@@ -10831,8 +10778,8 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
 
         student_ResRemplissage.DisplayAllResidentInTable(TabResident, Fill_Data.GetId_From_DB("Id_Ptrn_Res", "Pattern_Person_Res", "Name_Patern", getPatternResident()), LabNamesForRes, "عـــــدد الطلاب", CountTabStdIn);
 
-        Sti_Single3.setSelected(true);
-        SituationFam = Sti_Single3.getText();
+        Sti_SingleStdUpdtForm.setSelected(true);
+        SituationFam = Sti_SingleStdUpdtForm.getText();
 
         InitFormUpdIntlStd(false);
         //ChoixPanSrvdetaille(PanServiceDetaill, PanPrintCrd);
@@ -11065,8 +11012,8 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
 
 //        ChoixPanSrvdetaille(PanServiceDetaill, PanRegistrationStd);
 // ChoixPanSrvdetaille(PnMnRegis, PanCtnLbInsRm);
-        ChoixPanSrvdetaille(PanAllServiceStudent, PanInfoCard);
-        ChoixPanSrvdetaille(Pan_All_PansSais_, panSaisiStd_);
+        ChoixPanSrvdetaille(PanAllServiceStudent, PanInfoCard); // Global Panel and Panel of Information
+        ChoixPanSrvdetaille(Pan_All_PansSais_, panSaisiStd_); // Show panel saisie std in Global Panel
         PanResidentChoiceToSaisi = 1;
         DeSelectedPatern(check_Std, check_Prof, check_StdExt, check_Emp);  //For Deselect all Jcheck
         check_Std.setSelected(true);
@@ -11075,6 +11022,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         txt_NumInsc.requestFocus();
         Fill_Data.Filling(WilayaList, "Wilaya", "NameWilaya", 1);
         WilayaList.removeItem("/");
+
         Fill_Data.Filling(National_list, "Nationalite", "Nationalite", 2);
         National_list.removeItem("/");
 
@@ -11107,9 +11055,9 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         ExternalstudentRemplissage.ListExternalStudentNewOrNot((String) CombExternNewOrNot.getSelectedItem());
     }//GEN-LAST:event_jButton14ActionPerformed
 
-    private void LstPvlinUpdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LstPvlinUpdActionPerformed
-        RoomRemplissage.FillComboboxRooms(CombRomInUpdt, (String) LstPvlinUpd.getSelectedItem());
-    }//GEN-LAST:event_LstPvlinUpdActionPerformed
+    private void LstPvlinUpdtFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LstPvlinUpdtFormActionPerformed
+        RoomRemplissage.FillComboboxRooms(CombRomInUpdtForm, (String) LstPvlinUpdtForm.getSelectedItem());
+    }//GEN-LAST:event_LstPvlinUpdtFormActionPerformed
 
     private void jButton29ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton29ActionPerformed
 
@@ -11120,7 +11068,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             int idResChngRom = Fill_Data.GetIdResidentByNumCard(Integer.parseInt(NumCardToUpdt.getText()));
             if (!AncianRoom.getText().equals("")) {
                 int idRmAns = RoomRemplissage.Get_ID_Room(AncianRoom.getText());
-                int idRmNov = RoomRemplissage.Get_ID_Room((String) CombRomInUpdt.getSelectedItem());
+                int idRmNov = RoomRemplissage.Get_ID_Room((String) CombRomInUpdtForm.getSelectedItem());
                 Resident_GlRemplissage.ChangeRoom(idResChngRom, idRmAns, idRmNov, getPatternResident());
                 JOptionPane.showMessageDialog(null, "تم تغيير الغرفة بنجاح");
             }
@@ -11149,7 +11097,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
 
     private void jLabel69MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel69MouseClicked
         String Proffession_txt = jTextField2.getText();
-        if (Proffession_txt == "") {
+        if ("".equals(Proffession_txt)) {
             JOptionPane.showMessageDialog(null, "تأكد من تعبئة حقل المهنة");
         } else {
             if (Employer_Remplissage.ConrolSais_Prof(Proffession_txt) == 1) {
@@ -11191,32 +11139,31 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         F.FillTableCommune_Combobox((String) WilayaList.getSelectedItem(), null, CombCommuneSlct, 1);
     }//GEN-LAST:event_WilayaListActionPerformed
 
-    private void txtDairaStd2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDairaStd2KeyPressed
+    private void txtDairaStdUpdtFormKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDairaStdUpdtFormKeyPressed
 
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            txtCommuneStd2.requestFocus();
+            txtCommuneStdUpdtForm.requestFocus();
         }
-    }//GEN-LAST:event_txtDairaStd2KeyPressed
+    }//GEN-LAST:event_txtDairaStdUpdtFormKeyPressed
 
-    private void txtDairaStd2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDairaStd2FocusGained
+    private void txtDairaStdUpdtFormFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDairaStdUpdtFormFocusGained
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtDairaStd2FocusGained
+    }//GEN-LAST:event_txtDairaStdUpdtFormFocusGained
 
-    private void WilayaList2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_WilayaList2ActionPerformed
-        F.FillTableCommune_Combobox((String) WilayaList2.getSelectedItem(), null, CombCommune, 1);
-    }//GEN-LAST:event_WilayaList2ActionPerformed
+    private void WilayaListUpdtFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_WilayaListUpdtFormActionPerformed
+        F.FillTableCommune_Combobox((String) WilayaListUpdtForm.getSelectedItem(), null, CombCommuneUpdtForm, 1);
+    }//GEN-LAST:event_WilayaListUpdtFormActionPerformed
 
-    private void txtCommuneStd2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCommuneStd2KeyPressed
+    private void txtCommuneStdUpdtFormKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCommuneStdUpdtFormKeyPressed
         // --
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            National_list2.requestFocus();
+            National_listStdUpdtForm.requestFocus();
         }
-    }//GEN-LAST:event_txtCommuneStd2KeyPressed
+    }//GEN-LAST:event_txtCommuneStdUpdtFormKeyPressed
 
     private void jButton26ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton26ActionPerformed
-         ImageResidentToSv = GetPhotoStudentByScanner(CLabImg );
-        
-        
+        ImageResidentToSv = GetPhotoStudentByScanner(CLabImg);
+
         /*try {
             // use scan function of Wia api and create file with order 
             ScannerTool.scan("D:\\Photo_residents\\" + NumOrder.getText() + ".jpg");
@@ -11225,7 +11172,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
             JOptionPane.showMessageDialog(null, "حدث خطأ بالماسح الضوئي\n الرجاء تحميل الصورة يدويا");
         }*/
     }//GEN-LAST:event_jButton26ActionPerformed
-     public File GetPhotoStudentByScanner(JLabel CLabImg) {
+    public File GetPhotoStudentByScanner(JLabel CLabImg) {
 
         Wia4j wia4j = new Wia4j();
         File fileImage = null;
@@ -11261,7 +11208,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     }//GEN-LAST:event_BtnShowRoomsMouseExited
 
     private void jLabel11MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseExited
-       jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residence/Image/C_Add_Mini_h.png"))); // NOI18N
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residence/Image/C_Add_Mini_h.png"))); // NOI18N
     }//GEN-LAST:event_jLabel11MouseExited
 
     private void jLabel11MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseEntered
@@ -11283,7 +11230,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     }//GEN-LAST:event_txtNam_std_FRKeyPressed
 
     private void txtSurNam_std_FRKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSurNam_std_FRKeyPressed
-         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             DatBirth_std.requestFocus();
         }
     }//GEN-LAST:event_txtSurNam_std_FRKeyPressed
@@ -11299,7 +11246,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     }//GEN-LAST:event_txtNam_Father_FRKeyPressed
 
     private void txtPlcBirth_std_FRKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPlcBirth_std_FRKeyPressed
-         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             txtNam_Father.requestFocus();
         }
     }//GEN-LAST:event_txtPlcBirth_std_FRKeyPressed
@@ -11312,7 +11259,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     }//GEN-LAST:event_txtNam_mother_FRKeyPressed
 
     private void TtxtBacYearKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TtxtBacYearKeyPressed
-         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             txtBacMoy1.requestFocus();
         }
     }//GEN-LAST:event_TtxtBacYearKeyPressed
@@ -11334,21 +11281,242 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     }//GEN-LAST:event_CombCommuneSlctItemStateChanged
 
     private void National_listItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_National_listItemStateChanged
-       PavillonPanInf.requestFocus();
+        PavillonPanInf.requestFocus();
     }//GEN-LAST:event_National_listItemStateChanged
 
     private void RomPvinPanInfItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_RomPvinPanInfItemStateChanged
-       TtxtBacYear.requestFocus();
+        TtxtBacYear.requestFocus();
     }//GEN-LAST:event_RomPvinPanInfItemStateChanged
 
     private void txtBranch_stdItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_txtBranch_stdItemStateChanged
-       DatInscrpInUniv.requestFocus();
+        DatInscrpInUniv.requestFocus();
     }//GEN-LAST:event_txtBranch_stdItemStateChanged
 
     private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
-       AddWilaya FormAddWilay=new AddWilaya(this);
-       
+        addwilyGUI = new AddWilaya(this);
+        addwilyGUI.PrepareCreateGuiForm();
+        addwilyGUI.setLocationRelativeTo(null);
+        addwilyGUI.setVisible(true);
     }//GEN-LAST:event_jLabel13MouseClicked
+
+    private void buttonView4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonView4ActionPerformed
+        ChoixPanSrvdetaille(PanAllServiceStudent, UpdateStd);
+        ChoixPanSrvdetaille(PanAllUpdateResident, InfoStdToUpdate);
+
+        Fill_Data.Filling(CaseResident, "Resident_Case", "Resident_Case", 7);
+
+        Fill_Data.Filling(WilayaListUpdtForm, "Wilaya", "NameWilaya", 1);
+        WilayaListUpdtForm.removeItem("/");
+
+        Fill_Data.Filling(National_listStdUpdtForm, "Nationalite", "Nationalite", 2);
+        National_listStdUpdtForm.removeItem("/");
+
+        Fill_Data.Filling(LevelStdUpdtForm, "Level_Study", "DescriptionLevel", 3);
+        LevelStdUpdtForm.removeItem("/");
+
+        Fill_Data.Filling(Branch_stdUpdtForm, "Branch_Study", "BranchStd_Name", 4);
+        Branch_stdUpdtForm.removeItem("/");
+
+        Fill_Data.Filling(Depa_StdUpdtForm, "Faculty", "NameFact", 5);
+        Depa_StdUpdtForm.removeItem("/");
+
+        /**
+         * ********************************************************************
+         */
+        Fill_Data.Filling(Branch_stdExternStdUpdtForm, "Branch_Study", "BranchStd_Name", 4);
+        Branch_stdExternStdUpdtForm.removeItem("/");
+
+        Fill_Data.Filling(LevelStdExtUpdtForm, "Level_Study", "DescriptionLevel", 3);
+        LevelStdExtUpdtForm.removeItem("/");
+
+        Fill_Data.Filling(ProfessionToUpdate, "Profession", "Profession", 6);
+        ProfessionToUpdate.removeItem("/");
+
+        Fill_Data.Filling(LstPvlinUpdtForm, "Pavilion", "Pavilion_Name", 8);
+        DefaultTableModel dfmd = (DefaultTableModel) TabResident.getModel();
+
+        /**
+         * *********************************************************************
+         */
+        setPatternResident(check_Std1.getText());
+        student_ResRemplissage.DisplayAllResidentInTable(TabResident, Fill_Data.GetId_From_DB("Id_Ptrn_Res", "Pattern_Person_Res", "Name_Patern", getPatternResident()), LabNamesForRes, "عـــــدد الطلاب", CountTabStdIn);
+
+        Sti_SingleStdUpdtForm.setSelected(true);
+        SituationFam = Sti_SingleStdUpdtForm.getText();
+
+        InitFormUpdIntlStd(false);
+
+
+    }//GEN-LAST:event_buttonView4ActionPerformed
+
+    private void buttonView5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonView5ActionPerformed
+        ChoixPanSrvdetaille(PanAllServiceStudent, PanInfoCard);
+        ChoixPanSrvdetaille(Pan_All_PansSais_, panSaisiStd_);
+        setPatternResident("طالب داخلي");
+        txt_NumInsc.requestFocus();
+
+        Fill_Data.Filling(WilayaList, "Wilaya", "NameWilaya", 1); // Fill Combo Of Wilaya
+        WilayaList.removeItem("/");
+
+        Fill_Data.Filling(National_list, "Nationalite", "Nationalite", 2);
+        National_list.removeItem("/");
+
+        Fill_Data.Filling(LevelStd, "Level_Study", "DescriptionLevel", 3);
+        LevelStd.removeItem("/");
+
+        Fill_Data.Filling(txtBranch_std, "Branch_Study", "BranchStd_Name", 4);
+        txtBranch_std.removeItem("/");
+
+        Gender = 1;
+
+        Fill_Data.Filling(txtDepa_Std, "Faculty", "NameFact", 5);
+        txtDepa_Std.removeItem("/");
+
+        Fill_Data.Filling(PavillonPanInf, "Pavilion", "Pavilion_Name", 8);
+
+    }//GEN-LAST:event_buttonView5ActionPerformed
+
+    private void buttonView6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonView6ActionPerformed
+        ChoixPanSrvdetaille(PanAllServiceStudent, PanMenuAllStudent1);
+
+    }//GEN-LAST:event_buttonView6ActionPerformed
+
+    private void buttonView7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonView7ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonView7ActionPerformed
+
+    private void buttonView8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonView8ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonView8ActionPerformed
+
+    private void buttonView9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonView9ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonView9ActionPerformed
+
+    private void buttonView10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonView10ActionPerformed
+        FormExterieurResidents frmExtr = new FormExterieurResidents();
+        frmExtr.setVisible(true);
+
+    }//GEN-LAST:event_buttonView10ActionPerformed
+
+    private void buttonView11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonView11ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonView11ActionPerformed
+
+    private void jLabel60MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel60MouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel60MouseEntered
+
+    private void jLabel60MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel60MouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel60MouseExited
+
+    private void jLabel61MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel61MouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel61MouseEntered
+
+    private void jLabel61MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel61MouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel61MouseExited
+
+    private void jLabel68MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel68MouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel68MouseEntered
+
+    private void jLabel68MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel68MouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel68MouseExited
+
+    private void txtNam_std_FRFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNam_std_FRFocusGained
+        txtNam_std_FR.getInputContext().selectInputMethod(new Locale("fr", "FR"));
+    }//GEN-LAST:event_txtNam_std_FRFocusGained
+
+    private void txtSurNam_std_FRFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSurNam_std_FRFocusGained
+        txtSurNam_std_FR.getInputContext().selectInputMethod(new Locale("fr", "FR"));
+    }//GEN-LAST:event_txtSurNam_std_FRFocusGained
+
+    private void txtPlcBirth_std_FRFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPlcBirth_std_FRFocusGained
+        txtPlcBirth_std_FR.getInputContext().selectInputMethod(new Locale("fr", "FR"));
+    }//GEN-LAST:event_txtPlcBirth_std_FRFocusGained
+
+    private void txtNam_Father_FRFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNam_Father_FRFocusGained
+     // txtNam_Father_FR.getInputContext().selectInputMethod(new Locale("ar", "DZ"));
+      txtNam_Father_FR.getInputContext().selectInputMethod(new Locale("fr", "FR"));
+      
+    }//GEN-LAST:event_txtNam_Father_FRFocusGained
+
+    private void txtNam_mother_FRFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNam_mother_FRFocusGained
+          txtNam_mother_FR.getInputContext().selectInputMethod(new Locale("fr", "FR"));
+    }//GEN-LAST:event_txtNam_mother_FRFocusGained
+
+    private void LastNamMothARTxt_FRFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_LastNamMothARTxt_FRFocusGained
+         LastNamMothARTxt_FR.getInputContext().selectInputMethod(new Locale("fr", "FR"));
+    }//GEN-LAST:event_LastNamMothARTxt_FRFocusGained
+
+    private void firstYrsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_firstYrsStateChanged
+        // JOptionPane.showMessageDialog(null, "Test Jspinner Mouse Clicked");
+        int NextAn=(int)firstYrs.getValue();
+        NextAn=NextAn+1;
+        Annet1.setText(NextAn+"");
+    }//GEN-LAST:event_firstYrsStateChanged
+
+    private void buttonView12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonView12ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonView12ActionPerformed
+
+    private void buttonView13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonView13ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonView13ActionPerformed
+
+    private void RadBtnSingleStdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RadBtnSingleStdActionPerformed
+        if (RadBtnSingleStd.isSelected()) {
+           
+            SituationFam = RadBtnSingleStd.getText();
+            TtxtBacYear.requestFocus();
+        } else {
+            SituationFam = RadBtnMarriedStd.getText();
+            TtxtBacYear.requestFocus();
+        }
+    }//GEN-LAST:event_RadBtnSingleStdActionPerformed
+
+    private void RadBtnMarriedStdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RadBtnMarriedStdActionPerformed
+        if (RadBtnMarriedStd.isSelected()) {
+           
+            SituationFam = RadBtnMarriedStd.getText();
+            TtxtBacYear.requestFocus();
+        } else {
+            SituationFam = RadBtnSingleStd.getText();
+            TtxtBacYear.requestFocus();
+        }
+    }//GEN-LAST:event_RadBtnMarriedStdActionPerformed
+
+    private void BtnRdMaleStdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnRdMaleStdActionPerformed
+        if (BtnRdMaleStd.isSelected()) {
+            
+            Gender = 1;
+            RadBtnSingleStd.requestFocus();
+        } else {
+            
+            RadBtnSingleStd.requestFocus();
+            Gender = 2;
+        }
+    }//GEN-LAST:event_BtnRdMaleStdActionPerformed
+
+    private void BtnRdFemaleStdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnRdFemaleStdActionPerformed
+        if (BtnRdFemaleStd.isSelected()) {
+            
+            Gender = 2;
+            RadBtnSingleStd.requestFocus();
+        } else {
+            
+            Gender = 1;
+        }
+    }//GEN-LAST:event_BtnRdFemaleStdActionPerformed
+
+    private void jLabel18MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel18MouseClicked
+        FormExterieurResidents frmExtr = new FormExterieurResidents();
+        frmExtr.setVisible(true);
+    }//GEN-LAST:event_jLabel18MouseClicked
 
     /**
      * ************************ Initialisation Student_Resident
@@ -11374,7 +11542,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         txtNam_mother.setForeground(Color.gray);
         LastNamMothARTxt.setText("لقب  الام");
         LastNamMothARTxt.setForeground(Color.gray);
-        
+
         txtProfission_Moth.setText("مهنة الام");
         txtProfission_Moth.setForeground(Color.gray);
         txtAddress_Std.setText("العـنوان");
@@ -11386,11 +11554,10 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         CombCommuneSlct.setSelectedIndex(0);
         //txtCommuneStd.setForeground(Color.BLACK);
         National_list.setSelectedIndex(0);
-        CheckMale.setSelected(true);
+        BtnRdMaleStd.setSelected(true);
         Gender = 1;
-        checkFemal.setSelected(false);
-        Std_Maried.setSelected(false);
-        Sti_Single1.setSelected(true);
+
+        RadBtnSingleStd.setSelected(false);
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
         int year = cal.get(Calendar.YEAR);
@@ -11407,7 +11574,6 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
 
 //        LastNamMothARTxt.setText("..............................");
 //        LastNamMothARTxt.setForeground(Color.black);
-
     }
 
     /**
@@ -11415,15 +11581,15 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
      */
     public void Initialise_Professor_Resident() {
 
-        txtNam_Prof.setText("ادخل الاسم");
-        txtNam_Prof.setForeground(Color.gray);
-        txtSurNam_Prof.setText("ادخل اللقب");
-        txtSurNam_Prof.setForeground(Color.gray);
-        DatBirth_Prof.setText("");
-        txtPlcBirth_Prof.setText("ادخل مكان الميلاد");
-        txtPlcBirth_Prof.setForeground(Color.gray);
-        Gdr_Prf_Mal.setSelected(true);
-        Gender = 1;
+//        txtNam_Prof.setText("ادخل الاسم");
+//        txtNam_Prof.setForeground(Color.gray);
+//        txtSurNam_Prof.setText("ادخل اللقب");
+//        txtSurNam_Prof.setForeground(Color.gray);
+//        DatBirth_Prof.setText("");
+//        txtPlcBirth_Prof.setText("ادخل مكان الميلاد");
+//        txtPlcBirth_Prof.setForeground(Color.gray);
+//        Gdr_Prf_Mal.setSelected(true);
+//        Gender = 1;
 
         /*
           File   FileName=new File("src\\residence\\Image\\imageRes.png");
@@ -11577,7 +11743,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
      */
     public void InitialiseFormUpdateProfessor() {
         NumCardToUpdt2.setText("");
-        CaseResident1.setSelectedIndex(6);
+        CaseResidentProfUpdtForm.setSelectedIndex(6);
         txtNam_Prof1.setText("ادخل الاسم");
         txtSurNam_Prof1.setText("ادخل اللقب");
         DatBirth_Pro.setText("01/01/2001");
@@ -11623,6 +11789,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     public void BackgroundMenu(JLabel l) {// for menu principal
         int i = 0, sizeTable = TableMenuItem.length;
 
+        sizeTable = 7;
         while (i < sizeTable) {
             if (TableMenuItem[i] == l) {
                 // 51,204,255 [153,153,153] [102,204,255
@@ -11815,41 +11982,41 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
         CaseResident.setSelectedIndex(6);
         txtNam_std5.setText("");
         txtSurNam_std5.setText("");
-        DatBirth_std3.setText("");
-        txtPlcBirth_std5.setText("");
-        CheckMale2.setSelected(true);
-        checkFemal2.setSelected(false);
-        txt_NumInsc2.setText("رقــم تــسجـيــل الــبـكــالــوريــا ");
-        txt_NumInsc2.setForeground(new Color(204, 204, 204));
-        txtNam_Father2.setText("");
-        txtNam_mother2.setText("");
-        txtProfission_Std2.setText("");
-        txtProfission_Moth2.setText("");
-        txtAddress_Std2.setText("");
-        WilayaList2.setSelectedIndex(0);
-        txtDairaStd2.setText("");
-        txtCommuneStd2.setText("");
-        National_list2.setSelectedIndex(0);
-        Sti_Single3.setSelected(true);
+        DatBirth_stdUpdtForm.setText("");
+        txtPlcBirth_stdUpdtForm.setText("");
+        CheckMaleStdUpdtForm.setSelected(true);
+        checkFemalStdUpdtForm.setSelected(false);
+        txt_NumInscUpdtForm.setText("رقــم تــسجـيــل الــبـكــالــوريــا ");
+        txt_NumInscUpdtForm.setForeground(new Color(204, 204, 204));
+        txtNam_FatherStdUpdtForm.setText("");
+        txtNam_MotherStdUpdtForm.setText("");
+        txtProfissionfath_StdUpdtForm.setText("");
+        txtProfission_MothStdUpdtForm.setText("");
+        txtAddress_StdUpdtForm.setText("");
+        WilayaListUpdtForm.setSelectedIndex(0);
+        txtDairaStdUpdtForm.setText("");
+        txtCommuneStdUpdtForm.setText("");
+        National_listStdUpdtForm.setSelectedIndex(0);
+        Sti_SingleStdUpdtForm.setSelected(true);
         Gender = 1;
-        Std_Maried2.setSelected(false);
+        Std_MariedStdUpdtForm.setSelected(false);
 
-        TtxtBacYear2.setText("2018");
-        TtxtBacYear2.setForeground(new Color(204, 204, 204));
+        TtxtBacYearStdUpdtForm.setText("2018");
+        TtxtBacYearStdUpdtForm.setForeground(new Color(204, 204, 204));
         txtBacMoy2.setText("00.00");
         txtBacMoy2.setForeground(new Color(204, 204, 204));
-        txtPlaceGetBac2.setText("");
-        txtBranch_std5.setSelectedIndex(0);
-        txtDepa_Std2.setSelectedIndex(0);
-        LevelStd2.setSelectedIndex(0);
+        txtPlaceGetBacStdUpdtForm.setText("");
+        Branch_stdUpdtForm.setSelectedIndex(0);
+        Depa_StdUpdtForm.setSelectedIndex(0);
+        LevelStdUpdtForm.setSelectedIndex(0);
 
         LastName_ResidentFrUp.setText("");
-        PlaceBirthFrUp.setText("");
+        PlaceBirthFrStdUpdForm.setText("");
         Name_ResidentFrUp.setText("");
         Name_FatherFrUp.setText("");
         Name_MotherFrUp.setText("");
         LastName_MotheFrUp.setText("");
-        NamMrA.setText("");
+        NamMrArStdUpdtForm.setText("");
         Img_StdUpdate.setIcon(new ImageIcon(getClass().getResource("/residence/Image/imageRes.png")));
     }
 
@@ -11940,11 +12107,16 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel AncianRoom;
+    private javax.swing.JTextField Annet1;
     private javax.swing.JComboBox<String> Branch4;
     private javax.swing.JComboBox<String> BranchStd_year;
+    private javax.swing.JComboBox<String> Branch_stdExternStdUpdtForm;
+    private javax.swing.JComboBox<String> Branch_stdUpdtForm;
     private javax.swing.JButton BtnAnnuleSaveStd;
     private javax.swing.JButton BtnCancel;
     private javax.swing.JButton BtnNext;
+    private javax.swing.JRadioButton BtnRdFemaleStd;
+    private javax.swing.JRadioButton BtnRdMaleStd;
     private javax.swing.JButton BtnSavUpdt;
     private javax.swing.JButton BtnSaveStd;
     private javax.swing.JButton BtnSaveStd2;
@@ -11957,43 +12129,37 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     private javax.swing.JComboBox<String> CaseN2;
     private javax.swing.JComboBox<String> CaseN3;
     private javax.swing.JComboBox<String> CaseResident;
-    private javax.swing.JComboBox<String> CaseResident1;
     private javax.swing.JComboBox<String> CaseResident2;
     private javax.swing.JComboBox<String> CaseResident3;
+    private javax.swing.JComboBox<String> CaseResidentProfUpdtForm;
     private javax.swing.JButton ChangeRoom;
     private javax.swing.JCheckBox ChecAccessUsr;
     private javax.swing.JCheckBox CheckAdministrationusr;
     private javax.swing.JCheckBox CheckInscrRessevSrv;
-    private javax.swing.JCheckBox CheckMale;
-    private javax.swing.JCheckBox CheckMale2;
+    private javax.swing.JCheckBox CheckMaleStdUpdtForm;
     private javax.swing.JCheckBox CheckRestarUsr;
     private javax.swing.JCheckBox CheckSrvRoom;
-    private javax.swing.JComboBox<String> CombCommune;
     private javax.swing.JComboBox<String> CombCommuneSlct;
+    private javax.swing.JComboBox<String> CombCommuneUpdtForm;
     private javax.swing.JComboBox<String> CombExternNewOrNot;
-    private javax.swing.JComboBox<String> CombRomInUpdt;
+    private javax.swing.JComboBox<String> CombRomInUpdtForm;
     private javax.swing.JLabel CountTabStdIn;
     private javax.swing.JFormattedTextField DatBirth_Empl;
     private javax.swing.JFormattedTextField DatBirth_Pro;
-    private javax.swing.JFormattedTextField DatBirth_Prof;
     private javax.swing.JFormattedTextField DatBirth_Prof7;
-    private javax.swing.JFormattedTextField DatBirth_StdExt;
     private javax.swing.JFormattedTextField DatBirth_StdExt1;
     private javax.swing.JFormattedTextField DatBirth_std;
-    private javax.swing.JFormattedTextField DatBirth_std3;
+    private javax.swing.JFormattedTextField DatBirth_stdUpdtForm;
     private javax.swing.JFormattedTextField DatInscrpInUniv;
+    private javax.swing.JComboBox<String> Depa_StdUpdtForm;
     private javax.swing.JCheckBox Gdr_Emp_Mal1;
     private javax.swing.JCheckBox Gdr_Emp_MalE;
     private javax.swing.JCheckBox Gdr_Emp_femal1;
     private javax.swing.JCheckBox Gdr_Emp_femalE;
-    private javax.swing.JCheckBox Gdr_Prf_Mal;
     private javax.swing.JCheckBox Gdr_Prf_Malp;
     private javax.swing.JCheckBox Gdr_Prf_Malp1;
-    private javax.swing.JCheckBox Gdr_Prf_femal;
-    private javax.swing.JCheckBox Gdr_Prf_femal5;
     private javax.swing.JCheckBox Gdr_Prf_femalp;
     private javax.swing.JCheckBox Gdr_Prf_femalp1;
-    private javax.swing.JCheckBox Gdr_StdExt_Mal;
     private javax.swing.JLabel IDRoomA;
     private javax.swing.JLabel Img_EmpUpdate;
     private javax.swing.JLabel Img_Std1;
@@ -12001,6 +12167,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     private javax.swing.JLabel Img_StdUpdate1;
     private javax.swing.JLabel Img_profupdate;
     private javax.swing.JPanel InfoStdToUpdate;
+    private javax.swing.JPanel InfoStdToUpdate_1;
     private javax.swing.JLabel ItemMenConsult;
     private javax.swing.JLabel ItemMenLogout;
     private javax.swing.JLabel ItemMenRegistration;
@@ -12034,16 +12201,16 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     private javax.swing.JLabel LbInsNom2;
     private javax.swing.JLabel LbInsPrnom2;
     private javax.swing.JLabel LbInsPsw2;
+    private javax.swing.JLabel LbLstStdUpdtForm;
+    private javax.swing.JLabel LbNmStdUpdtForm;
     private javax.swing.JLabel Lb_Droit_User2;
     private javax.swing.JComboBox<String> LevelStd;
-    private javax.swing.JComboBox<String> LevelStd2;
-    private javax.swing.JComboBox<String> LevelStdExtToupd;
-    private javax.swing.JComboBox<String> LevelStd_StdExtrn;
+    private javax.swing.JComboBox<String> LevelStdExtUpdtForm;
+    private javax.swing.JComboBox<String> LevelStdUpdtForm;
     private javax.swing.JComboBox<String> LisLvlStd;
-    private javax.swing.JComboBox<String> LstPvlinUpd;
-    private javax.swing.JLabel MessgControl4;
+    private javax.swing.JComboBox<String> LstPvlinUpdtForm;
     private javax.swing.JLabel MessgControl5;
-    private javax.swing.JTextField NamMrA;
+    private javax.swing.JTextField NamMrArStdUpdtForm;
     private javax.swing.JLabel NamToChangCase;
     private javax.swing.JLabel NameRoom;
     private javax.swing.JLabel NameRoomr;
@@ -12051,7 +12218,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     private javax.swing.JTextField Name_MotherFrUp;
     private javax.swing.JTextField Name_ResidentFrUp;
     private javax.swing.JComboBox<String> National_list;
-    private javax.swing.JComboBox<String> National_list2;
+    private javax.swing.JComboBox<String> National_listStdUpdtForm;
     private javax.swing.JLabel NumCard;
     private javax.swing.JTextField NumCardToUpdt;
     private javax.swing.JTextField NumCardToUpdt1;
@@ -12079,8 +12246,6 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     private javax.swing.JPanel PanSaisiEmp1;
     private javax.swing.JPanel PanSaisiEmp_;
     private javax.swing.JPanel PanSaisiInfoStdExt1;
-    private javax.swing.JPanel PanSaisiProf_Emp_;
-    private javax.swing.JPanel PanSaisiStdExt1_;
     private javax.swing.JPanel PanStdEXtern;
     private javax.swing.JPanel PanStdExtToUpdate;
     private javax.swing.JPanel PanStdResident;
@@ -12091,7 +12256,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     private javax.swing.JComboBox<String> PavillonPanInf;
     private javax.swing.JComboBox<String> Pavlion4;
     private javax.swing.JComboBox<String> Pavlion5;
-    private javax.swing.JTextField PlaceBirthFrUp;
+    private javax.swing.JTextField PlaceBirthFrStdUpdForm;
     private javax.swing.JLabel PlcBirth;
     private javax.swing.JPanel PnIUpdtusr;
     private javax.swing.JPanel Pn_Menu;
@@ -12103,16 +12268,16 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     private javax.swing.JRadioButton Rad2;
     private javax.swing.JRadioButton Rad3;
     private javax.swing.JRadioButton Rad4;
+    private javax.swing.JRadioButton RadBtnMarriedStd;
+    private javax.swing.JRadioButton RadBtnSingleStd;
     private javax.swing.JComboBox<String> RomPvinPanInf;
     private javax.swing.JButton RserveRoom;
     private javax.swing.JLabel SaveAllChangeCaseRes;
     private javax.swing.JButton SaveReservRoom;
     private javax.swing.JPanel SecondCentrePan;
     private javax.swing.JSeparator Separator4;
-    private javax.swing.JCheckBox Std_Maried;
-    private javax.swing.JCheckBox Std_Maried2;
-    private javax.swing.JCheckBox Sti_Single1;
-    private javax.swing.JCheckBox Sti_Single3;
+    private javax.swing.JCheckBox Std_MariedStdUpdtForm;
+    private javax.swing.JCheckBox Sti_SingleStdUpdtForm;
     private javax.swing.JLabel SurNamToChangCase;
     private javax.swing.JTable TabEmpToConsult;
     private javax.swing.JTable TabExtStdToConsult;
@@ -12123,7 +12288,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     private javax.swing.JTable TabStdInternTotakeRoom;
     private javax.swing.JTable TabUserService;
     private javax.swing.JTextField TtxtBacYear;
-    private javax.swing.JTextField TtxtBacYear2;
+    private javax.swing.JTextField TtxtBacYearStdUpdtForm;
     private javax.swing.JPasswordField TxtInsConPswUsr;
     private javax.swing.JTextField TxtInsIdentifiantUsr;
     private javax.swing.JTextField TxtInsNomusr;
@@ -12133,10 +12298,19 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     private javax.swing.JComboBox<String> TxtType;
     private javax.swing.JPanel UpdateStd;
     private javax.swing.JComboBox<String> WilayaList;
-    private javax.swing.JComboBox<String> WilayaList2;
+    private javax.swing.JComboBox<String> WilayaListUpdtForm;
     private javax.swing.JButton btnUpdRes;
-    private javax.swing.JCheckBox checkFemal;
-    private javax.swing.JCheckBox checkFemal2;
+    private View.ButtonView buttonView10;
+    private View.ButtonView buttonView11;
+    private View.ButtonView buttonView12;
+    private View.ButtonView buttonView13;
+    private View.ButtonView buttonView4;
+    private View.ButtonView buttonView5;
+    private View.ButtonView buttonView6;
+    private View.ButtonView buttonView7;
+    private View.ButtonView buttonView8;
+    private View.ButtonView buttonView9;
+    private javax.swing.JCheckBox checkFemalStdUpdtForm;
     private javax.swing.JCheckBox check_Emp;
     private javax.swing.JCheckBox check_Emp1;
     private javax.swing.JCheckBox check_Emp2;
@@ -12151,6 +12325,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     private javax.swing.JCheckBox check_StdExt1;
     private javax.swing.JCheckBox check_StdExt2;
     private javax.swing.JCheckBox check_Std_TakeRom;
+    private javax.swing.JSpinner firstYrs;
     private javax.swing.JTextField ftxtPlcBirth_Prof;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
@@ -12218,8 +12393,6 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     private javax.swing.JLabel jLabel132;
     private javax.swing.JLabel jLabel133;
     private javax.swing.JLabel jLabel134;
-    private javax.swing.JLabel jLabel135;
-    private javax.swing.JLabel jLabel136;
     private javax.swing.JLabel jLabel137;
     private javax.swing.JLabel jLabel138;
     private javax.swing.JLabel jLabel139;
@@ -12250,11 +12423,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     private javax.swing.JLabel jLabel165;
     private javax.swing.JLabel jLabel166;
     private javax.swing.JLabel jLabel167;
-    private javax.swing.JLabel jLabel169;
     private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel171;
-    private javax.swing.JLabel jLabel172;
-    private javax.swing.JLabel jLabel173;
     private javax.swing.JLabel jLabel174;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel182;
@@ -12314,8 +12483,6 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel44;
-    private javax.swing.JLabel jLabel45;
-    private javax.swing.JLabel jLabel46;
     private javax.swing.JLabel jLabel47;
     private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel49;
@@ -12331,14 +12498,18 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     private javax.swing.JLabel jLabel58;
     private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel60;
+    private javax.swing.JLabel jLabel61;
     private javax.swing.JLabel jLabel62;
     private javax.swing.JLabel jLabel63;
     private javax.swing.JLabel jLabel64;
     private javax.swing.JLabel jLabel65;
     private javax.swing.JLabel jLabel66;
     private javax.swing.JLabel jLabel67;
+    private javax.swing.JLabel jLabel68;
     private javax.swing.JLabel jLabel69;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel70;
     private javax.swing.JLabel jLabel71;
     private javax.swing.JLabel jLabel72;
     private javax.swing.JLabel jLabel73;
@@ -12353,11 +12524,11 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     private javax.swing.JLabel jLabel81;
     private javax.swing.JLabel jLabel82;
     private javax.swing.JLabel jLabel84;
-    private javax.swing.JLabel jLabel85;
     private javax.swing.JLabel jLabel86;
     private javax.swing.JLabel jLabel88;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabel94;
+    private javax.swing.JLabel jLabel95;
     private javax.swing.JLabel jLabel98;
     private javax.swing.JLabel jLabel99;
     private javax.swing.JPanel jPanel1;
@@ -12385,6 +12556,7 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JScrollPane jScrollPane9;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
@@ -12408,64 +12580,52 @@ public class Home1 extends javax.swing.JFrame implements MouseListener, ActionLi
     private javax.swing.JComboBox<String> pavilion2;
     private javax.swing.JLabel timeLabel;
     private javax.swing.JTextField txtAddress_Std;
-    private javax.swing.JTextField txtAddress_Std2;
+    private javax.swing.JTextField txtAddress_StdUpdtForm;
     private javax.swing.JTextField txtBacMoy1;
     private javax.swing.JTextField txtBacMoy2;
     private javax.swing.JComboBox<String> txtBranch_std;
-    private javax.swing.JComboBox<String> txtBranch_std5;
-    private javax.swing.JComboBox<String> txtBranch_stdExternStd;
-    private javax.swing.JComboBox<String> txtBranch_stdExtr;
     private javax.swing.JComboBox<String> txtBrchToPrint;
-    private javax.swing.JTextField txtCommuneStd2;
+    private javax.swing.JTextField txtCommuneStdUpdtForm;
     private javax.swing.JTextField txtDairaStd;
-    private javax.swing.JTextField txtDairaStd2;
+    private javax.swing.JTextField txtDairaStdUpdtForm;
     private javax.swing.JLabel txtDatBirth;
     private javax.swing.JComboBox<String> txtDepa_Std;
-    private javax.swing.JComboBox<String> txtDepa_Std2;
     private javax.swing.JTextField txtNam_EmplInsr;
     private javax.swing.JTextField txtNam_Father;
-    private javax.swing.JTextField txtNam_Father2;
+    private javax.swing.JTextField txtNam_FatherStdUpdtForm;
     private javax.swing.JTextField txtNam_Father_FR;
-    private javax.swing.JTextField txtNam_Prof;
+    private javax.swing.JTextField txtNam_MotherStdUpdtForm;
     private javax.swing.JTextField txtNam_Prof1;
     private javax.swing.JTextField txtNam_Prof7;
-    private javax.swing.JTextField txtNam_StdExt;
     private javax.swing.JTextField txtNam_StdExt1;
     private javax.swing.JTextField txtNam_mother;
-    private javax.swing.JTextField txtNam_mother2;
     private javax.swing.JTextField txtNam_mother_FR;
     private javax.swing.JTextField txtNam_std;
     private javax.swing.JTextField txtNam_std5;
     private javax.swing.JTextField txtNam_std_FR;
     private javax.swing.JTextField txtPlaceGetBac1;
-    private javax.swing.JTextField txtPlaceGetBac2;
+    private javax.swing.JTextField txtPlaceGetBacStdUpdtForm;
     private javax.swing.JTextField txtPlcBirth_Emply;
-    private javax.swing.JTextField txtPlcBirth_Prof;
     private javax.swing.JTextField txtPlcBirth_Prof7;
-    private javax.swing.JTextField txtPlcBirth_StdExt;
     private javax.swing.JTextField txtPlcBirth_StdExt1;
     private javax.swing.JTextField txtPlcBirth_std;
-    private javax.swing.JTextField txtPlcBirth_std5;
+    private javax.swing.JTextField txtPlcBirth_stdUpdtForm;
     private javax.swing.JTextField txtPlcBirth_std_FR;
-    private javax.swing.JTextField txtProfession_Prof;
     private javax.swing.JTextField txtProfession_Prof2;
     private javax.swing.JTextField txtProfission_Moth;
-    private javax.swing.JTextField txtProfission_Moth2;
+    private javax.swing.JTextField txtProfission_MothStdUpdtForm;
     private javax.swing.JTextField txtProfission_Std;
-    private javax.swing.JTextField txtProfission_Std2;
+    private javax.swing.JTextField txtProfissionfath_StdUpdtForm;
     private javax.swing.JTextField txtSurNam_Empl;
-    private javax.swing.JTextField txtSurNam_Prof;
     private javax.swing.JTextField txtSurNam_Prof1;
     private javax.swing.JTextField txtSurNam_Prof7;
-    private javax.swing.JTextField txtSurNam_StdExt;
     private javax.swing.JTextField txtSurNam_StdExt1;
     private javax.swing.JTextField txtSurNam_std;
     private javax.swing.JTextField txtSurNam_std5;
     private javax.swing.JTextField txtSurNam_std_FR;
     private javax.swing.JTextField txt_NumInsc;
-    private javax.swing.JTextField txt_NumInsc2;
-    private javax.swing.JTextField txt_NumInscSdExt;
     private javax.swing.JTextField txt_NumInscSdExt1;
+    private javax.swing.JTextField txt_NumInscUpdtForm;
     // End of variables declaration//GEN-END:variables
 
     @Override

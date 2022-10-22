@@ -51,15 +51,15 @@ public class FormExterieurResidents extends javax.swing.JFrame {
     private String PatternResident;
     int Gender = 1;
     JTextField ListTextExt[] = null;
-    JTextField ListTextProf[]=null;
+    JTextField ListTextProf[] = null;
 
     public FormExterieurResidents() {
         initComponents();
-        this.ListTextExt = new JTextField[]{ txt_NumInscSdExt, txtNam_StdExt, txtSurNam_StdExt, txtPlcBirth_StdExt};
+        this.ListTextExt = new JTextField[]{txt_NumInscSdExt, txtNam_StdExt, txtSurNam_StdExt, txtPlcBirth_StdExt};
         HintTextFieldExtStd(ListTextExt);
-        this.ListTextProf=new JTextField[]{txtNam_Prof,txtSurNam_Prof,txtPlcBirth_Prof};
+        this.ListTextProf = new JTextField[]{txtNam_Prof, txtSurNam_Prof, txtPlcBirth_Prof};
         hintTextProfessor(ListTextProf);
-        
+
         Fill_Data.Filling(txtBranch_stdExtr, "Branch_Study", "BranchStd_Name", 4);
         txtBranch_stdExtr.removeItem("/");
         Fill_Data.Filling(LevelStd_StdExtrn, "Level_Study", "DescriptionLevel", 3);
@@ -165,11 +165,11 @@ public class FormExterieurResidents extends javax.swing.JFrame {
         buttonView5 = new View.ButtonView();
         buttonView6 = new View.ButtonView();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jPanel4_.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel4_.setBackground(new java.awt.Color(230, 230, 210));
         jPanel4_.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 1, new java.awt.Color(0, 0, 0)));
         jPanel4_.setPreferredSize(new java.awt.Dimension(200, 500));
 
@@ -294,33 +294,30 @@ public class FormExterieurResidents extends javax.swing.JFrame {
         jPanel4_.setLayout(jPanel4_Layout);
         jPanel4_Layout.setHorizontalGroup(
             jPanel4_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4_Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel4_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4_Layout.createSequentialGroup()
+                .addGroup(jPanel4_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(Img_Std, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton28, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(CLabImg, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jButton28, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(CLabImg, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel4_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton26, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(jPanel4_Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel98, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(22, 22, 22))
+                            .addComponent(jLabel98, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4_Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jButton26, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))))
             .addGroup(jPanel4_Layout.createSequentialGroup()
-                .addGroup(jPanel4_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4_Layout.createSequentialGroup()
-                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(NumOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(BtnNext)
-                    .addGroup(jPanel4_Layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addComponent(buttonView9, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(NumOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel4_Layout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addGroup(jPanel4_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(buttonView9, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
+                    .addComponent(BtnNext, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
             .addGroup(jPanel4_Layout.createSequentialGroup()
                 .addGroup(jPanel4_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4_Layout.createSequentialGroup()
@@ -332,7 +329,9 @@ public class FormExterieurResidents extends javax.swing.JFrame {
                             .addComponent(LabNameRestToPrint, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(LabDateBirth_Plc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(LabBranchStd, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(LabPrfNumCard_StdRes, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel4_Layout.createSequentialGroup()
+                        .addComponent(LabPrfNumCard_StdRes, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(24, 24, 24))
         );
         jPanel4_Layout.setVerticalGroup(
@@ -342,22 +341,19 @@ public class FormExterieurResidents extends javax.swing.JFrame {
                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(NumOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(17, 17, 17)
-                .addGroup(jPanel4_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel4_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4_Layout.createSequentialGroup()
                         .addComponent(jButton28, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(Img_Std, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(76, 76, 76))
+                        .addComponent(Img_Std, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4_Layout.createSequentialGroup()
-                        .addGroup(jPanel4_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel4_Layout.createSequentialGroup()
-                                .addComponent(jLabel98, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(8, 8, 8)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton26, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(CLabImg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(27, 27, 27)))
+                        .addComponent(jLabel98, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(8, 8, 8)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton26, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(CLabImg, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(42, 42, 42)
                 .addComponent(LabPrfNumCard_StdRes, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4_Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -371,16 +367,16 @@ public class FormExterieurResidents extends javax.swing.JFrame {
                 .addComponent(LabBranchStd, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(38, 38, 38)
                 .addComponent(buttonView9, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
                 .addComponent(BtnNext, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39))
+                .addGap(36, 36, 36))
         );
 
         jPanel1.add(jPanel4_, java.awt.BorderLayout.WEST);
 
         jPanel2.setLayout(new java.awt.CardLayout());
 
-        PanExtrieurStd.setBackground(new java.awt.Color(255, 255, 255));
+        PanExtrieurStd.setBackground(new java.awt.Color(230, 230, 210));
 
         jLabel168.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         jLabel168.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -496,7 +492,7 @@ public class FormExterieurResidents extends javax.swing.JFrame {
         jLabel177.setText("معلـومـــــات الـــطـــالـــب الــخـــارجـــي     ");
         jLabel177.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        Gdr_femal_ExtRBtn.setBackground(new java.awt.Color(255, 255, 255));
+        Gdr_femal_ExtRBtn.setBackground(new java.awt.Color(230, 230, 210));
         Gdr_femal_ExtRBtn.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         Gdr_femal_ExtRBtn.setText("مؤنث");
         Gdr_femal_ExtRBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -508,7 +504,7 @@ public class FormExterieurResidents extends javax.swing.JFrame {
             }
         });
 
-        Gdr_StdExt_Mal.setBackground(new java.awt.Color(255, 255, 255));
+        Gdr_StdExt_Mal.setBackground(new java.awt.Color(230, 230, 210));
         Gdr_StdExt_Mal.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         Gdr_StdExt_Mal.setSelected(true);
         Gdr_StdExt_Mal.setText("مذكر");
@@ -542,7 +538,7 @@ public class FormExterieurResidents extends javax.swing.JFrame {
         PanExtrieurStdLayout.setHorizontalGroup(
             PanExtrieurStdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanExtrieurStdLayout.createSequentialGroup()
-                .addContainerGap(147, Short.MAX_VALUE)
+                .addContainerGap(160, Short.MAX_VALUE)
                 .addGroup(PanExtrieurStdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanExtrieurStdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanExtrieurStdLayout.createSequentialGroup()
@@ -628,7 +624,7 @@ public class FormExterieurResidents extends javax.swing.JFrame {
 
         jPanel2.add(PanExtrieurStd, "card2");
 
-        PanProfesseur.setBackground(new java.awt.Color(255, 255, 255));
+        PanProfesseur.setBackground(new java.awt.Color(230, 230, 210));
 
         jLabel108.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         jLabel108.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -695,7 +691,7 @@ public class FormExterieurResidents extends javax.swing.JFrame {
         txtProfession_Prof.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         txtProfession_Prof.setEnabled(false);
 
-        Gdr_Prf_femal.setBackground(new java.awt.Color(255, 255, 255));
+        Gdr_Prf_femal.setBackground(new java.awt.Color(230, 230, 210));
         Gdr_Prf_femal.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         Gdr_Prf_femal.setText("مؤنث");
         Gdr_Prf_femal.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
@@ -704,7 +700,7 @@ public class FormExterieurResidents extends javax.swing.JFrame {
         Gdr_Prf_femal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         Gdr_Prf_femal.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 
-        Gdr_Prf_Mal.setBackground(new java.awt.Color(255, 255, 255));
+        Gdr_Prf_Mal.setBackground(new java.awt.Color(230, 230, 210));
         Gdr_Prf_Mal.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         Gdr_Prf_Mal.setText("مذكر");
         Gdr_Prf_Mal.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
@@ -718,7 +714,7 @@ public class FormExterieurResidents extends javax.swing.JFrame {
         PanProfesseurLayout.setHorizontalGroup(
             PanProfesseurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanProfesseurLayout.createSequentialGroup()
-                .addContainerGap(102, Short.MAX_VALUE)
+                .addContainerGap(163, Short.MAX_VALUE)
                 .addGroup(PanProfesseurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(PanProfesseurLayout.createSequentialGroup()
                         .addComponent(txtProfession_Prof, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -748,12 +744,11 @@ public class FormExterieurResidents extends javax.swing.JFrame {
                                 .addComponent(txtPlcBirth_Prof, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(55, 55, 55)
                                 .addComponent(jLabel97, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(77, 77, 77))
+                .addGap(29, 29, 29))
         );
         PanProfesseurLayout.setVerticalGroup(
             PanProfesseurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanProfesseurLayout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jLabel108, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PanProfesseurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -785,12 +780,12 @@ public class FormExterieurResidents extends javax.swing.JFrame {
                 .addGroup(PanProfesseurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Gdr_Prf_femal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Gdr_Prf_Mal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(146, Short.MAX_VALUE))
+                .addGap(0, 157, Short.MAX_VALUE))
         );
 
         jPanel2.add(PanProfesseur, "card3");
 
-        PanEmployer.setBackground(new java.awt.Color(255, 255, 255));
+        PanEmployer.setBackground(new java.awt.Color(230, 230, 210));
 
         Profession1.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         Profession1.setToolTipText("");
@@ -829,7 +824,7 @@ public class FormExterieurResidents extends javax.swing.JFrame {
         jLabel174.setText("المهنـــــــــــــة      : ");
         jLabel174.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
-        Gdr_Emp_Mal1.setBackground(new java.awt.Color(255, 255, 255));
+        Gdr_Emp_Mal1.setBackground(new java.awt.Color(230, 230, 210));
         Gdr_Emp_Mal1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         Gdr_Emp_Mal1.setSelected(true);
         Gdr_Emp_Mal1.setText("مذكر");
@@ -845,7 +840,7 @@ public class FormExterieurResidents extends javax.swing.JFrame {
             }
         });
 
-        Gdr_Emp_femal1.setBackground(new java.awt.Color(255, 255, 255));
+        Gdr_Emp_femal1.setBackground(new java.awt.Color(230, 230, 210));
         Gdr_Emp_femal1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         Gdr_Emp_femal1.setText("مؤنث");
         Gdr_Emp_femal1.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
@@ -959,55 +954,55 @@ public class FormExterieurResidents extends javax.swing.JFrame {
         PanEmployer.setLayout(PanEmployerLayout);
         PanEmployerLayout.setHorizontalGroup(
             PanEmployerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PanEmployerLayout.createSequentialGroup()
-                .addGroup(PanEmployerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PanEmployerLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(PanEmployerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel69, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jCheckBox4))
-                        .addGap(18, 18, 18)
-                        .addGroup(PanEmployerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(Profession, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
-                            .addComponent(jTextField2))
-                        .addGap(42, 42, 42)
-                        .addComponent(jLabel174, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(PanEmployerLayout.createSequentialGroup()
-                        .addGap(105, 105, 105)
-                        .addGroup(PanEmployerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel181, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(PanEmployerLayout.createSequentialGroup()
-                                .addComponent(txtNam_EmplInsr, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(43, 43, 43)
-                                .addComponent(jLabel179, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(PanEmployerLayout.createSequentialGroup()
-                                .addComponent(txtSurNam_Empl, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(45, 45, 45)
-                                .addComponent(jLabel175, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(PanEmployerLayout.createSequentialGroup()
-                                .addComponent(DatBirth_Empl, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(45, 45, 45)
-                                .addComponent(jLabel178, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(PanEmployerLayout.createSequentialGroup()
-                                .addComponent(txtPlcBirth_Emply, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(45, 45, 45)
-                                .addComponent(jLabel180, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(PanEmployerLayout.createSequentialGroup()
-                                .addComponent(Gdr_Emp_femal1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(40, 40, 40)
-                                .addComponent(Gdr_Emp_Mal1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(0, 77, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanEmployerLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Profession1, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(63, Short.MAX_VALUE)
+                .addGroup(PanEmployerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(PanEmployerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(PanEmployerLayout.createSequentialGroup()
+                            .addGroup(PanEmployerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel69, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jCheckBox4))
+                            .addGap(18, 18, 18)
+                            .addGroup(PanEmployerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(Profession, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(42, 42, 42)
+                            .addComponent(jLabel174, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(PanEmployerLayout.createSequentialGroup()
+                            .addGap(95, 95, 95)
+                            .addGroup(PanEmployerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(PanEmployerLayout.createSequentialGroup()
+                                    .addComponent(txtNam_EmplInsr, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(43, 43, 43)
+                                    .addComponent(jLabel179, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(PanEmployerLayout.createSequentialGroup()
+                                    .addComponent(txtSurNam_Empl, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(45, 45, 45)
+                                    .addComponent(jLabel175, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(PanEmployerLayout.createSequentialGroup()
+                                    .addComponent(DatBirth_Empl, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(45, 45, 45)
+                                    .addComponent(jLabel178, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(PanEmployerLayout.createSequentialGroup()
+                                    .addComponent(txtPlcBirth_Emply, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(45, 45, 45)
+                                    .addComponent(jLabel180, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(PanEmployerLayout.createSequentialGroup()
+                                    .addComponent(Gdr_Emp_femal1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(40, 40, 40)
+                                    .addComponent(Gdr_Emp_Mal1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanEmployerLayout.createSequentialGroup()
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Profession1, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel181, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(37, 37, 37))
         );
         PanEmployerLayout.setVerticalGroup(
             PanEmployerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanEmployerLayout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jLabel181, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PanEmployerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtNam_EmplInsr, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel179, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1023,7 +1018,7 @@ public class FormExterieurResidents extends javax.swing.JFrame {
                 .addGroup(PanEmployerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtPlcBirth_Emply, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel180, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(PanEmployerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(PanEmployerLayout.createSequentialGroup()
                         .addGroup(PanEmployerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1035,7 +1030,7 @@ public class FormExterieurResidents extends javax.swing.JFrame {
                                 .addComponent(jCheckBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(PanEmployerLayout.createSequentialGroup()
                                 .addGap(28, 28, 28)
-                                .addComponent(Profession, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addComponent(Profession, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(jLabel174, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20)
                 .addGroup(PanEmployerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1043,18 +1038,18 @@ public class FormExterieurResidents extends javax.swing.JFrame {
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(Profession1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(66, 66, 66))
+                .addContainerGap(108, Short.MAX_VALUE))
         );
 
         jPanel2.add(PanEmployer, "card4");
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.CENTER);
 
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setBackground(new java.awt.Color(230, 230, 210));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel3.setPreferredSize(new java.awt.Dimension(644, 50));
 
-        BtnRdExterieurStd.setBackground(new java.awt.Color(255, 255, 255));
+        BtnRdExterieurStd.setBackground(new java.awt.Color(230, 230, 210));
         BtnRdExterieurStd.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         BtnRdExterieurStd.setSelected(true);
         BtnRdExterieurStd.setText("طالب خـــارجــي");
@@ -1067,7 +1062,7 @@ public class FormExterieurResidents extends javax.swing.JFrame {
             }
         });
 
-        BtnRdEmployeur.setBackground(new java.awt.Color(255, 255, 255));
+        BtnRdEmployeur.setBackground(new java.awt.Color(230, 230, 210));
         BtnRdEmployeur.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         BtnRdEmployeur.setText("عـــامـــل");
         BtnRdEmployeur.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -1079,7 +1074,7 @@ public class FormExterieurResidents extends javax.swing.JFrame {
             }
         });
 
-        BtnRdProf.setBackground(new java.awt.Color(255, 255, 255));
+        BtnRdProf.setBackground(new java.awt.Color(230, 230, 210));
         BtnRdProf.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         BtnRdProf.setText("اســـتـاذ");
         BtnRdProf.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -1096,7 +1091,7 @@ public class FormExterieurResidents extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(260, Short.MAX_VALUE)
+                .addContainerGap(273, Short.MAX_VALUE)
                 .addComponent(BtnRdProf, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(61, 61, 61)
                 .addComponent(BtnRdEmployeur, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1162,7 +1157,7 @@ public class FormExterieurResidents extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addGap(135, 135, 135)
                 .addComponent(buttonView5, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 110, Short.MAX_VALUE)
                 .addComponent(buttonView6, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(41, 41, 41)
                 .addComponent(buttonView4, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1203,7 +1198,7 @@ public class FormExterieurResidents extends javax.swing.JFrame {
 
     private void jButton26ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton26ActionPerformed
 
-        ImageResidentToSv = GetPhotoStudentByScanner(CLabImg );
+        ImageResidentToSv = GetPhotoStudentByScanner(CLabImg);
 
         /*try {
             // use scan function of Wia api and create file with order
@@ -1405,14 +1400,14 @@ public class FormExterieurResidents extends javax.swing.JFrame {
         Fill_Data.Filling(LevelStd_StdExtrn, "Level_Study", "DescriptionLevel", 3);
         LevelStd_StdExtrn.removeItem("/");
         Gender = 1;
-        
+
         this.initialiseFieldPanelShowingData();
-        
+
         PanExtrieurStd.setVisible(true);
         PanProfesseur.setVisible(false);
         PanEmployer.setVisible(false);
 
-        
+
     }//GEN-LAST:event_BtnRdExterieurStdActionPerformed
 
     private void BtnRdEmployeurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnRdEmployeurActionPerformed
@@ -1421,9 +1416,9 @@ public class FormExterieurResidents extends javax.swing.JFrame {
         PanEmployer.setVisible(true);
         PanExtrieurStd.setVisible(false);
         PanProfesseur.setVisible(false);
-        
+
         this.initialiseFieldPanelShowingData();
-        
+
     }//GEN-LAST:event_BtnRdEmployeurActionPerformed
 
     private void Gdr_StdExt_MalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Gdr_StdExt_MalActionPerformed
@@ -1462,15 +1457,17 @@ public class FormExterieurResidents extends javax.swing.JFrame {
             String NevDatb = b[0] + "-" + b[1] + "-" + b[2];
             // JOptionPane.showMessageDialog(null, "The Resident :"+getPatternResident());
             try {
-                externalstudent = new ExternalStudent(txtNam_StdExt.getText(), txtSurNam_StdExt.getText(), 1, "", new SimpleDateFormat("dd-MM-yyyy").parse(NevDatb), txtPlcBirth_StdExt.getText(),
-                        Gender, Fill_Data.GetId_From_DB("Id_Ptrn_Res", "Pattern_Person_Res", "Name_Patern", getPatternResident()),
-                        8, txt_NumInscSdExt.getText(), Fill_Data.GetId_From_DB("Id_BranchStd", "Branch_Study", "BranchStd_Name", (String) txtBranch_stdExtr.getSelectedItem()),
-                        Fill_Data.GetId_From_DB("Id_LevelStudy", "Level_Study", "DescriptionLevel", (String) LevelStd_StdExtrn.getSelectedItem()), new Date(), 0);
+                externalstudent = new ExternalStudent(txtNam_StdExt.getText(), txtSurNam_StdExt.getText(), 1, "",new SimpleDateFormat("dd-MM-yyyy").parse(NevDatb), 
+                    txtPlcBirth_StdExt.getText(),Gender, Fill_Data.GetId_From_DB("Id_Ptrn_Res", "Pattern_Person_Res", "Name_Patern",
+                    getPatternResident()),8, txt_NumInscSdExt.getText(), Fill_Data.GetId_From_DB("Id_BranchStd", "Branch_Study", "BranchStd_Name",(String) txtBranch_stdExtr.getSelectedItem()),
+                        Fill_Data.GetId_From_DB("Id_LevelStudy", "Level_Study", "DescriptionLevel", (String) LevelStd_StdExtrn.getSelectedItem()),
+                        new Date(), 0);
 
             } catch (ParseException ex) {
-                Logger.getLogger(FormExterieurResidents.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(FormExterieurResidents.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "حدث خطأ اثناء عملية الحفظ الرجاء التأكد من المعلومات المدخلة");
             }
-            externalstudent.setImageRes(ImageResidentToSv);
+            externalstudent.setImageRes(ImageResidentToSv);//
             externalstudent.AddRsident();
 
             if (externalstudent.getValConfiramation() != 0) {       // when success add ExternelStudent Data in DB
@@ -1480,19 +1477,17 @@ public class FormExterieurResidents extends javax.swing.JFrame {
                 LabDateBirth_Plc.setText(Format.format(externalstudent.getDateBirth()));
                 LabPlaceBirth_Res.setText(externalstudent.getPlaceBirth());
                 LabBranchStd.setText((String) txtBranch_stdExtr.getSelectedItem());
-                */
-                
-                setDataOfResidents("" + externalstudent.getNumbre_CardRes(), externalstudent.getFirst_name(), externalstudent.getLast_name()
-                                        , Format.format(externalstudent.getDateBirth()), externalstudent.getPlaceBirth(), (String) txtBranch_stdExtr.getSelectedItem());
-                
-                new SuccessAlert1(this).setVisible(true);
-                
-                this.InitializeFieldsDataExternalStudent();
-                
-                //initialiseFieldPanelShowingData();
-                
-                //Initialise_ExternalStudent_Resident(txt_NumInscSdExt, txtNam_StdExt, txtSurNam_StdExt, DatBirth_StdExt, txtPlcBirth_StdExt, Gdr_StdExt_Mal, txtBranch_stdExtr, LevelStd_StdExtrn, null, 1);
+                 */
 
+                setDataOfResidents("" + externalstudent.getNumbre_CardRes(), externalstudent.getFirst_name(), externalstudent.getLast_name(),
+                         Format.format(externalstudent.getDateBirth()), externalstudent.getPlaceBirth(), (String) txtBranch_stdExtr.getSelectedItem());
+
+                new SuccessAlert1(this).setVisible(true);
+
+                this.InitializeFieldsDataExternalStudent();
+
+                //initialiseFieldPanelShowingData();
+                //Initialise_ExternalStudent_Resident(txt_NumInscSdExt, txtNam_StdExt, txtSurNam_StdExt, DatBirth_StdExt, txtPlcBirth_StdExt, Gdr_StdExt_Mal, txtBranch_stdExtr, LevelStd_StdExtrn, null, 1);
                 //ImageResidentToSv = InitialiseImageResident(Img_Std);
             } else {
                 messagerror = new MessageErrorControl(this, true, "الرجــاء اعــادة ادخــال البيانات");
@@ -1542,10 +1537,10 @@ public class FormExterieurResidents extends javax.swing.JFrame {
     }//GEN-LAST:event_txtBranch_stdExtrFocusGained
 
     private void buttonView6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonView6ActionPerformed
-        
+
         this.InitializeFieldsDataExternalStudent();
         this.initialiseFieldPanelShowingData();
-        
+
     }//GEN-LAST:event_buttonView6ActionPerformed
 
     private void ProfessionItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ProfessionItemStateChanged
@@ -1601,7 +1596,7 @@ public class FormExterieurResidents extends javax.swing.JFrame {
 
     /**
      * @param label
-     ***************************************************************************************************
+     * **************************************************************************************************
      * @return
      * @throws java.io.IOException
      */
@@ -1671,6 +1666,7 @@ public class FormExterieurResidents extends javax.swing.JFrame {
 
     /**
      * *****************************************************************************
+     * @param PatternResident
      */
     public void setPatternResident(String PatternResident) {
         this.PatternResident = PatternResident;
@@ -1682,7 +1678,7 @@ public class FormExterieurResidents extends javax.swing.JFrame {
     public void HintTextFieldExtStd(JTextField[] TabTextField) {
 
         for (JTextField TextField : TabTextField) {
-            
+
             TextField.addFocusListener(new FocusListener() {
                 @Override
                 public void focusGained(FocusEvent e) {
@@ -1709,11 +1705,10 @@ public class FormExterieurResidents extends javax.swing.JFrame {
                             TextField.setForeground(Color.black);
                             LabPlaceBirth_Res.setText("");
                             break;
-                            
+
                     }
                 }
 
-                
                 @Override
                 public void focusLost(FocusEvent e) {
 
@@ -1725,7 +1720,6 @@ public class FormExterieurResidents extends javax.swing.JFrame {
                         TextField.setText("ادخل الاسم");
                         TextField.setForeground(new Color(204, 204, 204));
                         LabNameRestToPrint.setText("الاسم");
-                        
 
                     } else if (TextField.equals(txtSurNam_StdExt) && TextField.getText().equals("")) {
                         TextField.setText("ادخل اللقب");
@@ -1737,19 +1731,19 @@ public class FormExterieurResidents extends javax.swing.JFrame {
                         LabPlaceBirth_Res.setText("مكان الميلاد");
                         TextField.setForeground(new Color(204, 204, 204));
 
-                    } 
+                    }
 
                 }
 
             });
-            
+
         }
 
     }
-    
-    public void hintTextProfessor(JTextField[] TabTextField){
+
+    public void hintTextProfessor(JTextField[] TabTextField) {
         for (JTextField TextField : TabTextField) {
-            
+
             TextField.addFocusListener(new FocusListener() {
                 @Override
                 public void focusGained(FocusEvent e) {
@@ -1771,25 +1765,24 @@ public class FormExterieurResidents extends javax.swing.JFrame {
                             TextField.setForeground(Color.black);
                             LabPlaceBirth_Res.setText("");
                             break;
-                            
+
                     }
                 }
 
-                
                 @Override
                 public void focusLost(FocusEvent e) {
 
-                     if (TextField.equals(txtNam_Prof) && TextField.getText().equals("")) {
+                    if (TextField.equals(txtNam_Prof) && TextField.getText().equals("")) {
                         TextField.setText("ادخل الاسم");
                         TextField.setForeground(new Color(204, 204, 204));
                         LabNameRestToPrint.setText("الاسم");
-                    
-                     } else if (TextField.equals(txtSurNam_Prof) && TextField.getText().equals("")) {
+
+                    } else if (TextField.equals(txtSurNam_Prof) && TextField.getText().equals("")) {
                         TextField.setText("ادخل اللقب");
                         LabLastNameRestToPrint.setText("اللقب");
                         TextField.setForeground(new Color(204, 204, 204));
 
-                     } else if (TextField.equals(txtPlcBirth_Prof) && TextField.getText().equals("")) {
+                    } else if (TextField.equals(txtPlcBirth_Prof) && TextField.getText().equals("")) {
                         TextField.setText("ادخل اللقب");
                         LabPlaceBirth_Res.setText("مكان الميلاد");
                         TextField.setForeground(new Color(204, 204, 204));
@@ -1799,68 +1792,67 @@ public class FormExterieurResidents extends javax.swing.JFrame {
                 }
 
             });
-            
+
         }
-        
+
     }
+
     /**
      * Initialise Data Information
-     * 
+     *
      */
-    
-    public void initialiseFieldPanelShowingData(){
+
+    public void initialiseFieldPanelShowingData() {
         LabPrfNumCard_StdRes.setText("رقم البطاقة");
         LabNameRestToPrint.setText("الاسم");
         LabLastNameRestToPrint.setText("اللقب");
         LabDateBirth_Plc.setText("تاريخ الميلاد");
         LabPlaceBirth_Res.setText("مكان الميلاد");
-        if (getPatternResident().equals(BtnRdExterieurStd.getText())) 
+        if (getPatternResident().equals(BtnRdExterieurStd.getText())) {
             LabBranchStd.setText("التخصص");
-        else 
+        } else {
             LabBranchStd.setText("المهنة");
-        
+        }
+
     }
-    
-    public void setDataOfResidents(String NumCard,String NameStd,String LastName,String DateBirth,String PlaceBirth,String Branch_Profess){
+
+    public void setDataOfResidents(String NumCard, String NameStd, String LastName, String DateBirth, String PlaceBirth, String Branch_Profess) {
         LabPrfNumCard_StdRes.setText(NumCard);
         LabNameRestToPrint.setText(NameStd);
         LabLastNameRestToPrint.setText(LastName);
         LabDateBirth_Plc.setText(DateBirth);
         LabPlaceBirth_Res.setText(PlaceBirth);
         LabBranchStd.setText(Branch_Profess);
-    
     }
-    
-    
-    
-    public void InitializeFieldsDataExternalStudent(){
+
+    public void InitializeFieldsDataExternalStudent() {
         txt_NumInscSdExt.setText("رقــم التــسجـيــل");
         txt_NumInscSdExt.setForeground(new Color(204, 204, 204));
         txtNam_StdExt.setText("ادخل الاسم");
         txtNam_StdExt.setForeground(new Color(204, 204, 204));
         txtSurNam_StdExt.setText("ادخل اللقب");
         txtSurNam_StdExt.setForeground(new Color(204, 204, 204));
-        
+
         DatBirth_StdExt.setText("");
-        
+
         txtPlcBirth_StdExt.setText("ادخل مكان الميلاد");
         txtPlcBirth_StdExt.setForeground(new Color(204, 204, 204));
         Gdr_StdExt_Mal.setSelected(true);
-        Gender=1;
+        Gender = 1;
         txtBranch_stdExtr.setSelectedIndex(0);
         LevelStd_StdExtrn.setSelectedIndex(0);
-        
+
         CLabImg.setIcon(new ImageIcon(getClass().getResource("/residence/Image/imageRes.png")));
     }
-    /********************************************************/
-    
+
+    /**
+     * *****************************************************
+     */
+
     public void ValidateNumber_NextOfExternalStudent() {
         NumOrder.setText("" + (Resident_GlRemplissage.GetMAX_ID_Resident()));
-        
-        
+
     }
-    
-    
 
     /**
      * @param args the command line arguments

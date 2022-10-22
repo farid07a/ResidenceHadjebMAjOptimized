@@ -6,7 +6,10 @@ farid khe --- chaima khebb
  */
 package residence;
 
+import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.Font;
+import java.awt.Image;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -26,6 +29,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -34,7 +39,9 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableRowSorter;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
@@ -61,49 +68,60 @@ public class Advanced_prp extends javax.swing.JFrame {
     /**
      * Creates new form Advanced_prp
      */
-   ConnectionDB cnx=new ConnectionDB();
-   Import_Export_Data ExportDataExce=new Import_Export_Data();
-   Get_Info_DB filling=new Get_Info_DB();
-    Room rom=new Room();
-    String[] columns = {"الحالة","الغرفة", "المستوى ","التخصص","الجنسية","الولاية","البلدية","الدئرة","بكالوريا",
-                            "رقم التسجيل","مكان الميلاد","تاريخ الميلاد","Nom","prenom","اللقب","الاسم","البطاقة",
-                            };
-    
-    
-                                 /*    res.getInt("BacYear"),res.getString("Name_Daira"),
+    ConnectionDB cnx = new ConnectionDB();
+    Import_Export_Data ExportDataExce = new Import_Export_Data();
+    Get_Info_DB filling = new Get_Info_DB();
+    Room rom = new Room();
+    String[] columns = {"الحالة", "الغرفة", "المستوى ", "التخصص", "الجنسية", "الولاية", "البلدية", "الدئرة", "بكالوريا",
+        "رقم التسجيل", "مكان الميلاد", "تاريخ الميلاد", "Nom", "prenom", "اللقب", "الاسم", "البطاقة", "الصورة"
+    };
+
+    /*    res.getInt("BacYear"),res.getString("Name_Daira"),
                     res.getString("Name_Commune"),res.getString("NameWilaya"),
                     res.getString("Nationalite"),res.getString("BranchStd_Name"),
                     res.getString("Level_study"),res.getString("Room_Code"),
                     res.getString("Resident_Case")};
-            }*/       
-    
-    Student_Res student_ResRemplissage=new Student_Res();
+            }*/
+    Student_Res student_ResRemplissage = new Student_Res();
     DefaultTableModel df;
-    String [] ComInvers={"Chambre","Année_Etd_Abr","Annee_Etd"};
+    String[] ComInvers = {"Chambre", "Année_Etd_Abr", "Annee_Etd"};
     Conf cnf;
+
     public Advanced_prp(Conf cnf) {
         initComponents();
-        this.cnf=cnf;
-         df=new DefaultTableModel(columns, 0);
+        this.cnf = cnf;
+        df = new DefaultTableModel(columns, 0) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex == 17) {
+                    return Icon.class;
+                } else {
+                    return getValueAt(0, columnIndex).getClass();
+                }
+            }
+            
+            
+        };
+
         jTable2.setModel(df);
-        this.Filling(Resident_Case, "Resident_Case", "Resident_Case",1);
-         this.Filling(Pavilion, "Pavilion", "Pavilion_Name",1);
-         this.Filling(Branch_Study,"Branch_Study", "BranchStd_Name",1);
-         this.Filling(Level_Study,"Level_Study", "DescriptionLevel",1);
-         
-         this.Filling(Name_Commune,"Student_Res", "Name_Commune",0);        
-         this.Filling(Name_Daira,"Student_Res", "Name_Daira",0);  
-         this.Filling(wilaya_List,"Wilaya", "NameWilaya",1);
-         FillListYear();
+        this.Filling(Resident_Case, "Resident_Case", "Resident_Case", 1);
+        this.Filling(Pavilion, "Pavilion", "Pavilion_Name", 1);
+        this.Filling(Branch_Study, "Branch_Study", "BranchStd_Name", 1);
+        this.Filling(Level_Study, "Level_Study", "DescriptionLevel", 1);
+
+        this.Filling(Name_Commune, "Student_Res", "Name_Commune", 0);
+        this.Filling(Name_Daira, "Student_Res", "Name_Daira", 0);
+        this.Filling(wilaya_List, "Wilaya", "NameWilaya", 1);
+        FillListYear();
         Align_List(Resident_Case);
         Align_List(Name_Daira);
         Align_List(Name_Commune);
         Align_List(Level_Study);
-        
+
         Align_List(wilaya_List);
         Align_List(Branch_Study);
         Align_List(Pavilion);
-     //   Align_List(bacYearList);
+        //   Align_List(bacYearList);
         PanWilaya.setVisible(false);
         PanLevel.setVisible(false);
         PanBranch.setVisible(false);
@@ -115,106 +133,110 @@ public class Advanced_prp extends javax.swing.JFrame {
         RomPvinPanInf.setVisible(false); //combobox is false when jframe opened
         Filling_Data(28);
         this.cnf.Filling_NameWilaya(NameWilaya);
-        
+
 //        jList8.setSize(220, 200);
-       // jList8.setPreferredSize(new Dimension(100,100));
+        // jList8.setPreferredSize(new Dimension(100,100));
     }
 
-    
-    public void Align_List(JList list){
-    DefaultListCellRenderer renderer =  (DefaultListCellRenderer)list.getCellRenderer();  
-renderer.setHorizontalAlignment(JLabel.CENTER); 
+    public void Align_List(JList list) {
+        DefaultListCellRenderer renderer = (DefaultListCellRenderer) list.getCellRenderer();
+        renderer.setHorizontalAlignment(JLabel.CENTER);
     }
-    
-   
-    
-        
-  public void Filling(JList list,String Tab,String Field,int i){ //i==0 for distict select for commune daira field
-                                                                 //i==2 for field integer 
-      Statement stm=null;
-      ResultSet res=null;
-       String Query="SELECT * FROM  "+Tab+"" ;
-      if(i==0){
-        Query="SELECT DISTINCT "+Field+" FROM  "+Tab+" " ;
-      } 
-      
-     DefaultListModel listModel = new DefaultListModel();
-     
-     listModel.removeAllElements();
+
+    public void Filling(JList list, String Tab, String Field, int i) { //i==0 for distict select for commune daira field
+        //i==2 for field integer 
+        Statement stm = null;
+        ResultSet res = null;
+        String Query = "SELECT * FROM  " + Tab + "";
+        if (i == 0) {
+            Query = "SELECT DISTINCT " + Field + " FROM  " + Tab + " ";
+        }
+
+        DefaultListModel listModel = new DefaultListModel();
+
+        listModel.removeAllElements();
 //       listModel= list.;
 //        listModel.removeAllElements();
         cnx.Connecting();
-         
+
         try {
-            stm=cnx.getConnect().createStatement();
-            res=stm.executeQuery(Query);
-            
-            while (res.next()){
-               listModel.addElement(res.getString(Field));
+            stm = cnx.getConnect().createStatement();
+            res = stm.executeQuery(Query);
+
+            while (res.next()) {
+                listModel.addElement(res.getString(Field));
             }
             list.setModel(listModel);
-            
+
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error SQL :"+e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error SQL :" + e.getMessage());
         }
-        
+
         try {
             stm.close();
             res.close();
             cnx.Deconnect();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error Close :"+e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error Close :" + e.getMessage());
         }
-        
-    } 
-    
-    public void FillListYear(){
-    Calendar cal = Calendar.getInstance();
-                cal.setTime(new Date());
-                int year = cal.get(Calendar.YEAR);
-                
-                DefaultListModel listModel = new DefaultListModel();
-                int i = (year-30);
-                for (; i <= year+1; ) {
-                    listModel.addElement(""+i);
-                    i++;
-                }
-                bacYearList.setModel(listModel);
-     }
-    
-    public void Filling_Data(int numcard){
-    
-        Statement  stm=null;
-        ResultSet res=null;
-        df=(DefaultTableModel) jTable2.getModel();
+
+    }
+
+    public void FillListYear() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        int year = cal.get(Calendar.YEAR);
+
+        DefaultListModel listModel = new DefaultListModel();
+        int i = (year - 30);
+        for (; i <= year + 1;) {
+            listModel.addElement("" + i);
+            i++;
+        }
+        bacYearList.setModel(listModel);
+    }
+
+    public void Filling_Data(int numcard) {
+
+        Statement stm = null;
+        ResultSet res = null;
+        df = (DefaultTableModel) jTable2.getModel();
         df.setRowCount(0);
-          String Query1="SELECT Name_Resident,LastName_Resident,Name_ResidentFr,LastName_ResidentFr,NumCard_Resident,DateBirth,PlaceBirth,PlaceBirthFr,\n" +
-"Name_Father,FullName_Mother,LastNamMothAR,Name_FatherFr,Name_MotherFr,LastName_MotheFr,Num_InscritBac,DateInscrp,BacMoyen,PlaceGetBac,\n" +
-"BacYear,BacMoyen,SituationFamily,Name_Daira,Name_Commune,NameWilaya,Address,ProfessionMother,ProfessionFather,\n" +
-"Nationalite,Nationalite_Fr,BranchStd_Name,BranchStd_NameFr,NameFact,DescriptionLevel,Level_study,Room_Code,Resident_Case\n" +
-"FROM Resident_Gl,Student_Res,Nationalite,Branch_Study,Faculty,Level_Study,Room,Wilaya,Resident_Case \n" +
-"WHERE \n" +
-"Student_Res.Id_Nationalite=Nationalite.Id_Nationalite\n" +
-"AND Student_Res.Id_BranchStd=Branch_Study.Id_BranchStd\n" +
-"AND Student_Res.ID_Wilaya=Wilaya.ID_Wilaya\n" +
-"\n" +
-"AND Student_Res.Id_Faculty=Faculty.Id_Faculty\n" +
-"AND Student_Res.Id_LevelStudy=Level_Study.Id_LevelStudy\n" +
-"AND Student_Res.Id_Room=Room.Id_Room\n" +
-"AND Resident_Gl.ID_Rsident=Student_Res.ID_Rsident\n" +             
-"AND Resident_Gl.ID_Case_Resident=Resident_Case.ID_Case_Resident "+         
-"AND Resident_Gl.Id_Ptrn_Res=1 order by Room_Code ";                  
-                  
+        String Query1 = "SELECT Name_Resident,LastName_Resident,Name_ResidentFr,LastName_ResidentFr,NumCard_Resident,imageStd,DateBirth,PlaceBirth,PlaceBirthFr,\n"
+                + "Name_Father,FullName_Mother,LastNamMothAR,Name_FatherFr,Name_MotherFr,LastName_MotheFr,Num_InscritBac,DateInscrp,BacMoyen,PlaceGetBac,\n"
+                + "BacYear,BacMoyen,SituationFamily,Name_Daira,Name_Commune,NameWilaya,Address,ProfessionMother,ProfessionFather,\n"
+                + "Nationalite,Nationalite_Fr,BranchStd_Name,BranchStd_NameFr,NameFact,DescriptionLevel,Level_study,Room_Code,Resident_Case\n"
+                + "FROM Resident_Gl,Student_Res,Nationalite,Branch_Study,Faculty,Level_Study,Room,Wilaya,Resident_Case \n"
+                + "WHERE \n"
+                + "Student_Res.Id_Nationalite=Nationalite.Id_Nationalite\n"
+                + "AND Student_Res.Id_BranchStd=Branch_Study.Id_BranchStd\n"
+                + "AND Student_Res.ID_Wilaya=Wilaya.ID_Wilaya\n"
+                + "\n"
+                + "AND Student_Res.Id_Faculty=Faculty.Id_Faculty\n"
+                + "AND Student_Res.Id_LevelStudy=Level_Study.Id_LevelStudy\n"
+                + "AND Student_Res.Id_Room=Room.Id_Room\n"
+                + "AND Resident_Gl.ID_Rsident=Student_Res.ID_Rsident\n"
+                + "AND Resident_Gl.ID_Case_Resident=Resident_Case.ID_Case_Resident "
+                + "AND Resident_Gl.Id_Ptrn_Res=1 order by Room_Code ";
+
 //"AND Resident_Gl.Id_Ptrn_Res=1 AND NumCard_Resident="+numcard+" order by Room_Code ";
         cnx.Connecting();
-      
+
         try {
-            stm=cnx.getConnect().createStatement();
-            res=stm.executeQuery(Query1);
+            stm = cnx.getConnect().createStatement();
+            res = stm.executeQuery(Query1);
             Object arg[] = null;
-            while (res.next()) {                
-            
-                arg=new Object[]{
+            ImageIcon image;
+            while (res.next()) {
+
+                if (res.getBytes("imageStd") != null) {
+                    image = new ImageIcon(
+                            new ImageIcon(res.getBytes("imageStd")).getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+                } else {
+                    image = null;
+                }
+
+                arg = new Object[]{
                     res.getString("Resident_Case"),
                     res.getString("Room_Code"),
                     res.getString("Level_study"),
@@ -231,21 +253,23 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
                     res.getString("Name_ResidentFr"),
                     res.getString("LastName_Resident"),
                     res.getString("Name_Resident"),
-                    res.getString("NumCard_Resident") 
+                    res.getString("NumCard_Resident"),
+                    image
+
                 };
-               df.addRow(arg); 
+                df.addRow(arg);
             }
-            
             //jTable2.setModel(df);
-          //  df.addRow(arg);
-                    
-                    //System.out.println(arg.toString());
-;
-            counStd.setText(""+jTable2.getRowCount());
+            //  df.addRow(arg);
+
+            //System.out.println(arg.toString());
+            
+            
+            counStd.setText("" + jTable2.getRowCount());
         } catch (SQLException e) {
             System.err.println(e);
         }
-        
+
         try {
             res.close();
             stm.close();
@@ -253,8 +277,9 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
+
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -349,25 +374,47 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jScrollPane2.setBackground(new java.awt.Color(255, 255, 255));
+
         jTable2.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "null", "Title 7", "Title 8", "Title 9", "Title 10", "Title 11", "Title 12", "null", "Title 14", "Title 15", "Title 16", "Title 17"
+                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "null", "Title 7", "Title 8", "Title 9", "Title 10", "Title 11", "Title 12", "null", "Title 14", "Title 15", "Title 16", "Title 17", "null"
             }
-        ));
-        jTable2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jTable2.setRowHeight(23);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jTable2.setRowHeight(40);
+        jTable2.setRowMargin(0);
+        jTable2.setShowVerticalLines(false);
         jTable2.getTableHeader().setResizingAllowed(false);
         jTable2.getTableHeader().setReorderingAllowed(false);
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+        jTable2.setDefaultRenderer(String.class, centerRenderer);
+
+        jTable2.getColumnModel().getColumn(17).setPreferredWidth(50);
+        JTableHeader headTab = jTable2.getTableHeader();
+        headTab.setBackground(new java.awt.Color(221,160,221));
+        headTab.setFont(new java.awt.Font("Times New Roman",Font.BOLD, 20));
+        headTab.setDefaultRenderer(centerRenderer);
+        headTab.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jScrollPane2.setViewportView(jTable2);
 
-        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel3.setLayout(new java.awt.CardLayout());
 
         jPanel9.setBackground(new java.awt.Color(255, 255, 255));
         jPanel9.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -378,7 +425,7 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
         CheckLevel.setText("المستوى الدراسي");
         CheckLevel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         CheckLevel.setBorderPainted(true);
-        CheckLevel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        CheckLevel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         CheckLevel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         CheckLevel.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         CheckLevel.addActionListener(new java.awt.event.ActionListener() {
@@ -393,7 +440,7 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
         CheckCase.setText("الحالة");
         CheckCase.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         CheckCase.setBorderPainted(true);
-        CheckCase.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        CheckCase.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         CheckCase.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         CheckCase.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         CheckCase.addActionListener(new java.awt.event.ActionListener() {
@@ -408,7 +455,7 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
         CheckCommune.setText("البلدية");
         CheckCommune.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         CheckCommune.setBorderPainted(true);
-        CheckCommune.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        CheckCommune.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         CheckCommune.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         CheckCommune.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         CheckCommune.addActionListener(new java.awt.event.ActionListener() {
@@ -423,7 +470,7 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
         CheckWilaya.setText("الولاية");
         CheckWilaya.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         CheckWilaya.setBorderPainted(true);
-        CheckWilaya.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        CheckWilaya.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         CheckWilaya.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         CheckWilaya.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         CheckWilaya.addActionListener(new java.awt.event.ActionListener() {
@@ -438,7 +485,7 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
         CheckBranch.setText("التخصص");
         CheckBranch.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         CheckBranch.setBorderPainted(true);
-        CheckBranch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        CheckBranch.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         CheckBranch.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         CheckBranch.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         CheckBranch.addActionListener(new java.awt.event.ActionListener() {
@@ -453,7 +500,7 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
         CheckBloc.setText("الجناح");
         CheckBloc.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         CheckBloc.setBorderPainted(true);
-        CheckBloc.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        CheckBloc.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         CheckBloc.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         CheckBloc.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         CheckBloc.addActionListener(new java.awt.event.ActionListener() {
@@ -468,7 +515,7 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
         CheckDaira.setText("الدائرة");
         CheckDaira.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         CheckDaira.setBorderPainted(true);
-        CheckDaira.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        CheckDaira.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         CheckDaira.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         CheckDaira.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         CheckDaira.addActionListener(new java.awt.event.ActionListener() {
@@ -486,7 +533,7 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        Resident_Case.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Resident_Case.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane1.setViewportView(Resident_Case);
 
         javax.swing.GroupLayout PanCaseLayout = new javax.swing.GroupLayout(PanCase);
@@ -497,7 +544,7 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
         );
         PanCaseLayout.setVerticalGroup(
             PanCaseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
         );
 
         jPanel9.add(PanCase, new org.netbeans.lib.awtextra.AbsoluteConstraints(1240, 50, 100, 155));
@@ -510,7 +557,7 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        wilaya_List.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        wilaya_List.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane8.setViewportView(wilaya_List);
 
         javax.swing.GroupLayout PanWilayaLayout = new javax.swing.GroupLayout(PanWilaya);
@@ -534,7 +581,7 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        Branch_Study.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Branch_Study.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane6.setViewportView(Branch_Study);
 
         javax.swing.GroupLayout PanBranchLayout = new javax.swing.GroupLayout(PanBranch);
@@ -545,7 +592,7 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
         );
         PanBranchLayout.setVerticalGroup(
             PanBranchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane6)
+            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
         );
 
         jPanel9.add(PanBranch, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 50, 150, 155));
@@ -558,7 +605,7 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        Level_Study.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Level_Study.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane5.setViewportView(Level_Study);
 
         javax.swing.GroupLayout PanLevelLayout = new javax.swing.GroupLayout(PanLevel);
@@ -583,7 +630,7 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        Name_Commune.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Name_Commune.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane4.setViewportView(Name_Commune);
 
         NameWilaya.addActionListener(new java.awt.event.ActionListener() {
@@ -620,7 +667,7 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        Name_Daira.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Name_Daira.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane3.setViewportView(Name_Daira);
 
         javax.swing.GroupLayout PanDairaLayout = new javax.swing.GroupLayout(PanDaira);
@@ -644,7 +691,7 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        Pavilion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Pavilion.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         Pavilion.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 PavilionValueChanged(evt);
@@ -671,20 +718,20 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
         jButton1.setText("قامة الطلبة 02 ");
         jButton1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jButton1.setContentAreaFilled(false);
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel9.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 10, 110, 35));
+        jPanel9.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 100, 35));
 
         CheckRoom.setBackground(new java.awt.Color(255, 255, 255));
         CheckRoom.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         CheckRoom.setText("الغرفة");
         CheckRoom.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         CheckRoom.setBorderPainted(true);
-        CheckRoom.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        CheckRoom.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         CheckRoom.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         CheckRoom.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         CheckRoom.addActionListener(new java.awt.event.ActionListener() {
@@ -694,7 +741,7 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
         });
         jPanel9.add(CheckRoom, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 70, 30));
 
-        RomPvinPanInf.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        RomPvinPanInf.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jPanel9.add(RomPvinPanInf, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 50, 70, 30));
 
         jButton2.setBackground(new java.awt.Color(255, 255, 255));
@@ -702,7 +749,7 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
         jButton2.setText("قائمة الطلبة الراسبين");
         jButton2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jButton2.setContentAreaFilled(false);
-        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -718,7 +765,7 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        bacYearList.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        bacYearList.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         bacYearList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 bacYearListValueChanged(evt);
@@ -744,7 +791,7 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
         CheckBacYear.setText("سنة البكالوريا");
         CheckBacYear.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         CheckBacYear.setBorderPainted(true);
-        CheckBacYear.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        CheckBacYear.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         CheckBacYear.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         CheckBacYear.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         CheckBacYear.addActionListener(new java.awt.event.ActionListener() {
@@ -760,20 +807,20 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
         jButton3.setText("قامة الطلبة01 ");
         jButton3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jButton3.setContentAreaFilled(false);
-        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
-        jPanel9.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 10, 110, 35));
+        jPanel9.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 10, 110, 35));
 
         jButton5.setBackground(new java.awt.Color(255, 255, 255));
         jButton5.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         jButton5.setText("استمارة المعلومات");
         jButton5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jButton5.setContentAreaFilled(false);
-        jButton5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton5.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
@@ -789,7 +836,7 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
         });
         jPanel9.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 110, 0, 30));
 
-        jPanel3.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 4, 1360, 310));
+        jPanel3.add(jPanel9, "card2");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -801,9 +848,10 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 88, -1, -1));
@@ -1002,7 +1050,7 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
         jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residence/Image/excel (1).png"))); // NOI18N
         jLabel14.setToolTipText("قائمة الطلبة");
         jLabel14.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        jLabel14.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel14.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jLabel14.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel14MouseClicked(evt);
@@ -1034,7 +1082,7 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("مسح");
         jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel1MouseClicked(evt);
@@ -1049,35 +1097,35 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
 
     private void txtnameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnameKeyReleased
         FilterResidentMlt(txtname, txtLastName, txtBirthplace, txtCom,
-                          txtNumCrd,txtDair,txtBranch,txtLevel,
-                          txtBacYear,txtCase,txtChambre,  
+                txtNumCrd, txtDair, txtBranch, txtLevel,
+                txtBacYear, txtCase, txtChambre,
                 jTable2, df);
-        counStd.setText(jTable2.getRowCount()+"");
+        counStd.setText(jTable2.getRowCount() + "");
     }//GEN-LAST:event_txtnameKeyReleased
 
     private void txtLastNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLastNameKeyReleased
-      FilterResidentMlt(txtname, txtLastName, txtBirthplace, txtCom,
-                          txtNumCrd,txtDair,txtBranch,txtLevel,
-                          txtBacYear,txtCase,txtChambre,  
+        FilterResidentMlt(txtname, txtLastName, txtBirthplace, txtCom,
+                txtNumCrd, txtDair, txtBranch, txtLevel,
+                txtBacYear, txtCase, txtChambre,
                 jTable2, df);
-        counStd.setText(jTable2.getRowCount()+"");
+        counStd.setText(jTable2.getRowCount() + "");
     }//GEN-LAST:event_txtLastNameKeyReleased
 
     private void txtBirthplaceKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBirthplaceKeyReleased
-      FilterResidentMlt(txtname, txtLastName, txtBirthplace, txtCom,
-                          txtNumCrd,txtDair,txtBranch,txtLevel,
-                          txtBacYear,txtCase,txtChambre,  
+        FilterResidentMlt(txtname, txtLastName, txtBirthplace, txtCom,
+                txtNumCrd, txtDair, txtBranch, txtLevel,
+                txtBacYear, txtCase, txtChambre,
                 jTable2, df);
-        counStd.setText(jTable2.getRowCount()+"");
+        counStd.setText(jTable2.getRowCount() + "");
     }//GEN-LAST:event_txtBirthplaceKeyReleased
 
     private void txtComKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtComKeyReleased
-      FilterResidentMlt(txtname, txtLastName, txtBirthplace, txtCom,
-                          txtNumCrd,txtDair,txtBranch,txtLevel,
-                          txtBacYear,txtCase,txtChambre,  
+        FilterResidentMlt(txtname, txtLastName, txtBirthplace, txtCom,
+                txtNumCrd, txtDair, txtBranch, txtLevel,
+                txtBacYear, txtCase, txtChambre,
                 jTable2, df);
-        counStd.setText(jTable2.getRowCount()+"");
-        
+        counStd.setText(jTable2.getRowCount() + "");
+
     }//GEN-LAST:event_txtComKeyReleased
 
     private void txtLastNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLastNameActionPerformed
@@ -1086,55 +1134,57 @@ renderer.setHorizontalAlignment(JLabel.CENTER);
 
     private void CheckBranchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckBranchActionPerformed
 
-         Dispay_hide_panState(CheckBranch, PanBranch,Branch_Study);
+        Dispay_hide_panState(CheckBranch, PanBranch, Branch_Study);
     }//GEN-LAST:event_CheckBranchActionPerformed
 
     private void CheckCaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckCaseActionPerformed
 
-        Dispay_hide_panState(CheckCase, PanCase,Resident_Case);
+        Dispay_hide_panState(CheckCase, PanCase, Resident_Case);
     }//GEN-LAST:event_CheckCaseActionPerformed
 
     private void CheckBlocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckBlocActionPerformed
-      
-        Dispay_hide_panState(CheckBloc, PanBloc,Pavilion);
+
+        Dispay_hide_panState(CheckBloc, PanBloc, Pavilion);
     }//GEN-LAST:event_CheckBlocActionPerformed
 
     private void CheckDairaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckDairaActionPerformed
-  
-        Dispay_hide_panState(CheckDaira, PanDaira,Name_Daira);
+
+        Dispay_hide_panState(CheckDaira, PanDaira, Name_Daira);
     }//GEN-LAST:event_CheckDairaActionPerformed
 
     private void CheckWilayaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckWilayaActionPerformed
-        
-         Dispay_hide_panState(CheckWilaya, PanWilaya,wilaya_List);
-        
+
+        Dispay_hide_panState(CheckWilaya, PanWilaya, wilaya_List);
+
     }//GEN-LAST:event_CheckWilayaActionPerformed
 
     private void CheckCommuneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckCommuneActionPerformed
-       
-         Dispay_hide_panState(CheckCommune, PanCommune,Name_Commune);
+
+        Dispay_hide_panState(CheckCommune, PanCommune, Name_Commune);
     }//GEN-LAST:event_CheckCommuneActionPerformed
 
     private void CheckLevelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckLevelActionPerformed
-        Dispay_hide_panState(CheckLevel, PanLevel,Level_Study);
+        Dispay_hide_panState(CheckLevel, PanLevel, Level_Study);
     }//GEN-LAST:event_CheckLevelActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       try {
-           this.GetDataWithMultMethod(0);
-       } catch (IOException ex) {
-           Logger.getLogger(Advanced_prp.class.getName()).log(Level.SEVERE, null, ex);
-       }
+        try {
+            this.GetDataWithMultMethod(0);
+        } catch (IOException ex) {
+            Logger.getLogger(Advanced_prp.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void CheckRoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckRoomActionPerformed
         if (CheckRoom.isSelected()) {
             RomPvinPanInf.setVisible(true);
-        }else RomPvinPanInf.setVisible(false);
+        } else {
+            RomPvinPanInf.setVisible(false);
+        }
     }//GEN-LAST:event_CheckRoomActionPerformed
 
     private void PavilionValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_PavilionValueChanged
-rom.FillComboboxRooms(RomPvinPanInf, Pavilion.getSelectedValue());        
+        rom.FillComboboxRooms(RomPvinPanInf, Pavilion.getSelectedValue());
     }//GEN-LAST:event_PavilionValueChanged
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -1157,10 +1207,10 @@ rom.FillComboboxRooms(RomPvinPanInf, Pavilion.getSelectedValue());
 
     private void txtDairKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDairKeyReleased
         FilterResidentMlt(txtname, txtLastName, txtBirthplace, txtCom,
-                          txtNumCrd,txtDair,txtBranch,txtLevel,
-                          txtBacYear,txtCase,txtChambre,  
+                txtNumCrd, txtDair, txtBranch, txtLevel,
+                txtBacYear, txtCase, txtChambre,
                 jTable2, df);
-        counStd.setText(jTable2.getRowCount()+"");
+        counStd.setText(jTable2.getRowCount() + "");
     }//GEN-LAST:event_txtDairKeyReleased
 
     private void txtBranchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBranchActionPerformed
@@ -1168,62 +1218,62 @@ rom.FillComboboxRooms(RomPvinPanInf, Pavilion.getSelectedValue());
     }//GEN-LAST:event_txtBranchActionPerformed
 
     private void txtBranchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBranchKeyReleased
-       FilterResidentMlt(txtname, txtLastName, txtBirthplace, txtCom,
-                          txtNumCrd,txtDair,txtBranch,txtLevel,
-                          txtBacYear,txtCase,txtChambre,  
+        FilterResidentMlt(txtname, txtLastName, txtBirthplace, txtCom,
+                txtNumCrd, txtDair, txtBranch, txtLevel,
+                txtBacYear, txtCase, txtChambre,
                 jTable2, df);
-        counStd.setText(jTable2.getRowCount()+"");
+        counStd.setText(jTable2.getRowCount() + "");
     }//GEN-LAST:event_txtBranchKeyReleased
 
     private void txtLevelKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLevelKeyReleased
         FilterResidentMlt(txtname, txtLastName, txtBirthplace, txtCom,
-                          txtNumCrd,txtDair,txtBranch,txtLevel,
-                          txtBacYear,txtCase,txtChambre,  
+                txtNumCrd, txtDair, txtBranch, txtLevel,
+                txtBacYear, txtCase, txtChambre,
                 jTable2, df);
-        counStd.setText(jTable2.getRowCount()+"");
+        counStd.setText(jTable2.getRowCount() + "");
     }//GEN-LAST:event_txtLevelKeyReleased
 
     private void txtChambreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtChambreKeyReleased
         FilterResidentMlt(txtname, txtLastName, txtBirthplace, txtCom,
-                          txtNumCrd,txtDair,txtBranch,txtLevel,
-                          txtBacYear,txtCase,txtChambre,  
+                txtNumCrd, txtDair, txtBranch, txtLevel,
+                txtBacYear, txtCase, txtChambre,
                 jTable2, df);
-        counStd.setText(jTable2.getRowCount()+"");
+        counStd.setText(jTable2.getRowCount() + "");
     }//GEN-LAST:event_txtChambreKeyReleased
 
     private void txtCaseKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCaseKeyReleased
         FilterResidentMlt(txtname, txtLastName, txtBirthplace, txtCom,
-                          txtNumCrd,txtDair,txtBranch,txtLevel,
-                          txtBacYear,txtCase,txtChambre,  
+                txtNumCrd, txtDair, txtBranch, txtLevel,
+                txtBacYear, txtCase, txtChambre,
                 jTable2, df);
-        counStd.setText(jTable2.getRowCount()+"");
+        counStd.setText(jTable2.getRowCount() + "");
     }//GEN-LAST:event_txtCaseKeyReleased
 
     private void txtBacYearKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBacYearKeyReleased
-       FilterResidentMlt(txtname, txtLastName, txtBirthplace, txtCom,
-                          txtNumCrd,txtDair,txtBranch,txtLevel,
-                          txtBacYear,txtCase,txtChambre,  
+        FilterResidentMlt(txtname, txtLastName, txtBirthplace, txtCom,
+                txtNumCrd, txtDair, txtBranch, txtLevel,
+                txtBacYear, txtCase, txtChambre,
                 jTable2, df);
-        counStd.setText(jTable2.getRowCount()+"");
+        counStd.setText(jTable2.getRowCount() + "");
     }//GEN-LAST:event_txtBacYearKeyReleased
 
     private void txtNumCrdKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumCrdKeyReleased
         FilterResidentMlt(txtname, txtLastName, txtBirthplace, txtCom,
-                          txtNumCrd,txtDair,txtBranch,txtLevel,
-                          txtBacYear,txtCase,txtChambre,  
+                txtNumCrd, txtDair, txtBranch, txtLevel,
+                txtBacYear, txtCase, txtChambre,
                 jTable2, df);
-        counStd.setText(jTable2.getRowCount()+"");
+        counStd.setText(jTable2.getRowCount() + "");
     }//GEN-LAST:event_txtNumCrdKeyReleased
 
     private void jLabel14MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel14MouseClicked
-        DefaultTableModel dm= (DefaultTableModel) jTable2.getModel();
+        DefaultTableModel dm = (DefaultTableModel) jTable2.getModel();
 
         try {
-            writeToExcell(jTable2,dm);
+            writeToExcell(jTable2, dm);
         } catch (IOException ex) {
             Logger.getLogger(Advanced_prp.class.getName()).log(Level.SEVERE, null, ex);
         }
-        try{
+        try {
             Desktop dt = Desktop.getDesktop();
             // dt.open(new File("src\\OurFile\\AppClose.xlsx"));
             dt.open(new File("D:\\List_Etudiants.xlsx"));  //when exporting with jtable
@@ -1234,27 +1284,27 @@ rom.FillComboboxRooms(RomPvinPanInf, Pavilion.getSelectedValue());
         }
     }//GEN-LAST:event_jLabel14MouseClicked
 
-    public void ClearTxtField(){
-    txtBacYear.setText("");
-    txtBirthplace.setText("");
-    txtBranch.setText("");
-    txtCase.setText("");
-    txtChambre.setText("");
-    txtCom.setText("");
-    txtDair.setText("");
-    txtLastName.setText("");
-    txtLevel.setText("");
-    txtNumCrd.setText("");
-    txtname.setText("");
+    public void ClearTxtField() {
+        txtBacYear.setText("");
+        txtBirthplace.setText("");
+        txtBranch.setText("");
+        txtCase.setText("");
+        txtChambre.setText("");
+        txtCom.setText("");
+        txtDair.setText("");
+        txtLastName.setText("");
+        txtLevel.setText("");
+        txtNumCrd.setText("");
+        txtname.setText("");
     }
-    
+
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
         ClearTxtField();
         FilterResidentMlt(txtname, txtLastName, txtBirthplace, txtCom,
-                          txtNumCrd,txtDair,txtBranch,txtLevel,
-                          txtBacYear,txtCase,txtChambre,  
+                txtNumCrd, txtDair, txtBranch, txtLevel,
+                txtBacYear, txtCase, txtChambre,
                 jTable2, df);
-        counStd.setText(jTable2.getRowCount()+"");
+        counStd.setText(jTable2.getRowCount() + "");
     }//GEN-LAST:event_jLabel1MouseClicked
 
     private void bacYearListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_bacYearListValueChanged
@@ -1262,616 +1312,663 @@ rom.FillComboboxRooms(RomPvinPanInf, Pavilion.getSelectedValue());
     }//GEN-LAST:event_bacYearListValueChanged
 
     private void CheckBacYearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CheckBacYearActionPerformed
-        Dispay_hide_panState(CheckBacYear, PanBacYear,bacYearList);
+        Dispay_hide_panState(CheckBacYear, PanBacYear, bacYearList);
     }//GEN-LAST:event_CheckBacYearActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-         try {
-           this.GetDataWithMultMethod(1);
-       } catch (IOException ex) {
-           Logger.getLogger(Advanced_prp.class.getName()).log(Level.SEVERE, null, ex);
-       }
+        try {
+            this.GetDataWithMultMethod(1);
+        } catch (IOException ex) {
+            Logger.getLogger(Advanced_prp.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    
-  public void FillTableCommune_Jlist(String Wly,JList list){
-    
-    //dfm=(DefaultTableModel)jTable2.getModel();
-    String Query="SELECT * FROM Commune,Wilaya where Commune.ID_Wilaya=Wilaya.ID_Wilaya "
-            + " AND Wilaya.NameWilaya=N'"+Wly+"' ;";
-    
-    Statement stm=null;
-    ResultSet Res=null;
-    /**********************************************************/
-    
-    DefaultListModel listModel = new DefaultListModel();
-     listModel.removeAllElements();
+    public void FillTableCommune_Jlist(String Wly, JList list) {
+
+        //dfm=(DefaultTableModel)jTable2.getModel();
+        String Query = "SELECT * FROM Commune,Wilaya where Commune.ID_Wilaya=Wilaya.ID_Wilaya "
+                + " AND Wilaya.NameWilaya=N'" + Wly + "' ;";
+
+        Statement stm = null;
+        ResultSet Res = null;
+        /**
+         * *******************************************************
+         */
+
+        DefaultListModel listModel = new DefaultListModel();
+        listModel.removeAllElements();
 //       listModel= list.;
 //        listModel.removeAllElements();
         cnx.Connecting();
         try {
-            stm=cnx.getConnect().createStatement();
-            Res=stm.executeQuery(Query);
-            
-            while (Res.next()){
-               listModel.addElement(Res.getString("Commune_Ar"));
+            stm = cnx.getConnect().createStatement();
+            Res = stm.executeQuery(Query);
+
+            while (Res.next()) {
+                listModel.addElement(Res.getString("Commune_Ar"));
             }
             list.setModel(listModel);
-     }catch(SQLException e){
-        JOptionPane.showMessageDialog(null, "Error In Fill Table Of managers "+e.getMessage());
-    }
-    /******************************************************/
-   try {
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error In Fill Table Of managers " + e.getMessage());
+        }
+        /**
+         * ***************************************************
+         */
+        try {
             stm.close();
             Res.close();
             cnx.Deconnect();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error In Close Statement"+e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error In Close Statement" + e.getMessage());
         }
-  }
-    
+    }
+
     private void NameWilayaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NameWilayaActionPerformed
-        FillTableCommune_Jlist((String)NameWilaya.getSelectedItem(),Name_Commune);
+        FillTableCommune_Jlist((String) NameWilaya.getSelectedItem(), Name_Commune);
     }//GEN-LAST:event_NameWilayaActionPerformed
 
     private void formComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentHidden
-       
+
         this.cnf.h.CloseAdvancedprp();
         //this.cnf.h.F.setVisible(true);
         //JOptionPane.showMessageDialog(null, "Hidden Compenet Test");
     }//GEN-LAST:event_formComponentHidden
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-       try {
-           JasperReport jasperreport;
-           InputStream file=getClass().getResourceAsStream("/Reports/Form_Student_Information.jrxml");
-           JasperDesign jasperdesign=JRXmlLoader.load(file);
-               
-         jasperreport=JasperCompileManager.compileReport(jasperdesign);
-        /*  Connection Cnx1;
+        try {
+            JasperReport jasperreport;
+            InputStream file = getClass().getResourceAsStream("/Reports/Form_Student_Information.jrxml");
+            JasperDesign jasperdesign = JRXmlLoader.load(file);
+
+            jasperreport = JasperCompileManager.compileReport(jasperdesign);
+            /*  Connection Cnx1;
          cnx.Connecting();
         Cnx1 =cnx.getConnect();*/
-        JasperPrint jasperprint=JasperFillManager.fillReport(jasperreport,null,new JREmptyDataSource());
-        // jp=JasperFillManager.fillReport(jr, parametres, cnx.getConnect());
-           JasperViewer JspViewr=new JasperViewer(jasperprint, false);
-              JspViewr.viewReport(jasperprint,false);
-       } catch (JRException ex) {
-           Logger.getLogger(Advanced_prp.class.getName()).log(Level.SEVERE, null, ex);
-       }
+            JasperPrint jasperprint = JasperFillManager.fillReport(jasperreport, null, new JREmptyDataSource());
+            // jp=JasperFillManager.fillReport(jr, parametres, cnx.getConnect());
+            JasperViewer JspViewr = new JasperViewer(jasperprint, false);
+            JspViewr.viewReport(jasperprint, false);
+        } catch (JRException ex) {
+            Logger.getLogger(Advanced_prp.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton5ActionPerformed
-/************/
-    
-    public void TestCard_Pavillon_Mult_Choice(String pav){
-     try {
-String Query1="SELECT  Name_Resident,LastName_Resident,Name_ResidentFr,LastName_ResidentFr,imageStd,CodeBare_Resident,\n" +
-"NumCard_Resident,DateBirth,PlaceBirth,PlaceBirthFr,\n" +
-"Name_Father,FullName_Mother,LastNamMothAR,Name_FatherFr,Name_MotherFr,\n" +
-"LastName_MotheFr,Num_InscritBac,DateInscrp,BacMoyen,PlaceGetBac,\n" +
-"BacYear,SituationFamily,Name_Daira,\n" +
-"Name_Commune,NameWilaya,Address,ProfessionMother,\n" +
-"ProfessionFather,Branch_Study.BranchStd_Name,Branch_Study.branch_code,\n" +
-"Branch_Study.BranchStd_NameFr,Nationalite,Nationalite_Fr,NameFact,DescriptionLevel,\n" +
-"Level_study,Room_Code,Resident_Case,Wilaya.NumWilaya,\n" +
-"Resident_Gl.ID_gender\n" +
-"FROM Resident_Gl,Student_Res,Nationalite,Branch_Study,Faculty,Level_Study,Room,Wilaya,\n" +
-"Resident_Case,Gender,Pavilion \n" +
-"WHERE Student_Res.Id_Nationalite=Nationalite.Id_Nationalite  \n" +
-"AND Student_Res.Id_BranchStd=Branch_Study.Id_BranchStd  \n" +
-"AND Student_Res.ID_Wilaya=Wilaya.ID_Wilaya  \n" +
-"AND Student_Res.Id_Faculty=Faculty.Id_Faculty \n" +
-"AND Gender.ID_gender=Resident_Gl.ID_gender\n" +
-"AND Student_Res.Id_LevelStudy=Level_Study.Id_LevelStudy \n" +
-"AND Student_Res.Id_Room=Room.Id_Room \n" +
-"AND Room.ID_Pavilion=Pavilion.ID_Pavilion\n" +
-"AND Resident_Gl.ID_Rsident=Student_Res.ID_Rsident \n" +
-"AND Resident_Gl.ID_Case_Resident=Resident_Case.ID_Case_Resident   \n" +
-"AND Resident_Gl.Id_Ptrn_Res=1 " ;
-/*****************************************/
- List<String> list=null;
-/*****************************************************************/    
-        if (CheckCase.isSelected()) {
-            String Cond=" ";
-            
-            if (Resident_Case.getSelectedIndex()==-1) {
-             Query1+=" ";   
-            }else{
-                list= Resident_Case.getSelectedValuesList();
-             Cond=" AND Resident_Case.Resident_Case in( ";
-                
-              int sizeList=list.size();
-            for (int i=0; i<sizeList; i++) {
-               
-                if (i<sizeList-1) {
-                   Cond+="N'"+list.get(i)+"', ";  //when selected first elements in list 
-                }else 
-                Cond+="N'"+list.get(i)+"' ";     //when 
+    /**
+     * *********
+     */
+
+    public void TestCard_Pavillon_Mult_Choice(String pav) {
+        try {
+            String Query1 = "SELECT  Name_Resident,LastName_Resident,Name_ResidentFr,LastName_ResidentFr,imageStd,CodeBare_Resident,\n"
+                    + "NumCard_Resident,DateBirth,PlaceBirth,PlaceBirthFr,\n"
+                    + "Name_Father,FullName_Mother,LastNamMothAR,Name_FatherFr,Name_MotherFr,\n"
+                    + "LastName_MotheFr,Num_InscritBac,DateInscrp,BacMoyen,PlaceGetBac,\n"
+                    + "BacYear,SituationFamily,Name_Daira,\n"
+                    + "Name_Commune,NameWilaya,Address,ProfessionMother,\n"
+                    + "ProfessionFather,Branch_Study.BranchStd_Name,Branch_Study.branch_code,\n"
+                    + "Branch_Study.BranchStd_NameFr,Nationalite,Nationalite_Fr,NameFact,DescriptionLevel,\n"
+                    + "Level_study,Room_Code,Resident_Case,Wilaya.NumWilaya,\n"
+                    + "Resident_Gl.ID_gender\n"
+                    + "FROM Resident_Gl,Student_Res,Nationalite,Branch_Study,Faculty,Level_Study,Room,Wilaya,\n"
+                    + "Resident_Case,Gender,Pavilion \n"
+                    + "WHERE Student_Res.Id_Nationalite=Nationalite.Id_Nationalite  \n"
+                    + "AND Student_Res.Id_BranchStd=Branch_Study.Id_BranchStd  \n"
+                    + "AND Student_Res.ID_Wilaya=Wilaya.ID_Wilaya  \n"
+                    + "AND Student_Res.Id_Faculty=Faculty.Id_Faculty \n"
+                    + "AND Gender.ID_gender=Resident_Gl.ID_gender\n"
+                    + "AND Student_Res.Id_LevelStudy=Level_Study.Id_LevelStudy \n"
+                    + "AND Student_Res.Id_Room=Room.Id_Room \n"
+                    + "AND Room.ID_Pavilion=Pavilion.ID_Pavilion\n"
+                    + "AND Resident_Gl.ID_Rsident=Student_Res.ID_Rsident \n"
+                    + "AND Resident_Gl.ID_Case_Resident=Resident_Case.ID_Case_Resident   \n"
+                    + "AND Resident_Gl.Id_Ptrn_Res=1 ";
+            /**
+             * **************************************
+             */
+            List<String> list = null;
+            /**
+             * **************************************************************
+             */
+            if (CheckCase.isSelected()) {
+                String Cond = " ";
+
+                if (Resident_Case.getSelectedIndex() == -1) {
+                    Query1 += " ";
+                } else {
+                    list = Resident_Case.getSelectedValuesList();
+                    Cond = " AND Resident_Case.Resident_Case in( ";
+
+                    int sizeList = list.size();
+                    for (int i = 0; i < sizeList; i++) {
+
+                        if (i < sizeList - 1) {
+                            Cond += "N'" + list.get(i) + "', ";  //when selected first elements in list 
+                        } else {
+                            Cond += "N'" + list.get(i) + "' ";     //when 
+                        }
+                    }
+                    Cond += " ) ";
+                }
+                Query1 += Cond;
             }
-            Cond+=" ) ";
+            /**
+             * ********************************************************
+             */
+            if (CheckBranch.isSelected()) {
+                String Cond = " ";
+                if (Branch_Study.getSelectedIndex() == -1) {
+                    Query1 += " ";
+                } else {
+                    list = Branch_Study.getSelectedValuesList();
+                    Cond = " AND Branch_Study.BranchStd_Name in( ";
+                    int sizeList = list.size();
+                    for (int i = 0; i < sizeList; i++) {
+                        if (i < sizeList - 1) {
+                            Cond += "N'" + list.get(i) + "', ";  //when selected first elements in list 
+                        } else {
+                            Cond += "N'" + list.get(i) + "' ";     //when 
+                        }
+                    }
+                    Cond += " ) ";
+                }
+                Query1 += Cond;
             }
-            Query1+=Cond;
+            /**
+             * *********************************************************
+             */
+            if (CheckLevel.isSelected()) {
+                String Cond = " ";
+                if (Level_Study.getSelectedIndex() == -1) {
+                    Query1 += " ";
+                } else {
+                    list = Level_Study.getSelectedValuesList();
+                    Cond = " AND Level_Study.DescriptionLevel in( ";
+
+                    int sizeList = list.size();
+                    for (int i = 0; i < sizeList; i++) {
+                        if (i < sizeList - 1) {
+                            Cond += "N'" + list.get(i) + "', ";  //when selected first elements in list 
+                        } else {
+                            Cond += "N'" + list.get(i) + "' ";     //when 
+                        }
+                    }
+                    Cond += " ) ";
+                }
+                Query1 += Cond;
+            }
+            /**
+             * *******************************************************************
+             */
+
+            if (CheckBacYear.isSelected()) {
+                String Cond = " ";
+                if (bacYearList.getSelectedIndex() == -1) {
+                    Query1 += " ";
+                } else {
+                    list = bacYearList.getSelectedValuesList();
+                    Cond = " AND Student_Res.BacYear in( ";
+
+                    int sizeList = list.size();
+
+                    int year = 0;
+                    for (int i = 0; i < sizeList; i++) {
+
+                        //JOptionPane.showMessageDialog(null, "The Year is :"+list.get(i));
+                        year = Integer.parseInt(list.get(i));
+
+                        //  JOptionPane.showMessageDialog(null, "The Year is :"+year);
+                        if (i < sizeList - 1) {
+
+                            Cond += " " + year + ", ";  //when selected first elements in list 
+                        } else {
+                            Cond += " " + year + " ";     //when 
+                        }
+                    }
+                    Cond += " ) ";
+                }
+                Query1 += Cond;
+            }
+            /**
+             * ********************************************************************
+             */
+            if (CheckCommune.isSelected()) {
+                String Cond = " ";
+                if (Name_Commune.getSelectedIndex() == -1) {
+                    Query1 += " ";
+
+                } else {
+                    list = Name_Commune.getSelectedValuesList();
+                    Cond = " AND Student_Res.Name_Commune in( ";
+                    int sizeList = list.size();
+                    for (int i = 0; i < sizeList; i++) {
+                        if (i < sizeList - 1) {
+                            Cond += "N'" + list.get(i) + "', ";  //when selected first elements in list 
+                        } else {
+                            Cond += "N'" + list.get(i) + "' ";     //when 
+                        }
+                    }
+                    Cond += " ) ";
+                }
+                Query1 += Cond;
+            }
+            /**
+             * *******************************************************************
+             */
+            if (CheckWilaya.isSelected()) {
+                String Cond = " ";
+                if (wilaya_List.getSelectedIndex() == -1) {
+                    Query1 += " ";
+                } else {
+                    list = wilaya_List.getSelectedValuesList();
+                    Cond = " AND Wilaya.NameWilaya in( ";
+                    int sizeList = list.size();
+                    for (int i = 0; i < sizeList; i++) {
+                        if (i < sizeList - 1) {
+                            Cond += "N'" + list.get(i) + "', ";  //when selected first elements in list 
+                        } else {
+                            Cond += "N'" + list.get(i) + "' ";     //when 
+                        }
+                    }
+                    Cond += " ) ";
+                }
+                Query1 += Cond;
+            }
+            /**
+             * ********************************************************************
+             */
+            if (CheckDaira.isSelected()) {
+                String Cond = " ";
+                if (Name_Daira.getSelectedIndex() == -1) {
+                    Query1 += " ";
+                } else {
+                    list = Name_Daira.getSelectedValuesList();
+                    Cond = " AND Student_Res.Name_Daira in( ";
+                    int sizeList = list.size();
+                    for (int i = 0; i < sizeList; i++) {
+                        if (i < sizeList - 1) {
+                            Cond += "N'" + list.get(i) + "', ";  //when selected first elements in list 
+                        } else {
+                            Cond += "N'" + list.get(i) + "' ";     //when 
+                        }
+                    }
+                    Cond += " ) ";
+                }
+                Query1 += Cond;
+            }
+            /**
+             * *********************************************************************
+             */
+            if (CheckBloc.isSelected()) {
+                String Cond = " ";
+                if (Pavilion.getSelectedIndex() == -1) {
+                    Query1 += " ";
+                } else {
+                    list = Pavilion.getSelectedValuesList();
+                    Cond = " AND Pavilion.Pavilion_Name in( ";
+                    int sizeList = list.size();
+                    for (int i = 0; i < sizeList; i++) {
+                        if (i < sizeList - 1) {
+                            Cond += "'" + list.get(i) + "', ";  //when selected first elements in list 
+                        } else {
+                            Cond += "'" + list.get(i) + "' ";     //when 
+                        }
+                    }
+                    Cond += " ) ";
+                }
+                Query1 += Cond;
+            }
+            /**
+             * **********************************************************************
+             */
+            if (CheckRoom.isSelected()) {
+
+                String Cond = " ";
+
+                if (RomPvinPanInf.getSelectedIndex() == -1) {
+                    Query1 += " ";
+                } else {
+
+                    String romNam = " ";
+                    romNam = (String) RomPvinPanInf.getSelectedItem();
+                    Cond += " AND Room.Room_Code = '" + romNam + "' ";
+                }
+                Query1 += Cond;
+            }
+            /**
+             * **************************************
+             */
+
+            JasperReport jasperreport;
+            // InputStream file=getClass().getResourceAsStream("/Reports/CardResident.jrxml");
+            InputStream file = getClass().getResourceAsStream("/Reports/NewReportCard_1_1.jrxml");
+            //NewReportCard
+            JasperDesign jasperdesign = JRXmlLoader.load(file);
+            JRDesignQuery newQuery = new JRDesignQuery();
+            newQuery.setText(Query1);
+            jasperdesign.setQuery(newQuery);
+            jasperreport = JasperCompileManager.compileReport(jasperdesign);
+            //JasperPrint jasperprint=JasperFillManager.fillReport(jasperreport,parametres, Cnx1);
+            this.cnx.Connecting();
+            Connection cnxt = this.cnx.getConnect();
+            JasperPrint jasperprint = JasperFillManager.fillReport(jasperreport, null, cnxt);
+
+            JasperViewer JspViewr = new JasperViewer(jasperprint, false);
+            JspViewr.viewReport(jasperprint, false);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
- /***********************************************************/       
-        if (CheckBranch.isSelected())
-        {
-              String Cond=" ";
-             if (Branch_Study.getSelectedIndex()==-1) {
-             Query1+=" ";   
-            }else{
-                 list= Branch_Study.getSelectedValuesList();
-                 Cond=" AND Branch_Study.BranchStd_Name in( ";
-            int sizeList=list.size();
-            for (int i=0; i<sizeList; i++) {
-               if (i<sizeList-1) {
-                   Cond+="N'"+list.get(i)+"', ";  //when selected first elements in list 
-                }else 
-                Cond+="N'"+list.get(i)+"' ";     //when 
-            }
-            Cond+=" ) ";
-            }
-              Query1+=Cond; 
-        }
-/************************************************************/        
-         if (CheckLevel.isSelected())
-        {
-            String Cond=" ";
-             if (Level_Study.getSelectedIndex()==-1) {
-             Query1+=" ";   
-            }else{
-             list= Level_Study.getSelectedValuesList();
-             Cond=" AND Level_Study.DescriptionLevel in( ";     
-                 
-            int sizeList=list.size();
-            for (int i=0; i<sizeList; i++) {
-               if (i<sizeList-1) {
-                   Cond+="N'"+list.get(i)+"', ";  //when selected first elements in list 
-                }else 
-                Cond+="N'"+list.get(i)+"' ";     //when 
-            }
-            Cond+=" ) ";
-            }
-              Query1+=Cond; 
-        }
-/**********************************************************************/        
-        
-             if (CheckBacYear.isSelected())
-        {
-            String Cond=" ";
-             if (bacYearList.getSelectedIndex()==-1) {
-             Query1+=" ";   
-            }else{
-             list= bacYearList.getSelectedValuesList();
-             Cond=" AND Student_Res.BacYear in( ";    
-                 
-            int sizeList=list.size();
-            
-            int year=0;
-            for (int i=0; i<sizeList; i++) {
-                
-                 //JOptionPane.showMessageDialog(null, "The Year is :"+list.get(i));
-                
-                 year=Integer.parseInt(list.get(i));
-                 
-               //  JOptionPane.showMessageDialog(null, "The Year is :"+year);
-               if (i<sizeList-1) {
-                  
-                   Cond+=" "+year+", ";  //when selected first elements in list 
-                }else 
-                Cond+=" "+year+" ";     //when 
-            }
-            Cond+=" ) ";
-            }
-              Query1+=Cond; 
-        }
-/***********************************************************************/
-             if (CheckCommune.isSelected())
-        {
-             String Cond=" ";
-             if (Name_Commune.getSelectedIndex()==-1) {
-             Query1+=" ";  
-             
-            }else{
-             list= Name_Commune.getSelectedValuesList();
-             Cond=" AND Student_Res.Name_Commune in( ";
-            int sizeList=list.size();
-            for (int i=0; i<sizeList; i++) {
-               if (i<sizeList-1) {
-                   Cond+="N'"+list.get(i)+"', ";  //when selected first elements in list 
-                }else 
-                Cond+="N'"+list.get(i)+"' ";     //when 
-            }
-            Cond+=" ) ";
-            }
-              Query1+=Cond; 
-        }
-/**********************************************************************/
-      if (CheckWilaya.isSelected())
-        {
-             String Cond=" ";
-             if (wilaya_List.getSelectedIndex()==-1) {
-             Query1+=" ";   
-            }else{
-             list= wilaya_List.getSelectedValuesList();
-             Cond=" AND Wilaya.NameWilaya in( ";    
-            int sizeList=list.size();
-            for (int i=0; i<sizeList; i++) {
-               if (i<sizeList-1) {
-                   Cond+="N'"+list.get(i)+"', ";  //when selected first elements in list 
-                }else 
-                Cond+="N'"+list.get(i)+"' ";     //when 
-            }
-            Cond+=" ) ";
-            }
-              Query1+=Cond; 
-        }
-/***********************************************************************/
-    if ( CheckDaira.isSelected())
-        {
-             String Cond=" ";
-             if (Name_Daira.getSelectedIndex()==-1) {
-             Query1+=" ";   
-            }else{
-              list= Name_Daira.getSelectedValuesList();
-             Cond=" AND Student_Res.Name_Daira in( ";   
-            int sizeList=list.size();
-            for (int i=0; i<sizeList; i++) {
-               if (i<sizeList-1) {
-                   Cond+="N'"+list.get(i)+"', ";  //when selected first elements in list 
-                }else 
-                Cond+="N'"+list.get(i)+"' ";     //when 
-            }
-            Cond+=" ) ";
-            }
-              Query1+=Cond; 
-        }
-/************************************************************************/
-if ( CheckBloc.isSelected())
-        {
-             String Cond=" ";
-             if (Pavilion.getSelectedIndex()==-1) {
-             Query1+=" ";   
-            }else{
-            list= Pavilion.getSelectedValuesList();
-            Cond=" AND Pavilion.Pavilion_Name in( ";     
-            int sizeList=list.size();
-            for (int i=0; i<sizeList; i++) {
-               if (i<sizeList-1) {
-                   Cond+="'"+list.get(i)+"', ";  //when selected first elements in list 
-                }else 
-                Cond+="'"+list.get(i)+"' ";     //when 
-            }
-            Cond+=" ) ";
-            }
-              Query1+=Cond; 
-        }
-/*************************************************************************/
-        if (CheckRoom.isSelected()) {
-           
-            String Cond=" ";
-            
-             if (RomPvinPanInf.getSelectedIndex()==-1) {
-             Query1+=" ";   
-            }else{
-                 
-            String   romNam=" ";
-            romNam = (String) RomPvinPanInf.getSelectedItem();
-            Cond+=" AND Room.Room_Code = '"+romNam+"' ";
-            }
-             Query1+=Cond; 
-        }
-/*****************************************/
-                      
-              JasperReport jasperreport;          
-          // InputStream file=getClass().getResourceAsStream("/Reports/CardResident.jrxml");
-            InputStream file=getClass().getResourceAsStream("/Reports/NewReportCard_1_1.jrxml");
-           //NewReportCard
-            JasperDesign jasperdesign=JRXmlLoader.load(file);
-           JRDesignQuery newQuery=new JRDesignQuery();
-           newQuery.setText(Query1);
-           jasperdesign.setQuery(newQuery);
-           jasperreport=JasperCompileManager.compileReport(jasperdesign);
-           //JasperPrint jasperprint=JasperFillManager.fillReport(jasperreport,parametres, Cnx1);
-           this.cnx.Connecting();
-           Connection cnxt=this.cnx.getConnect();
-           JasperPrint jasperprint=JasperFillManager.fillReport(jasperreport,null,cnxt);
-           
-            JasperViewer JspViewr=new JasperViewer(jasperprint, false);
-              JspViewr.viewReport(jasperprint,false);
-    } catch (Exception e) {
-        e.printStackTrace();
     }
-}
-/*******************/
+
+    /**
+     * ****************
+     */
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         TestCard_Pavillon_Mult_Choice("");
     }//GEN-LAST:event_jButton4ActionPerformed
-private static void writeToExcell(JTable table,DefaultTableModel model) throws FileNotFoundException, IOException {
-       WorkbookFactory workbookFactory = new WorkbookFactory();
-    Workbook wb = new XSSFWorkbook(); //Excell workbook
-    Sheet sheet = wb.createSheet(); //WorkSheet
-    Row row = sheet.createRow(2); //Row created at line 3
-   // TableModel model = table.getModel(); //Table model
-    
+    private static void writeToExcell(JTable table, DefaultTableModel model) throws FileNotFoundException, IOException {
+        WorkbookFactory workbookFactory = new WorkbookFactory();
+        Workbook wb = new XSSFWorkbook(); //Excell workbook
+        Sheet sheet = wb.createSheet(); //WorkSheet
+        Row row = sheet.createRow(2); //Row created at line 3
+        // TableModel model = table.getModel(); //Table model
 
-    Row headerRow = sheet.createRow(0); //Create row at line 0
-    for(int headings = 0; headings < model.getColumnCount(); headings++){ //For each column
-        headerRow.createCell(headings).setCellValue(model.getColumnName(headings));//Write column name
-    }
-
-    for(int rows = 0; rows < table.getRowCount(); rows++){ //For each table row
-        for(int cols = 0; cols < table.getColumnCount(); cols++){ //For each table column
-            row.createCell(cols).setCellValue(table.getValueAt(rows, cols).toString()); //Write value
+        Row headerRow = sheet.createRow(0); //Create row at line 0
+        for (int headings = 0; headings < model.getColumnCount(); headings++) { //For each column
+            headerRow.createCell(headings).setCellValue(model.getColumnName(headings));//Write column name
         }
 
-        //Set the row to the next one in the sequence 
-        row = sheet.createRow((rows + 3)); 
+        for (int rows = 0; rows < table.getRowCount(); rows++) { //For each table row
+            for (int cols = 0; cols < table.getColumnCount(); cols++) { //For each table column
+                row.createCell(cols).setCellValue(table.getValueAt(rows, cols).toString()); //Write value
+            }
+
+            //Set the row to the next one in the sequence 
+            row = sheet.createRow((rows + 3));
+        }
+        wb.write(new FileOutputStream("D:\\List_Etudiants.xlsx"));//Save the file     
     }
-    wb.write(new FileOutputStream("D:\\List_Etudiants.xlsx"));//Save the file     
-}
-    
-    public void Dispay_hide_panState(JCheckBox ch,JPanel pan,JList lst){
-      if (ch.isSelected()) 
+
+    public void Dispay_hide_panState(JCheckBox ch, JPanel pan, JList lst) {
+        if (ch.isSelected()) {
             pan.setVisible(true);
-      else{ pan.setVisible(false);
-      lst.clearSelection();
-      }
-    }
-    
-    public void GetDataWithMultMethod(int choice) throws IOException{
-    
-    String Query1;
-        if (choice ==0) {
-            Query1 = "SELECT distinct Name_Resident,LastName_Resident,Name_ResidentFr,LastName_ResidentFr,NumCard_Resident,DateBirth,PlaceBirth,PlaceBirthFr,\n" +
-               "Name_Father,FullName_Mother,LastNamMothAR,Name_FatherFr,Name_MotherFr,LastName_MotheFr,Num_InscritBac,DateInscrp,PlaceGetBac,\n" +
-               "BacYear,BacMoyen,SituationFamily,Name_Daira,Name_Commune,NameWilaya,Address,ProfessionMother,ProfessionFather,\n" +
-               "Nationalite,Nationalite_Fr,BranchStd_Name,BranchStd_NameFr,NameFact,DescriptionLevel,Level_study,Room_Code,Resident_Case ,Branch_Study.branch_code, \n" +
-               "Branch_Study.domaine_Code,Branch_Study.domaine_Label,Branch_Study.domaine_Label_ar \n"+     
-                    
-               "FROM Resident_Gl,Student_Res,Nationalite,Branch_Study,Faculty,Level_Study,Room,Wilaya,Resident_Case \n" +
-               "WHERE \n" +
-                    
-               "Student_Res.Id_Nationalite=Nationalite.Id_Nationalite \n" +
-               "AND Student_Res.Id_BranchStd=Branch_Study.Id_BranchStd \n" +
-               "AND Student_Res.ID_Wilaya=Wilaya.ID_Wilaya \n" +
-               "\n" +
-               "AND Student_Res.Id_Faculty=Faculty.Id_Faculty \n" +
-               "AND Student_Res.Id_LevelStudy=Level_Study.Id_LevelStudy \n" +
-               "AND Student_Res.Id_Room=Room.Id_Room \n" +  /*"AND Room.ID_Pavilion =Pavilion.ID_Pavilion \n"+*/
-               "AND Resident_Gl.ID_Rsident=Student_Res.ID_Rsident \n" +
-               "AND Resident_Gl.ID_Case_Resident=Resident_Case.ID_Case_Resident \n"+
-               "AND Resident_Gl.Id_Ptrn_Res=1 ";
-                                                
-                // GENDER NOT GETED IN THIS QUERY
-            
-            
-        }else
-        {
-/**
- legacy code
-"FROM Resident_Gl,Student_Res,Nationalite,Branch_Study,Faculty,Level_Study,Room,Wilaya,Resident_Case,Commune,Pavilion,Gender \n" +     //,Pavilion.Pavilion_Name
- **/
-            
-        Query1="SELECT distinct Name_Resident,LastName_Resident,Name_ResidentFr,LastName_ResidentFr,NumCard_Resident,DateBirth,PlaceBirth,PlaceBirthFr, \n" +
-"Name_Father,FullName_Mother,LastNamMothAR,Name_FatherFr,Name_MotherFr,LastName_MotheFr,Num_InscritBac,DateInscrp,BacMoyen,PlaceGetBac,\n" +
-"BacYear,SituationFamily,Name_Daira,Name_Commune,NameWilaya,Address,ProfessionMother,ProfessionFather,Branch_Study.BranchStd_Name,Branch_Study.branch_code,Branch_Study.BranchStd_NameFr, \n" +
-"Nationalite,Nationalite_Fr,NameFact,DescriptionLevel,Level_study,Room_Code,Resident_Case,Wilaya.NumWilaya,Resident_Gl.ID_gender\n" +
-"FROM Resident_Gl,Student_Res,Nationalite,Branch_Study,Faculty,Level_Study,Room,Wilaya,Resident_Case,Gender \n" +     //,Pavilion.Pavilion_Name
-
-"WHERE  \n" +
-"Student_Res.Id_Nationalite = Nationalite.Id_Nationalite  \n" +
-"AND Student_Res.Id_BranchStd = Branch_Study.Id_BranchStd  \n" +
-"AND Student_Res.ID_Wilaya = Wilaya.ID_Wilaya  \n" +
-"AND Student_Res.Id_Faculty=Faculty.Id_Faculty \n" +
-"AND Gender.ID_gender=Resident_Gl.ID_gender\n" +
-"AND Student_Res.Id_LevelStudy=Level_Study.Id_LevelStudy \n" +
-"AND Student_Res.Id_Room=Room.Id_Room \n" +
-"AND Resident_Gl.ID_Rsident=Student_Res.ID_Rsident        \n" +
-//"AND Pavilion.ID_Pavilion=Room.ID_Pavilion \n" +
-"AND Resident_Gl.ID_Case_Resident=Resident_Case.ID_Case_Resident    \n" +
-"AND Resident_Gl.Id_Ptrn_Res=1  \n";
+        } else {
+            pan.setVisible(false);
+            lst.clearSelection();
         }
-       
-     List<String> list;
-/*****************************************************************/    
+    }
+
+    public void GetDataWithMultMethod(int choice) throws IOException {
+
+        String Query1;
+        if (choice == 0) {
+            Query1 = "SELECT distinct Name_Resident,LastName_Resident,Name_ResidentFr,LastName_ResidentFr,NumCard_Resident,DateBirth,PlaceBirth,PlaceBirthFr,\n"
+                    + "Name_Father,FullName_Mother,LastNamMothAR,Name_FatherFr,Name_MotherFr,LastName_MotheFr,Num_InscritBac,DateInscrp,PlaceGetBac,\n"
+                    + "BacYear,BacMoyen,SituationFamily,Name_Daira,Name_Commune,NameWilaya,Address,ProfessionMother,ProfessionFather,\n"
+                    + "Nationalite,Nationalite_Fr,BranchStd_Name,BranchStd_NameFr,NameFact,DescriptionLevel,Level_study,Room_Code,Resident_Case ,Branch_Study.branch_code, \n"
+                    + "Branch_Study.domaine_Code,Branch_Study.domaine_Label,Branch_Study.domaine_Label_ar \n"
+                    + "FROM Resident_Gl,Student_Res,Nationalite,Branch_Study,Faculty,Level_Study,Room,Wilaya,Resident_Case \n"
+                    + "WHERE \n"
+                    + "Student_Res.Id_Nationalite=Nationalite.Id_Nationalite \n"
+                    + "AND Student_Res.Id_BranchStd=Branch_Study.Id_BranchStd \n"
+                    + "AND Student_Res.ID_Wilaya=Wilaya.ID_Wilaya \n"
+                    + "\n"
+                    + "AND Student_Res.Id_Faculty=Faculty.Id_Faculty \n"
+                    + "AND Student_Res.Id_LevelStudy=Level_Study.Id_LevelStudy \n"
+                    + "AND Student_Res.Id_Room=Room.Id_Room \n"
+                    + /*"AND Room.ID_Pavilion =Pavilion.ID_Pavilion \n"+*/ "AND Resident_Gl.ID_Rsident=Student_Res.ID_Rsident \n"
+                    + "AND Resident_Gl.ID_Case_Resident=Resident_Case.ID_Case_Resident \n"
+                    + "AND Resident_Gl.Id_Ptrn_Res=1 ";
+
+            // GENDER NOT GETED IN THIS QUERY
+        } else {
+            /**
+             * legacy code "FROM
+             * Resident_Gl,Student_Res,Nationalite,Branch_Study,Faculty,Level_Study,Room,Wilaya,Resident_Case,Commune,Pavilion,Gender
+             * \n" + //,Pavilion.Pavilion_Name
+ *
+             */
+
+            Query1 = "SELECT distinct Name_Resident,LastName_Resident,Name_ResidentFr,LastName_ResidentFr,NumCard_Resident,DateBirth,PlaceBirth,PlaceBirthFr, \n"
+                    + "Name_Father,FullName_Mother,LastNamMothAR,Name_FatherFr,Name_MotherFr,LastName_MotheFr,Num_InscritBac,DateInscrp,BacMoyen,PlaceGetBac,\n"
+                    + "BacYear,SituationFamily,Name_Daira,Name_Commune,NameWilaya,Address,ProfessionMother,ProfessionFather,Branch_Study.BranchStd_Name,Branch_Study.branch_code,Branch_Study.BranchStd_NameFr, \n"
+                    + "Nationalite,Nationalite_Fr,NameFact,DescriptionLevel,Level_study,Room_Code,Resident_Case,Wilaya.NumWilaya,Resident_Gl.ID_gender\n"
+                    + "FROM Resident_Gl,Student_Res,Nationalite,Branch_Study,Faculty,Level_Study,Room,Wilaya,Resident_Case,Gender \n"
+                    + //,Pavilion.Pavilion_Name
+                    "WHERE  \n"
+                    + "Student_Res.Id_Nationalite = Nationalite.Id_Nationalite  \n"
+                    + "AND Student_Res.Id_BranchStd = Branch_Study.Id_BranchStd  \n"
+                    + "AND Student_Res.ID_Wilaya = Wilaya.ID_Wilaya  \n"
+                    + "AND Student_Res.Id_Faculty=Faculty.Id_Faculty \n"
+                    + "AND Gender.ID_gender=Resident_Gl.ID_gender\n"
+                    + "AND Student_Res.Id_LevelStudy=Level_Study.Id_LevelStudy \n"
+                    + "AND Student_Res.Id_Room=Room.Id_Room \n"
+                    + "AND Resident_Gl.ID_Rsident=Student_Res.ID_Rsident        \n"
+                    + //"AND Pavilion.ID_Pavilion=Room.ID_Pavilion \n" +
+                    "AND Resident_Gl.ID_Case_Resident=Resident_Case.ID_Case_Resident    \n"
+                    + "AND Resident_Gl.Id_Ptrn_Res=1  \n";
+        }
+
+        List<String> list;
+        /**
+         * **************************************************************
+         */
         if (CheckCase.isSelected()) {
-            String Cond=" ";
-            
-            if (Resident_Case.getSelectedIndex()==-1) {
-             Query1+=" ";   
-            }else{
-                list= Resident_Case.getSelectedValuesList();
-             Cond=" AND Resident_Case.Resident_Case in( ";
-                
-              int sizeList=list.size();
-            for (int i=0; i<sizeList; i++) {
-               
-                if (i<sizeList-1) {
-                   Cond+="N'"+list.get(i)+"', ";  //when selected first elements in list 
-                }else 
-                Cond+="N'"+list.get(i)+"' ";     //when 
-            }
-            Cond+=" ) ";
-            }
-            Query1+=Cond;
-        }
- /***********************************************************/       
-        if (CheckBranch.isSelected())
-        {
-              String Cond=" ";
-             if (Branch_Study.getSelectedIndex()==-1) {
-             Query1+=" ";   
-            }else{
-                 list= Branch_Study.getSelectedValuesList();
-                 Cond=" AND Branch_Study.BranchStd_Name in( ";
-            int sizeList=list.size();
-            for (int i=0; i<sizeList; i++) {
-               if (i<sizeList-1) {
-                   Cond+="N'"+list.get(i)+"', ";  //when selected first elements in list 
-                }else 
-                Cond+="N'"+list.get(i)+"' ";     //when 
-            }
-            Cond+=" ) ";
-            }
-              Query1+=Cond; 
-        }
-/************************************************************/        
-         if (CheckLevel.isSelected())
-        {
-            String Cond=" ";
-             if (Level_Study.getSelectedIndex()==-1) {
-             Query1+=" ";   
-            }else{
-             list= Level_Study.getSelectedValuesList();
-             Cond=" AND Level_Study.DescriptionLevel in( ";     
-                 
-            int sizeList=list.size();
-            for (int i=0; i<sizeList; i++) {
-               if (i<sizeList-1) {
-                   Cond+="N'"+list.get(i)+"', ";  //when selected first elements in list 
-                }else 
-                Cond+="N'"+list.get(i)+"' ";     //when 
-            }
-            Cond+=" ) ";
-            }
-              Query1+=Cond; 
-        }
-/**********************************************************************/        
-        
-             if (CheckBacYear.isSelected())
-        {
-            String Cond=" ";
-             if (bacYearList.getSelectedIndex()==-1) {
-             Query1+=" ";   
-            }else{
-             list= bacYearList.getSelectedValuesList();
-             Cond=" AND Student_Res.BacYear in( ";    
-                 
-            int sizeList=list.size();
-            
-            int year=0;
-            for (int i=0; i<sizeList; i++) {
-                
-                 //JOptionPane.showMessageDialog(null, "The Year is :"+list.get(i));
-                
-                 year=Integer.parseInt(list.get(i));
-                 
-               //  JOptionPane.showMessageDialog(null, "The Year is :"+year);
-               if (i<sizeList-1) {
-                  
-                   Cond+=" "+year+", ";  //when selected first elements in list 
-                }else 
-                Cond+=" "+year+" ";     //when 
-            }
-            Cond+=" ) ";
-            }
-              Query1+=Cond; 
-        }
-/***********************************************************************/
-             if (CheckCommune.isSelected())
-        {
-             String Cond=" ";
-             if (Name_Commune.getSelectedIndex()==-1) {
-             Query1+=" ";  
-             
-            }else{
-             list= Name_Commune.getSelectedValuesList();
-             Cond=" AND Student_Res.Name_Commune in( ";
-            int sizeList=list.size();
-            for (int i=0; i<sizeList; i++) {
-               if (i<sizeList-1) {
-                   Cond+="N'"+list.get(i)+"', ";  //when selected first elements in list 
-                }else 
-                Cond+="N'"+list.get(i)+"' ";     //when 
-            }
-            Cond+=" ) ";
-            }
-              Query1+=Cond; 
-        }
-/**********************************************************************/
-      if (CheckWilaya.isSelected())
-        {
-             String Cond=" ";
-             if (wilaya_List.getSelectedIndex()==-1) {
-             Query1+=" ";   
-            }else{
-             list= wilaya_List.getSelectedValuesList();
-             Cond=" AND Wilaya.NameWilaya in( ";    
-            int sizeList=list.size();
-            for (int i=0; i<sizeList; i++) {
-               if (i<sizeList-1) {
-                   Cond+="N'"+list.get(i)+"', ";  //when selected first elements in list 
-                }else 
-                Cond+="N'"+list.get(i)+"' ";     //when 
-            }
-            Cond+=" ) ";
-            }
-              Query1+=Cond; 
-        }
-/***********************************************************************/
-    if ( CheckDaira.isSelected())
-        {
-             String Cond=" ";
-             if (Name_Daira.getSelectedIndex()==-1) {
-             Query1+=" ";   
-            }else{
-              list= Name_Daira.getSelectedValuesList();
-             Cond=" AND Student_Res.Name_Daira in( ";   
-            int sizeList=list.size();
-            for (int i=0; i<sizeList; i++) {
-               if (i<sizeList-1) {
-                   Cond+="N'"+list.get(i)+"', ";  //when selected first elements in list 
-                }else 
-                Cond+="N'"+list.get(i)+"' ";     //when 
-            }
-            Cond+=" ) ";
-            }
-              Query1+=Cond; 
-        }
-/************************************************************************/
-if ( CheckBloc.isSelected())
-        {
-             String Cond=" ";
-             if (Pavilion.getSelectedIndex()==-1) {
-             Query1+=" ";   
-            }else{
-            list= Pavilion.getSelectedValuesList();
-            Cond=" AND Pavilion.Pavilion_Name in( ";     
-            int sizeList=list.size();
-            for (int i=0; i<sizeList; i++) {
-               if (i<sizeList-1) {
-                   Cond+="'"+list.get(i)+"', ";  //when selected first elements in list 
-                }else 
-                Cond+="'"+list.get(i)+"' ";     //when 
-            }
-            Cond+=" ) ";
-            }
-              Query1+=Cond; 
-        }
-/*************************************************************************/
-        if (CheckRoom.isSelected()) {
-           
-            String Cond=" ";
-            
-             if (RomPvinPanInf.getSelectedIndex()==-1) {
-             Query1+=" ";   
-            }else{
-                 
-            String   romNam=" ";
-            romNam = (String) RomPvinPanInf.getSelectedItem();
-            Cond+=" AND Room.Room_Code = '"+romNam+"' ";
-            }
-             Query1+=Cond; 
-        }
-/*************************************************************************/
+            String Cond = " ";
 
-        Query1+=" order by Room.Room_Code ";
-        if (choice==0) {
-             ExportDataExce.Fill_FileExcel_StdNoCodeCommune(Query1);   // NOT GENDER 
-        }else {
-             ExportDataExce.Fill_FileExcel_Std2(Query1);    // WITH GENDER
+            if (Resident_Case.getSelectedIndex() == -1) {
+                Query1 += " ";
+            } else {
+                list = Resident_Case.getSelectedValuesList();
+                Cond = " AND Resident_Case.Resident_Case in( ";
+
+                int sizeList = list.size();
+                for (int i = 0; i < sizeList; i++) {
+
+                    if (i < sizeList - 1) {
+                        Cond += "N'" + list.get(i) + "', ";  //when selected first elements in list 
+                    } else {
+                        Cond += "N'" + list.get(i) + "' ";     //when 
+                    }
+                }
+                Cond += " ) ";
+            }
+            Query1 += Cond;
         }
-     
+        /**
+         * ********************************************************
+         */
+        if (CheckBranch.isSelected()) {
+            String Cond = " ";
+            if (Branch_Study.getSelectedIndex() == -1) {
+                Query1 += " ";
+            } else {
+                list = Branch_Study.getSelectedValuesList();
+                Cond = " AND Branch_Study.BranchStd_Name in( ";
+                int sizeList = list.size();
+                for (int i = 0; i < sizeList; i++) {
+                    if (i < sizeList - 1) {
+                        Cond += "N'" + list.get(i) + "', ";  //when selected first elements in list 
+                    } else {
+                        Cond += "N'" + list.get(i) + "' ";     //when 
+                    }
+                }
+                Cond += " ) ";
+            }
+            Query1 += Cond;
+        }
+        /**
+         * *********************************************************
+         */
+        if (CheckLevel.isSelected()) {
+            String Cond = " ";
+            if (Level_Study.getSelectedIndex() == -1) {
+                Query1 += " ";
+            } else {
+                list = Level_Study.getSelectedValuesList();
+                Cond = " AND Level_Study.DescriptionLevel in( ";
+
+                int sizeList = list.size();
+                for (int i = 0; i < sizeList; i++) {
+                    if (i < sizeList - 1) {
+                        Cond += "N'" + list.get(i) + "', ";  //when selected first elements in list 
+                    } else {
+                        Cond += "N'" + list.get(i) + "' ";     //when 
+                    }
+                }
+                Cond += " ) ";
+            }
+            Query1 += Cond;
+        }
+        /**
+         * *******************************************************************
+         */
+
+        if (CheckBacYear.isSelected()) {
+            String Cond = " ";
+            if (bacYearList.getSelectedIndex() == -1) {
+                Query1 += " ";
+            } else {
+                list = bacYearList.getSelectedValuesList();
+                Cond = " AND Student_Res.BacYear in( ";
+
+                int sizeList = list.size();
+
+                int year = 0;
+                for (int i = 0; i < sizeList; i++) {
+
+                    //JOptionPane.showMessageDialog(null, "The Year is :"+list.get(i));
+                    year = Integer.parseInt(list.get(i));
+
+                    //  JOptionPane.showMessageDialog(null, "The Year is :"+year);
+                    if (i < sizeList - 1) {
+
+                        Cond += " " + year + ", ";  //when selected first elements in list 
+                    } else {
+                        Cond += " " + year + " ";     //when 
+                    }
+                }
+                Cond += " ) ";
+            }
+            Query1 += Cond;
+        }
+        /**
+         * ********************************************************************
+         */
+        if (CheckCommune.isSelected()) {
+            String Cond = " ";
+            if (Name_Commune.getSelectedIndex() == -1) {
+                Query1 += " ";
+
+            } else {
+                list = Name_Commune.getSelectedValuesList();
+                Cond = " AND Student_Res.Name_Commune in( ";
+                int sizeList = list.size();
+                for (int i = 0; i < sizeList; i++) {
+                    if (i < sizeList - 1) {
+                        Cond += "N'" + list.get(i) + "', ";  //when selected first elements in list 
+                    } else {
+                        Cond += "N'" + list.get(i) + "' ";     //when 
+                    }
+                }
+                Cond += " ) ";
+            }
+            Query1 += Cond;
+        }
+        /**
+         * *******************************************************************
+         */
+        if (CheckWilaya.isSelected()) {
+            String Cond = " ";
+            if (wilaya_List.getSelectedIndex() == -1) {
+                Query1 += " ";
+            } else {
+                list = wilaya_List.getSelectedValuesList();
+                Cond = " AND Wilaya.NameWilaya in( ";
+                int sizeList = list.size();
+                for (int i = 0; i < sizeList; i++) {
+                    if (i < sizeList - 1) {
+                        Cond += "N'" + list.get(i) + "', ";  //when selected first elements in list 
+                    } else {
+                        Cond += "N'" + list.get(i) + "' ";     //when 
+                    }
+                }
+                Cond += " ) ";
+            }
+            Query1 += Cond;
+        }
+        /**
+         * ********************************************************************
+         */
+        if (CheckDaira.isSelected()) {
+            String Cond = " ";
+            if (Name_Daira.getSelectedIndex() == -1) {
+                Query1 += " ";
+            } else {
+                list = Name_Daira.getSelectedValuesList();
+                Cond = " AND Student_Res.Name_Daira in( ";
+                int sizeList = list.size();
+                for (int i = 0; i < sizeList; i++) {
+                    if (i < sizeList - 1) {
+                        Cond += "N'" + list.get(i) + "', ";  //when selected first elements in list 
+                    } else {
+                        Cond += "N'" + list.get(i) + "' ";     //when 
+                    }
+                }
+                Cond += " ) ";
+            }
+            Query1 += Cond;
+        }
+        /**
+         * *********************************************************************
+         */
+        if (CheckBloc.isSelected()) {
+            String Cond = " ";
+            if (Pavilion.getSelectedIndex() == -1) {
+                Query1 += " ";
+            } else {
+                list = Pavilion.getSelectedValuesList();
+                Cond = " AND Pavilion.Pavilion_Name in( ";
+                int sizeList = list.size();
+                for (int i = 0; i < sizeList; i++) {
+                    if (i < sizeList - 1) {
+                        Cond += "'" + list.get(i) + "', ";  //when selected first elements in list 
+                    } else {
+                        Cond += "'" + list.get(i) + "' ";     //when 
+                    }
+                }
+                Cond += " ) ";
+            }
+            Query1 += Cond;
+        }
+        /**
+         * **********************************************************************
+         */
+        if (CheckRoom.isSelected()) {
+
+            String Cond = " ";
+
+            if (RomPvinPanInf.getSelectedIndex() == -1) {
+                Query1 += " ";
+            } else {
+
+                String romNam = " ";
+                romNam = (String) RomPvinPanInf.getSelectedItem();
+                Cond += " AND Room.Room_Code = '" + romNam + "' ";
+            }
+            Query1 += Cond;
+        }
+        /**
+         * **********************************************************************
+         */
+
+        Query1 += " order by Room.Room_Code ";
+        if (choice == 0) {
+            ExportDataExce.Fill_FileExcel_StdNoCodeCommune(Query1);   // NOT GENDER 
+        } else {
+            ExportDataExce.Fill_FileExcel_Std2(Query1);    // WITH GENDER
+        }
+
     }
-    
+
     /*
     public void FillComboboxRooms(JComboBox cmb,String IdPav){
    
@@ -1901,78 +1998,73 @@ if ( CheckBloc.isSelected())
         }
      }
     
-    */
-    
-    public void FilterResidentMlt(JTextField NumCard,JTextField NameRes,JTextField LastNm,JTextField DateNais,
-            JTextField commune,JTextField Daira,JTextField branch,JTextField level,JTextField caseStd,JTextField bacyear,
+     */
+    public void FilterResidentMlt(JTextField NumCard, JTextField NameRes, JTextField LastNm, JTextField DateNais,
+            JTextField commune, JTextField Daira, JTextField branch, JTextField level, JTextField caseStd, JTextField bacyear,
             JTextField Cham,
-            JTable tab,DefaultTableModel dm){  //filtrer dans le tableau fournisseur
-       TableRowSorter<DefaultTableModel> tr=new TableRowSorter<DefaultTableModel>(dm);
-        tab.setRowSorter(tr);     
-List <RowFilter<Object,Object>> filters = new ArrayList<RowFilter<Object,Object>>(2);
-filters.add(RowFilter.regexFilter(NumCard.getText()));
-filters.add(RowFilter.regexFilter(NameRes.getText()));
-filters.add(RowFilter.regexFilter(LastNm.getText()));
-filters.add(RowFilter.regexFilter(DateNais.getText()));
+            JTable tab, DefaultTableModel dm) {  //filtrer dans le tableau fournisseur
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<DefaultTableModel>(dm);
+        tab.setRowSorter(tr);
+        List<RowFilter<Object, Object>> filters = new ArrayList<RowFilter<Object, Object>>(2);
+        filters.add(RowFilter.regexFilter(NumCard.getText()));
+        filters.add(RowFilter.regexFilter(NameRes.getText()));
+        filters.add(RowFilter.regexFilter(LastNm.getText()));
+        filters.add(RowFilter.regexFilter(DateNais.getText()));
 
-filters.add(RowFilter.regexFilter(commune.getText()));
-filters.add(RowFilter.regexFilter(Daira.getText()));
-filters.add(RowFilter.regexFilter(branch.getText()));
-filters.add(RowFilter.regexFilter(level.getText()));
+        filters.add(RowFilter.regexFilter(commune.getText()));
+        filters.add(RowFilter.regexFilter(Daira.getText()));
+        filters.add(RowFilter.regexFilter(branch.getText()));
+        filters.add(RowFilter.regexFilter(level.getText()));
 
-filters.add(RowFilter.regexFilter(caseStd.getText()));
-filters.add(RowFilter.regexFilter(bacyear.getText()));
-filters.add(RowFilter.regexFilter(Cham.getText()));
-RowFilter rf = RowFilter.andFilter(filters);
-tr.setRowFilter(rf); 
-}
-    
-    public void ToolsRoomTotal_PvlOne(int Ncd){
-
-    String TestQuery="SELECT Name_Resident,LastName_Resident,Branch_Study.BranchStd_Name,Room_Code\n" +
-"FROM Resident_Gl,Branch_Study,Student_Res,Room \n" +
-"WHERE Resident_Gl.ID_Rsident=Student_Res.ID_Rsident\n" +
-"AND Student_Res.Id_BranchStd=Branch_Study.Id_BranchStd \n" +
-"AND Student_Res.Id_Room=Room.Id_Room\n" +
-"AND Resident_Gl.NumCard_Resident='"+Ncd+"'";
-    try {
-         JasperReport jasperreport;
-         InputStream file=getClass().getResourceAsStream("/Reports/Room_Hardware.jrxml");
-          JasperDesign jasperdesign=JRXmlLoader.load(file);
-           JRDesignQuery newQuery=new JRDesignQuery();
-           newQuery.setText(TestQuery);
-           jasperdesign.setQuery(newQuery);
-          Map parametres=new HashMap<String ,Object>();
-               Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        int year = cal.get(Calendar.YEAR);
-             parametres.put("AnneEtd", year+"");
-           //parametres.put("PrPav", Ncd+"");
-       
-         jasperreport=JasperCompileManager.compileReport(jasperdesign);
-          Connection Cnx1;
-         cnx.Connecting();
-        Cnx1 =cnx.getConnect();
-        JasperPrint jasperprint=JasperFillManager.fillReport(jasperreport,parametres, Cnx1);
-        // jp=JasperFillManager.fillReport(jr, parametres, cnx.getConnect());
-           JasperViewer JspViewr=new JasperViewer(jasperprint, false);
-              JspViewr.viewReport(jasperprint,false);
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error in jasper Report"+e.getMessage());
+        filters.add(RowFilter.regexFilter(caseStd.getText()));
+        filters.add(RowFilter.regexFilter(bacyear.getText()));
+        filters.add(RowFilter.regexFilter(Cham.getText()));
+        RowFilter rf = RowFilter.andFilter(filters);
+        tr.setRowFilter(rf);
     }
-}   
-/****************************************************************/
 
-    
-     
-     
-     
-    
-    
-    
-    
-/******************************************************************/    
-    
+    public void ToolsRoomTotal_PvlOne(int Ncd) {
+
+        String TestQuery = "SELECT Name_Resident,LastName_Resident,Branch_Study.BranchStd_Name,Room_Code\n"
+                + "FROM Resident_Gl,Branch_Study,Student_Res,Room \n"
+                + "WHERE Resident_Gl.ID_Rsident=Student_Res.ID_Rsident\n"
+                + "AND Student_Res.Id_BranchStd=Branch_Study.Id_BranchStd \n"
+                + "AND Student_Res.Id_Room=Room.Id_Room\n"
+                + "AND Resident_Gl.NumCard_Resident='" + Ncd + "'";
+        try {
+            JasperReport jasperreport;
+            InputStream file = getClass().getResourceAsStream("/Reports/Room_Hardware.jrxml");
+            JasperDesign jasperdesign = JRXmlLoader.load(file);
+            JRDesignQuery newQuery = new JRDesignQuery();
+            newQuery.setText(TestQuery);
+            jasperdesign.setQuery(newQuery);
+            Map parametres = new HashMap<String, Object>();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            int year = cal.get(Calendar.YEAR);
+            parametres.put("AnneEtd", year + "");
+            //parametres.put("PrPav", Ncd+"");
+
+            jasperreport = JasperCompileManager.compileReport(jasperdesign);
+            Connection Cnx1;
+            cnx.Connecting();
+            Cnx1 = cnx.getConnect();
+            JasperPrint jasperprint = JasperFillManager.fillReport(jasperreport, parametres, Cnx1);
+            // jp=JasperFillManager.fillReport(jr, parametres, cnx.getConnect());
+            JasperViewer JspViewr = new JasperViewer(jasperprint, false);
+            JspViewr.viewReport(jasperprint, false);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error in jasper Report" + e.getMessage());
+        }
+    }
+
+    /**
+     * *************************************************************
+     */
+
+    /**
+     * ***************************************************************
+     */
     /**
      * @param args the command line arguments
      */
@@ -2004,15 +2096,14 @@ tr.setRowFilter(rf);
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-            Advanced_prp Ap=    new Advanced_prp(null);
-            Ap.setVisible(true);
-            Ap.Filling_Data(28);
-       //     Ap.CreateDomaineTable();
-            //Ap.AddDomaine("d001","ادب عربي","test");
-           // JOptionPane.showMessageDialog(null, "finish running");
-            
-           // Ap.ToolsRoomTotal_PvlOne(120);
-            
+                Advanced_prp Ap = new Advanced_prp(null);
+                Ap.setVisible(true);
+                Ap.Filling_Data(28);
+                //     Ap.CreateDomaineTable();
+                //Ap.AddDomaine("d001","ادب عربي","test");
+                // JOptionPane.showMessageDialog(null, "finish running");
+
+                // Ap.ToolsRoomTotal_PvlOne(120);
             }
         });
         //new Advanced_prp().ToolsRoomTotal_PvlOne(120);

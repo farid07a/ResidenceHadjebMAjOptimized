@@ -94,8 +94,7 @@ public class ExternalStudent extends Resident_Gl {
                 ValMax = res.getInt(1);
                 System.out.println("residence.Employer.AddRsident() Max ID" + ValMax);
             }
-
-            prstm = cnx.getConnect().prepareStatement(Query);
+            //prstm = cnx.getConnect().prepareStatement(Query);            
             prstm = cnx.getConnect().prepareStatement(Query);
             prstm.setString(1, this.Num_InscritBac);
             prstm.setInt(2, this.Id_BranchStd);

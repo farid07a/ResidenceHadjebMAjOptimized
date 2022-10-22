@@ -5,6 +5,30 @@
  */
 package View;
 
+import java.awt.Component;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.DefaultCellEditor;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.renderer.DefaultTableRenderer;
+
 /**
  *
  * @author faridPC
@@ -14,10 +38,18 @@ public class Main extends javax.swing.JFrame {
     /**
      * Creates new form Main
      */
+    
+    private DefaultTableModel model=new DefaultTableModel();
+    ResultSet Res;
     public Main() {
         initComponents();
+        init();
+        CustomJtable();
     }
-
+    
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,42 +59,159 @@ public class Main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panelBorder1 = new com.farid.swing.PanelBorder();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        TableView = new javax.swing.JTable(){
+            public Class getColumnClass(int column) {
+                return (column == 4 ) ? Icon.class : Object.class;
+            }
+        };
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
-        panelBorder1.setOpaque(true);
+        TableView.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "الرقم", "الاسم", "اللقب", "الوصف", "الصورة", "الحالة"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, true, true, true, true, true
+            };
 
-        javax.swing.GroupLayout panelBorder1Layout = new javax.swing.GroupLayout(panelBorder1);
-        panelBorder1.setLayout(panelBorder1Layout);
-        panelBorder1Layout.setHorizontalGroup(
-            panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 412, Short.MAX_VALUE)
-        );
-        panelBorder1Layout.setVerticalGroup(
-            panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 253, Short.MAX_VALUE)
-        );
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        TableView.setRowHeight(70);
+        TableView.setShowVerticalLines(false);
+        TableView.setSurrendersFocusOnKeystroke(true);
+        TableView.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(TableView);
+        if (TableView.getColumnModel().getColumnCount() > 0) {
+            TableView.getColumnModel().getColumn(1).setPreferredWidth(200);
+            TableView.getColumnModel().getColumn(2).setPreferredWidth(200);
+            TableView.getColumnModel().getColumn(3).setMinWidth(150);
+            TableView.getColumnModel().getColumn(3).setPreferredWidth(150);
+            TableView.getColumnModel().getColumn(3).setMaxWidth(150);
+            TableView.getColumnModel().getColumn(5).setMinWidth(50);
+            TableView.getColumnModel().getColumn(5).setPreferredWidth(50);
+            TableView.getColumnModel().getColumn(5).setMaxWidth(50);
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(panelBorder1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 423, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 835, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(panelBorder1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 222, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        try {
+            model=(DefaultTableModel)TableView.getModel();
+            model.setRowCount(0);
+            PreparedStatement prStm=DataBaseConnection.getInstance().getConnection().prepareStatement(""
+                    + "Select NumCard_Resident,Name_Resident,LastName_Resident ,DateBirth,PlaceBirth,imageStd FROM Resident_Gl");
+            
+            Res=prStm.executeQuery();
+            int count=0;
+            while (Res.next() && count++<100) {
+                ImageIcon imgTb;
+                
+                
+                //ImageIcon image = new ImageIcon(new ImageIcon(list.get(i).getMyImage()).getImage().getScaledInstance(56, 56, Image.SCALE_SMOOTH) );
+                
+                byte tab[]=Res.getBytes("imageStd");
+                
+                
+                
+                if (Res.getBytes("imageStd") != null) {
+                    System.out.println(" ! Null my picts");
+                 InputStream in = new ByteArrayInputStream(tab);
+                BufferedImage bImageFromConvert = ImageIO.read(in);
+                //imgTb=new ImageIcon(bImageFromConvert);  
+                imgTb =  new javax.swing.ImageIcon(getClass().getResource("/residence/Image/imageRes.png"));
+                }else 
+                {
+                  imgTb =  new javax.swing.ImageIcon(getClass().getResource("/residence/Image/imageRes.png"));
+                }
+                       //LabImage.setIcon(new ImageIcon(new ImageIcon(bImageFromConvert).getImage().getScaledInstance(LabImage.getWidth(), LabImage.getHeight(), Image.SCALE_SMOOTH) )); 
+                
+                
+                model.addRow(new Object[]{TableView.getRowCount()+1,Res.getString("Name_Resident"),Res.getString("LastName_Resident"),
+                                          Res.getString("PlaceBirth"),imgTb});
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+        
+    }//GEN-LAST:event_formWindowOpened
+
+    public void CustomJtable(){
+        TableView.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer(){
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); //To change body of generated methods, choose Tools | Templates.
+                if (column != 4) {
+                    setHorizontalAlignment(CENTER);
+                }
+                TableView.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(new JTextField()));
+                return this;
+            }
+            
+        
+        });
+        
+        TableView.setDefaultRenderer(Object.class, new DefaultTableCellRenderer(){
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                if (column == 3) {
+                    JTextArea txtAr=new JTextArea(value +"");
+                    txtAr.setWrapStyleWord(true);
+                    txtAr.setLineWrap(true);
+                    txtAr.setBackground(getBackground());
+                    JScrollPane sp=new JScrollPane(txtAr);
+                    sp.setBorder(null);
+                    return sp;
+                }else{
+                    super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                    //HSSFRegionUtil.setBorderBottom();
+                    setBorder(new EmptyBorder(1, 5, 1, 5));
+                 return this;
+                }
+            }
+        });
+        
+        
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -89,7 +238,7 @@ public class Main extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -99,6 +248,15 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.farid.swing.PanelBorder panelBorder1;
+    private javax.swing.JTable TableView;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
+    private void init() {
+        
+        try {
+            DataBaseConnection.getInstance().ConnectionToDatabase();
+        } catch (SQLException | ClassNotFoundException e1) {
+        }
+    }
 }

@@ -53,7 +53,7 @@ public class Menu extends javax.swing.JPanel {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.fillRoundRect(0 , 0, getWidth(), getHeight(), 20 , 20);
         g2.setColor(getBackground());
-        GradientPaint gp=new GradientPaint(0, 0, Color.yellow, Color.decode(""), TOP_ALIGNMENT, Color.black)
+        GradientPaint gp=new GradientPaint(0, 0, Color.yellow, Color.decode(""), TOP_ALIGNMENT, Color.black);
         
         super.paintChildren(g); //To change body of generated methods, choose Tools | Templates.
     }

@@ -124,23 +124,18 @@ public class Resident_Gl {
                 JOptionPane.showMessageDialog(null, "Error in added ");
             
             
-            InsertImageResident10(ImageRes, Numbre_CardRes);
+            InsertImageResidentInDatabase(ImageRes, Numbre_CardRes);
             this.ValConfiramation=1;
-        
+        prstm.close(); 
         } catch (HeadlessException | SQLException e) {
             this.ValConfiramation=0;
-            JOptionPane.showMessageDialog(null, "Error in SQL Class Resident  AddResident"+e.getMessage());
+            JOptionPane.showMessageDialog(null, "حدث خطأ اثناء حفظ المعلومات"+e.getMessage());
             
              try {
               cnx.getConnect().rollback();
           } catch (SQLException ex) {
               JOptionPane.showMessageDialog(null, "RollBack In Add Student Parent Class :"+ex.getMessage());
           }
-        }
-        try {
-            prstm.close();  
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error in Close() : "+ex.getMessage());
         }
     }
     
@@ -153,6 +148,7 @@ public class Resident_Gl {
       DefaultTableModel dftabMd=(DefaultTableModel)tabRes.getModel();   
          dftabMd.setRowCount(0);
          cnx.Connecting();
+         
      get_Info_DB.filling_ArrayList("Resident_Case", ListInfo);
      try {
              stm=getCnx().getConnect().createStatement();
@@ -935,8 +931,9 @@ public void InsertImageResident(File FileImg,int NumCard){
     }
 
 }
-/******************EEEEEEEEEEE*************************/
-public void InsertImageResident10(File FileImg, int NumCard){
+/******************EEEEEEEEEE
+     * @param FileImgE*************************/
+public void InsertImageResidentInDatabase(File FileImg, int NumCard){
 
     int len;
 
@@ -952,21 +949,19 @@ public void InsertImageResident10(File FileImg, int NumCard){
            prstm.setBinaryStream(1, fis, len);
            
            int x=prstm.executeUpdate();
+           
            if (x>0) {
     //          JOptionPane.showMessageDialog(null, "The Image is Updated");
           }else {
            JOptionPane.showMessageDialog(null, "Error in Image  Updated");
            }
+           
+           prstm.close();
         } catch (HeadlessException | FileNotFoundException | SQLException e) {
             JOptionPane.showMessageDialog(null, "Error in Sql :"+e.getMessage());
         }
+        //cnx.Deconnect();
       
-      try {
-        prstm.close();
-     //cnx.Deconnect();
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(null, "Error in Sql :"+e.getMessage());
-    }
 
 }
 
@@ -998,7 +993,7 @@ public void UpdateResident(  int ID_Resident, int NumCard){
         //JOptionPane.showMessageDialog(null, "I am After  Exectue Field Resident_Gl"); 
         
         if(VarPht==1){ 
-        InsertImageResident10(ImageRes, NumCard);
+        InsertImageResidentInDatabase(ImageRes, NumCard);
         }
         
         /*else {
