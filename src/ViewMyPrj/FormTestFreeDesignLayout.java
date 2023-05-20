@@ -6,7 +6,14 @@
 package ViewMyPrj;
 import java.awt.event.KeyEvent;
 import java.awt.Color;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
+import residence.ConnectionDB;
 import residence.TimeFormatter;
 /**
  *
@@ -74,6 +81,7 @@ public class FormTestFreeDesignLayout extends javax.swing.JFrame {
         jLabel65 = new javax.swing.JLabel();
         RomPvinPanInf = new javax.swing.JComboBox<>();
         jCheckBox1 = new javax.swing.JCheckBox();
+        ConnectionDB = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -742,16 +750,24 @@ public class FormTestFreeDesignLayout extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(4, 0, 0, 0);
         jPanel4.add(jCheckBox1, gridBagConstraints);
 
+        ConnectionDB.setText("ConnectionDB");
+        ConnectionDB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ConnectionDBActionPerformed(evt);
+            }
+        });
+        jPanel4.add(ConnectionDB, new java.awt.GridBagConstraints());
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 855, Short.MAX_VALUE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -1010,6 +1026,29 @@ public class FormTestFreeDesignLayout extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
+    private void ConnectionDBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConnectionDBActionPerformed
+        FormTestFreeDesignLayout.ConnectingAccess();
+    }//GEN-LAST:event_ConnectionDBActionPerformed
+
+    private static void ConnectingAccess(){
+        try {
+Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            String DB;
+            System.out.println("Success Download ");          
+            DB = "jdbc:ucanaccess:////D:\\Base.accdb";
+            
+            DB = "jdbc:ucanaccess:////D:\\att2000.mdb";
+             Connection cnnct=DriverManager.getConnection(DB);
+                System.out.println("Success Connecting... ");
+           // JOptionPane.showMessageDialog(null, "The connection is etablished...");
+        } catch (SQLException e) {
+           JOptionPane.showMessageDialog(null, "Eroooooor conect for Server  "+e.getMessage());
+           
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ConnectionDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -1036,18 +1075,24 @@ public class FormTestFreeDesignLayout extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(FormTestFreeDesignLayout.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
+    
+        
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FormTestFreeDesignLayout().setVisible(true);
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new FormTestFreeDesignLayout().setVisible(true);
+//            }
+//        });
+    
+        FormTestFreeDesignLayout.ConnectingAccess();
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox CheckMale;
     private javax.swing.JComboBox<String> ComboxHome;
+    private javax.swing.JButton ConnectionDB;
     private javax.swing.JFormattedTextField DatBirth_std;
     private javax.swing.JTextField LastNamMothARTxt;
     private javax.swing.JComboBox<String> National_list;

@@ -37,6 +37,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
@@ -520,12 +521,15 @@ public class Resident_Gl {
     
    /**********************************************************************************/
    public void GetInformationResidentN(int NumCard_Resident ,JTextField Numcard,JComboBox CasResident,JTextField txtNam_std5,JTextField txtSurNam_std5,
-                                        JFormattedTextField DatBirth_std3,JTextField txtPlcBirth_std5,JCheckBox CheckMale2,JCheckBox checkFemal2,JTextField txt_NumInsc2,
+                                        JFormattedTextField DatBirth_std3,JTextField txtPlcBirth_std5,JCheckBox CheckMale2,JCheckBox checkFemal2,
+                                        JTextField txt_NumInsc2,
                                         JTextField txtNam_Father2,JTextField txtNam_mother2,JTextField txtProfission_Std2,JTextField txtProfission_Moth2,
                                         JTextField txtAddress_Std2,JComboBox WilayaList2,
                                         JTextField txtDairaStd2,
                                         JComboBox txtCommuneStd2,
-                                        JComboBox National_list2,JCheckBox Sti_Single3,JCheckBox Std_Maried2,JTextField TtxtBacYear2,
+                                        JComboBox National_list2,
+                                        JRadioButton Sti_Single3,
+                                        JRadioButton Std_Maried2,JTextField TtxtBacYear2,
                                         JTextField txtBacMoy2,JTextField txtPlaceGetBac2,JComboBox txtBranch_std5,JComboBox txtDepa_Std2,
                                         JComboBox LevelStd2,JLabel LabImage,String NamPatern,String SituationFmly,
                                         JTextField Name_ResidentFrUp,JTextField LastName_ResidentFrUp,JTextField PlaceBirthFrUp,

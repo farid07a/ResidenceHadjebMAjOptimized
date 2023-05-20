@@ -1511,15 +1511,18 @@ String TestQuery="SELECT Name_Resident,LastName_Resident,DateBirth,PlaceBirth,Br
 
 /***************************************************************************/
     public static void main(String[] args) {
-        Resident_Gl r=new  Resident_Gl("mmmmmm", "mmmmmm", 182, "100000", new Date(), "batna",1,1,7);
         
-        Student_Res std=new Student_Res();
-        std.ListStdBacYear(2018, "علوم وتكنولوجيا");
-       /* Student_Res std=new Student_Res(r.getFirst_name(),r.getLast_name(),r.getNumbre_CardRes(),r.getBarcode(), 
-              r.getDateBirth(), r.getPlaceBirth(),r.getID_gender(),r.getId_Ptrn_Res(),7, "mmmmmm", "mmmmmm", "mmmmmm", "mmmmmm", "mmmmmm", 7,
-              "aa", "aa", 1, "aa", 2013, 10.2,"biskra", 2, new Date() , 2, 2, 1, "10000000",1);
-        */
         
+        
+//        Resident_Gl r=new  Resident_Gl("mmmmmm", "mmmmmm", 182, "100000", new Date(), "batna",1,1,7);
+//        
+//        Student_Res std=new Student_Res();
+//        std.ListStdBacYear(2018, "علوم وتكنولوجيا");
+//       /* Student_Res std=new Student_Res(r.getFirst_name(),r.getLast_name(),r.getNumbre_CardRes(),r.getBarcode(), 
+//              r.getDateBirth(), r.getPlaceBirth(),r.getID_gender(),r.getId_Ptrn_Res(),7, "mmmmmm", "mmmmmm", "mmmmmm", "mmmmmm", "mmmmmm", 7,
+//              "aa", "aa", 1, "aa", 2013, 10.2,"biskra", 2, new Date() , 2, 2, 1, "10000000",1);
+//        */
+//        
       //  std.UpdateResident(std.Get_ID_Resident(5378),5378);
    // std.DisplayReportAllStdDetaills("علوم الطبيعة والحياة","سنة أولي ليسانس","ســــاكن");
        // std.TestCard(4198);

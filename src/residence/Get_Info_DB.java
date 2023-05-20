@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
@@ -424,15 +425,21 @@ String Query="UPDATE "+Tab+" SET "+C1+"=? , "+C2+"=? "
         tab.setRowSorter(tr);
         
 List <RowFilter<Object,Object>> filters = new ArrayList<RowFilter<Object,Object>>(2);
-filters.add(RowFilter.regexFilter(NumCard.getText()));
-filters.add(RowFilter.regexFilter(NameRes.getText()));
-filters.add(RowFilter.regexFilter(LastNm.getText()));
-filters.add(RowFilter.regexFilter(DateNais.getText()));
+
+
+if (! Objects.isNull(NumCard)) filters.add(RowFilter.regexFilter(NumCard.getText()));
+if (! Objects.isNull(NameRes) ) filters.add(RowFilter.regexFilter(NameRes.getText()));
+if (! Objects.isNull(LastNm)) filters.add(RowFilter.regexFilter(LastNm.getText()));
+if (! Objects.isNull(DateNais)) filters.add(RowFilter.regexFilter(DateNais.getText()));
+
 RowFilter rf = RowFilter.andFilter(filters);
 tr.setRowFilter(rf); 
 }
     void CleanTextFld (JTextField NumCard,JTextField NameRes,JTextField LastNm,JTextField DateNais){
-     NumCard.setText("");NameRes.setText("");LastNm.setText("");DateNais.setText("");
+     if (! Objects.isNull(NumCard)) NumCard.setText("");
+     if (! Objects.isNull(NameRes)) NameRes.setText("");
+     if (! Objects.isNull(LastNm)) LastNm.setText("");
+     if (! Objects.isNull(DateNais)) DateNais.setText("");
      }    
     
     
